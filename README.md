@@ -10,3 +10,9 @@ This tool utilises the WordPress REST API to gather information and perform acti
 - The passphrase is required to be set when launching the tool and is then used to encrypt and decrypt the site credentials.
 - The passphrase is stored in the browser's [Session Storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage). This is cleared when either the tab is closed or the browser is closed.
 - This tool is client-side only. No data is stored on a server.
+
+## To Do
+[-] Add info on CORS
+[-] WordPress compatibility
+[-] Plugins like WordFence blocking Application Passwords
+[-] Add troubleshooting
