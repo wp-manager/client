@@ -1,18 +1,59 @@
-# Site Manager UI
-Designed to help manage and maintain WordPress websites
+# site-manager-ui
 
-This tool utilises the WordPress REST API to gather information and perform actions. In addition, plugins on sites can extend the functionality of this tool, tailoring it for your needs
+This template should help get you started developing with Vue 3 in Vite.
 
-## Keeping it secure
-- Each site is authenticated individually using an Application Password which is tied against the logged in WordPress user for that site
-- The Application Password can only perform actions that is applicable to the user's role on each site
-- Site credentials are stored using [Local Storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) and are encrypted using a passphrase
-- The passphrase is required to be set when launching the tool and is then used to encrypt and decrypt the site credentials.
-- The passphrase is stored in the browser's [Session Storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage). This is cleared when either the tab is closed or the browser is closed.
-- This tool is client-side only. No data is stored on a server.
+## Recommended IDE Setup
 
-## To Do
-[-] Add info on CORS
-[-] WordPress compatibility
-[-] Plugins like WordFence blocking Application Passwords
-[-] Add troubleshooting
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+
+## Type Support for `.vue` Imports in TS
+
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+
+If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+
+1. Disable the built-in TypeScript Extension
+    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
+    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
+2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+
+## Customize configuration
+
+See [Vite Configuration Reference](https://vitejs.dev/config/).
+
+## Project Setup
+
+```sh
+npm install
+```
+
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
+```
+
+### Type-Check, Compile and Minify for Production
+
+```sh
+npm run build
+```
+
+### Run End-to-End Tests with [Playwright](https://playwright.dev)
+
+```sh
+# Install browsers for the first run
+npx playwright install
+
+# When testing on CI, must build the project first
+npm run build
+
+# Runs the end-to-end tests
+npm run test:e2e
+# Runs the tests only on Chromium
+npm run test:e2e -- --project=chromium
+# Runs the tests of a specific file
+npm run test:e2e -- tests/example.spec.ts
+# Runs the tests in debug mode
+npm run test:e2e -- --debug
+```
