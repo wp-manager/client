@@ -40,7 +40,8 @@ const config: PlaywrightTestConfig = {
     trace: 'on-first-retry',
 
     /* Only on CI systems run the tests headless */
-    headless: !!process.env.CI
+    headless: true,
+    screenshot: 'on'
   },
 
   /* Configure projects for major browsers */
@@ -95,7 +96,6 @@ const config: PlaywrightTestConfig = {
 
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
   // outputDir: 'test-results/',
-
   /* Run your local dev server before starting the tests */
   webServer: {
     /**
@@ -105,6 +105,7 @@ const config: PlaywrightTestConfig = {
      */
     command: process.env.CI ? 'vite preview --port 5173' : 'vite dev',
     port: 5173,
+    stdout: 'pipe',
     reuseExistingServer: !process.env.CI
   }
 }
