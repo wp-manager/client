@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isValidURL } from '@/utils/url';
 import WordpressAuth from '@/utils/wordpressAuth';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const url = ref('');
 const authError = ref('');
@@ -20,6 +20,11 @@ const checkURLValidity = () => {
     authError.value = '';
   }
 };
+
+
+import {useSitesStore} from '@/stores/sites';
+
+const sitesStore = useSitesStore();
 
 </script>
 

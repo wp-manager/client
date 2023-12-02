@@ -1,7 +1,18 @@
 <script setup lang="ts">
+import {useAuthStore} from '@/stores/auth';
+
+const authStore = useAuthStore();
+
+
 defineProps<{
 	msg?: string
 }>()
+
+const changePassphrase = () => {
+	if(authStore.ask()){
+		window.location.reload();
+	}
+}
 </script>
 
 <template>
@@ -16,10 +27,18 @@ defineProps<{
 			<RouterLink to="/sites/1">
 				<i class="bi bi-window"></i> Site
 			</RouterLink>
+			<RouterLink to="/sites/add">
+				<i class="bi bi-window-plus"></i> Add Site
+			</RouterLink>
 			<RouterLink to="/sites/1/core">
 				<i class="bi bi-braces"></i> Core
 			</RouterLink>
-		</div>
+			</div>
+			<div class="sidebar__nav">
+				<a @click="changePassphrase">
+					<i class="bi bi-key"></i> Change Passphrase
+				</a>
+			</div>
 	</div>
 </template>
 
@@ -29,11 +48,17 @@ defineProps<{
 	padding: .75rem;
 	width: 275px;
 	height: 100svh;
+	display: flex;
+	flex-direction: column;
 
 	&__nav {
 		display: flex;
 		flex-direction: column;
 		gap: .5rem;
+
+		&:nth-child(1) {
+			flex-grow: 1;
+		}
 	
 
 	a {

@@ -3,7 +3,7 @@ function isValidURL(url: string) {
         return false;
     }
 
-    // Check if URL is valid. Use regex to ensure it has *{something}*.*{something}*
+    // Check if URL is valid
     const regex = new RegExp(/^(https?:\/\/)?(www\.)?([a-z0-9]+(-?[a-z0-9])*\.)+[a-z]{2,}(:[0-9]{1,5})?(\/.*)?$/i);
 
     if (!regex.test(url)) {

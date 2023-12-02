@@ -2,7 +2,7 @@ import { isValidURL, sanitiseURL } from "./url";
 
 class WordpressAuth {
     private appID: string = '6708b25c-f31a-4a99-8dc5-68d575514c08';
-    private callbackPath: string = '/sites/add';
+    private callbackPath: string = '/sites/add/callback';
     public uri: string = '';
 
     constructor(url: string) {
