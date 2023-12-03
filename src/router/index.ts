@@ -5,6 +5,8 @@ import Site from "@/views/Site.vue";
 import SiteCore from "@/views/SiteCore.vue";
 import AddSite from "@/views/AddSite.vue";
 import { useSitesStore } from "@/stores/sites";
+import Encryption from "@/utils/encryption";
+import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,20 +29,54 @@ const router = createRouter({
                 {
                     path: "callback",
                     name: "add-site-callback",
-                    redirect: (to) => {
-                      if(to.query.site_url && to.query.user_login && to.query.password){
+                    component: () => {},
+                    beforeEnter: async (to) => {
+                        const params = new URLSearchParams(
+                            to.query as Record<string, string>
+                        );
+
+                        if (
+                            !params.has("site_url") ||
+                            !params.has("user_login") ||
+                            !params.has("password")
+                        ) {
+                            return { path: "/sites", query: {} };
+                        }
+
+                        if (
+                            params.get("site_url") == "" ||
+                            params.get("user_login") == "" ||
+                            params.get("password") == ""
+                        ) {
+                            return { path: "/sites", query: {} };
+                        }
+
+                        const authStore = useAuthStore();
+                        // Encrypt the password
+                        const encryption = new Encryption();
+                        const encryptedPassword = await encryption.encrypt(
+                            to.query.password as string,
+                            authStore.get()
+                        );
+
+                        const serializedEncryptedPassword =
+                            encryption.serialise(encryptedPassword);
+
                         const sitesStore = useSitesStore();
-                        sitesStore.addSite(to.query.site_url as string, to.query.user_login as string, to.query.password as string)
-                        return { path: '/sites', query: {} }
-                      }
-                      return { path: '/sites', query: {} }
-                    }
-                    
+
+                        sitesStore.addSite(
+                            to.query.site_url as string,
+                            to.query.user_login as string,
+                            btoa(serializedEncryptedPassword)
+                        );
+
+                        return { path: "/sites", query: {} };
+                    },
                 },
-            ]
+            ],
         },
         {
-            path: "/sites/:id",
+            path: "/sites/:uri",
             name: "site",
             component: Site,
             children: [

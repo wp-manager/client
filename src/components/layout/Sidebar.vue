@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import {useAuthStore} from '@/stores/auth';
+import { useSitesStore } from '@/stores/sites';
 
 const authStore = useAuthStore();
+
+const sitesStore = useSitesStore();
+const firstSite = sitesStore.getSites()[0];
 
 
 defineProps<{
@@ -21,16 +25,16 @@ const changePassphrase = () => {
 			<RouterLink to="/">
 				<i class="bi bi-house"></i>Home
 			</RouterLink>
-			<RouterLink to="/sites">
-				<i class="bi bi-window-stack"></i>Sites
-			</RouterLink>
-			<RouterLink to="/sites/1">
-				<i class="bi bi-window"></i> Site
-			</RouterLink>
 			<RouterLink to="/sites/add">
 				<i class="bi bi-window-plus"></i> Add Site
 			</RouterLink>
-			<RouterLink to="/sites/1/core">
+			<RouterLink to="/sites">
+				<i class="bi bi-window-stack"></i>Sites
+			</RouterLink>
+			<RouterLink :to="{ name: 'site', params: { uri: firstSite.uri } }">
+				<i class="bi bi-window"></i> Site
+			</RouterLink>
+			<RouterLink :to="{ name: 'site-core', params: { uri: firstSite.uri } }">
 				<i class="bi bi-braces"></i> Core
 			</RouterLink>
 			</div>
@@ -48,6 +52,7 @@ const changePassphrase = () => {
 	padding: .75rem;
 	width: 275px;
 	height: 100svh;
+	flex-shrink: 0;
 	display: flex;
 	flex-direction: column;
 

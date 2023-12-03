@@ -21,6 +21,7 @@
     "@playwright/test": "^1.39.0",
     "@tsconfig/node18": "^18.2.2",
     "@types/node": "^18.18.5",
+    "@vitejs/plugin-basic-ssl": "^1.0.2",
     "@vitejs/plugin-vue": "^4.4.0",
     "@vue/test-utils": "^2.4.3",
     "@vue/tsconfig": "^0.4.0",

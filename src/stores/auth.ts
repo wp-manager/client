@@ -1,17 +1,21 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import Encryption from '@/utils/encryption';
 
 export const useAuthStore = defineStore('auth', () => {
-    let sessionPassphrase: string|null = null;
+    let sessionPassphrase: string = '';
 
-    if(sessionStorage.getItem('passphrase')){
+    if(sessionStorage.getItem('passphrase') && sessionStorage.getItem('passphrase') !== ''){
         sessionPassphrase = sessionStorage.getItem('passphrase') as string;
     }else{
         ask();
     }
 
     function get(){
+        if(!sessionPassphrase){
+            if(!ask()){
+                throw new Error('No passphrase');
+            }
+        }
+
         return sessionPassphrase;
     }
 
@@ -22,7 +26,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     function ask(){
         let passphrase = prompt('Please enter your passphrase');
-        if(!passphrase){
+        if(!passphrase || passphrase === ''){
             return false;
         }
 
@@ -30,5 +34,5 @@ export const useAuthStore = defineStore('auth', () => {
         return true;
     }
 
-    return { get, set, ask }
+    return { get, ask }
 })

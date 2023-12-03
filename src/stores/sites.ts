@@ -2,6 +2,7 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { useAuthStore } from "./auth";
 import Encryption from "@/utils/encryption";
+import { sanitiseURL } from "@/utils/url";
 
 type Site = {
     uri: string;
@@ -11,7 +12,7 @@ type Site = {
 
 export const useSitesStore = defineStore("sites", () => {
     let sites = ref<Site[]>([]);
-    const authStore = useAuthStore();
+
 
     loadSites();
 
@@ -24,7 +25,7 @@ export const useSitesStore = defineStore("sites", () => {
 
             unparsedSites.forEach((site) => {
                 sites.value.push({
-                    uri: site.uri,
+                    uri: sanitiseURL(site.uri),
                     user: site.user,
                     password: site.password,
                 });
@@ -61,7 +62,7 @@ export const useSitesStore = defineStore("sites", () => {
             encryptedSites.push({
                 uri: site.uri,
                 user: site.user,
-                password: Encryption.encrypt(site.password),
+                password: site.password 
             });
         });
 
