@@ -12,7 +12,7 @@ import { useFlashStore } from "@/stores/flash";
 
 let historyMode = createWebHistory(import.meta.env.BASE_URL);
 // Change the history mode to hash if we're in a GitHub Action
-if (import.meta.env.GITHUB_ACTION) {
+if (Object.keys(import.meta.env).includes("GITHUB_ACTION")) {
     historyMode = createWebHashHistory(import.meta.env.BASE_URL);
 }
 const router = createRouter({
