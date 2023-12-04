@@ -15,7 +15,8 @@ let historyMode = createWebHistory(import.meta.env.BASE_URL);
 if (Object.keys(import.meta.env).includes("GITHUB_ACTION") && import.meta.env.GITHUB_ACTION) {
     historyMode = createWebHashHistory(import.meta.env.BASE_URL);
 }
-const router = createRouter({
+
+const router = createRouter({    
     history: historyMode,
     routes: [
         {
