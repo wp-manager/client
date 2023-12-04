@@ -10,9 +10,6 @@ export default defineConfig({
     vue(),
     basicSsl()
   ],
-  server: {
-    https: true
-  },
   envPrefix: 'UI_',
   resolve: {
     alias: {

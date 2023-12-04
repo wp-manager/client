@@ -7,6 +7,8 @@ import AddSite from "@/views/AddSite.vue";
 import { useSitesStore } from "@/stores/sites";
 import Encryption from "@/utils/encryption";
 import { useAuthStore } from "@/stores/auth";
+import { useSiteStore } from "@/stores/site";
+import { useFlashStore } from "@/stores/flash";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -79,6 +81,28 @@ const router = createRouter({
             path: "/sites/:uri",
             name: "site",
             component: Site,
+            props: true,
+            beforeEnter: (to) => {
+                const sitesStore = useSitesStore();
+                const site = sitesStore.getSite(to.params.uri as string);
+
+                if (!site) {
+                    const flashStore = useFlashStore();
+                    flashStore.addFlash({
+                        type: "error",
+                        message: "Site not found",
+                    });
+                    return {
+                        path: "/sites",
+                        query: {
+                            flash: null,
+                        },
+                    };
+                }
+
+                const siteStore = useSiteStore();
+                siteStore.useSite(site);
+            },
             children: [
                 {
                     path: "core",
@@ -88,6 +112,35 @@ const router = createRouter({
             ],
         },
     ],
+});
+
+router.afterEach((to, from) => {
+    // remove ?flash if it exists
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("flash")) {
+        params.delete("flash");
+        if (params.size > 0) {
+            window.history.replaceState(
+                {},
+                "",
+                `${to.path}?${params.toString()}`
+            );
+        } else {
+            window.history.replaceState({}, "", window.location.pathname);
+            
+        }
+    }
+
+    if(to.params.uri) {
+    const sitesStore = useSitesStore();
+    const site = sitesStore.getSite(to.params.uri as string);
+
+    if (site) {
+        const siteStore = useSiteStore();
+        siteStore.useSite(site);
+    }
+}
+    
 });
 
 export default router;

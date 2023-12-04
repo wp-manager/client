@@ -1,18 +1,11 @@
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
-import { useAuthStore } from "./auth";
-import Encryption from "@/utils/encryption";
-import { sanitiseURL } from "@/utils/url";
 
-type Site = {
-    uri: string;
-    user: string;
-    password: string;
-};
+import { sanitiseURL } from "@/utils/url";
+import type { Site } from "@/types/site";
 
 export const useSitesStore = defineStore("sites", () => {
     let sites = ref<Site[]>([]);
-
 
     loadSites();
 
@@ -62,7 +55,7 @@ export const useSitesStore = defineStore("sites", () => {
             encryptedSites.push({
                 uri: site.uri,
                 user: site.user,
-                password: site.password 
+                password: site.password
             });
         });
 
@@ -74,5 +67,9 @@ export const useSitesStore = defineStore("sites", () => {
         return sites.value;
     }
 
-    return { loadSites, addSite, getSites };
+    function getSite(uri: Site["uri"]): Site | undefined {
+        return sites.value.find((site) => site.uri === uri);
+    }
+
+    return { loadSites, addSite, getSites, getSite };
 });
