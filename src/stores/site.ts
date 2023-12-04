@@ -6,31 +6,30 @@ import { useAuthStore } from "./auth";
 import Encryption from "@/utils/encryption";
 
 export const useSiteStore = defineStore("site", () => {
-    let site = ref<Site>({
+    let siteInstance: Site = {
         uri: "",
         user: "",
         password: "",
-    });
+    };
 
     function useSite(site: Site) {
-
-        site = site;
+        siteInstance = site;
     }
 
-    function getAuthHeader(): string {
+    async function getAuthHeader(): Promise<string> {
         const authStore = useAuthStore();
         const encryption = new Encryption();
-        console.log(site.value);
-        console.log('deserialisedPassword', site.value.password);
         const deserialisedPassword = encryption.deserialise(
-            atob(site.value.password)
+            atob(siteInstance.password)
         );
-        const decryptedPassword = encryption.decrypt(
+        const decryptedPassword = await encryption.decrypt(
             deserialisedPassword,
             authStore.get()
-        );
+        ).catch((error) => {
+            throw new Error(error);
+        });
 
-        return `Basic ${btoa(`${site.value.user}:${decryptedPassword}`)}`;
+        return `Basic ${btoa(`${siteInstance.user}:${decryptedPassword}`)}`;
     }
 
     // API
@@ -40,19 +39,20 @@ export const useSiteStore = defineStore("site", () => {
         params: URLSearchParams,
         body: any
     ) {
-        const headers = new Headers();
-        headers.append("Authorization", getAuthHeader());
         const options = {
             method: method,
-            headers: headers,
+            headers: {
+                Authorization: await getAuthHeader(),
+            },
             body: body,
         };
+        console.log(options);
         const response = await fetch(url.toString(), options);
         return response.json();
     }
 
     async function apiGetCore() {
-        const url = new URL(`https://${site.value.uri}/wp-json/wp/v2`);
+        const url = new URL(`https://${siteInstance.uri}/wp-json/wp/v2`);
         const params = new URLSearchParams();
         return await apiRequest(url, "GET", params, null);
     }

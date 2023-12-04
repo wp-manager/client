@@ -11,17 +11,18 @@ defineProps<{
   uri?: string
 }>()
 
-// on mount, load site
-onMounted(() => {
-  const uri = useRouter().currentRoute.value.params.uri;
-  if(!uri) return;
-  let s = sitesStore.getSite(uri.toString());
-  if(!s) return;
-  console.log('ss',s);
+// get router params
+const router = useRouter();
+const { uri } = router.currentRoute.value.params;
 
-  siteStore.useSite(Object.assign({},s));
-  console.log('dd',siteStore.apiGetCore());
-})
+if(uri) {
+  const site = sitesStore.getSite(uri.toString());
+  if(site) {
+    siteStore.useSite(site);
+    siteStore.apiGetCore();
+
+  }
+}
 
 </script>
 
