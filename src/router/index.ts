@@ -1,4 +1,8 @@
-import { createRouter, createWebHashHistory, createWebHistory } from "vue-router";
+import {
+    createRouter,
+    createWebHashHistory,
+    createWebHistory,
+} from "vue-router";
 import Home from "@/views/Home.vue";
 import Sites from "@/views/Sites.vue";
 import Site from "@/views/Site.vue";
@@ -12,11 +16,14 @@ import { useFlashStore } from "@/stores/flash";
 
 let historyMode = createWebHistory(import.meta.env.BASE_URL);
 // Change the history mode to hash if we're in a GitHub Action
-if (Object.keys(import.meta.env).includes("GITHUB_ACTION") && import.meta.env.GITHUB_ACTION) {
+if (
+    Object.keys(import.meta.env).includes("GITHUB_ACTION") &&
+    import.meta.env.GITHUB_ACTION
+) {
     historyMode = createWebHashHistory(import.meta.env.BASE_URL);
 }
 
-const router = createRouter({    
+const router = createRouter({
     history: historyMode,
     routes: [
         {
@@ -133,20 +140,18 @@ router.afterEach((to, from) => {
             );
         } else {
             window.history.replaceState({}, "", window.location.pathname);
-            
         }
     }
 
-    if(to.params.uri) {
-    const sitesStore = useSitesStore();
-    const site = sitesStore.getSite(to.params.uri as string);
+    if (to.params.uri) {
+        const sitesStore = useSitesStore();
+        const site = sitesStore.getSite(to.params.uri as string);
 
-    if (site) {
-        const siteStore = useSiteStore();
-        siteStore.useSite(site);
+        if (site) {
+            const siteStore = useSiteStore();
+            siteStore.useSite(site);
+        }
     }
-}
-    
 });
 
 export default router;
