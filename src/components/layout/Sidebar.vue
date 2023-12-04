@@ -31,10 +31,10 @@ const changePassphrase = () => {
 			<RouterLink to="/sites">
 				<i class="bi bi-window-stack"></i>Sites
 			</RouterLink>
-			<RouterLink :to="{ name: 'site', params: { uri: firstSite.uri } }">
+			<RouterLink :to="{ name: 'site', params: { uri: firstSite.uri } }" v-if="firstSite">
 				<i class="bi bi-window"></i> Site
 			</RouterLink>
-			<RouterLink :to="{ name: 'site-core', params: { uri: firstSite.uri } }">
+			<RouterLink :to="{ name: 'site-core', params: { uri: firstSite.uri } }" v-if="firstSite">
 				<i class="bi bi-braces"></i> Core
 			</RouterLink>
 			</div>
