@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { useFlashStore } from '@/stores/flash';
 import { useSitesStore } from '@/stores/sites';
 import { sanitiseURL } from '@/utils/url';
 
 const sitesStore = useSitesStore();
+const flashStore = useFlashStore();
 </script>
 
 <template>
@@ -11,12 +13,15 @@ const sitesStore = useSitesStore();
             <tr>
                 <th>Site</th>
                 <th>User</th>
-                <th>Decrypted?</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="site in sitesStore.getSites()" :key="site.uri">
-                <td>{{ sanitiseURL(site.uri) }}</td>
+                <td>
+                    <RouterLink :to="{ name: 'site', params: { uri: site.uri } }">
+                        {{ sanitiseURL(site.uri) }}
+                    </RouterLink>
+                </td>
                 <td>{{ site.user }}</td>
                 <td>{{ site.password }}</td>
             </tr>
