@@ -4,7 +4,7 @@ export const useAuthStore = defineStore('auth', () => {
     let sessionPassphrase: string = '';
 
     if(sessionStorage.getItem('passphrase') && sessionStorage.getItem('passphrase') !== ''){
-        sessionPassphrase = sessionStorage.getItem('passphrase') as string;
+        sessionPassphrase = atob(sessionStorage.getItem('passphrase') as string);
     }else{
         ask();
     }
@@ -21,7 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     function set(passphrase: string){
         sessionPassphrase = passphrase;
-        sessionStorage.setItem('passphrase', passphrase);
+        sessionStorage.setItem('passphrase', btoa(passphrase));
     }
 
     function ask(){
