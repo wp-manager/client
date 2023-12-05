@@ -34,12 +34,11 @@ export const useSitesStore = defineStore("sites", () => {
         let existingSite = sites.value.find((site) => site.uri === uri);
 
         if (existingSite) {
-          console.log('existingSite', existingSite);
             existingSite.user = user;
             existingSite.password = password;
         } else {
             sites.value.push({
-                uri: uri,
+                uri: sanitiseURL(uri),
                 user: user,
                 password: password,
             });

@@ -1,26 +1,26 @@
 import { ref } from "vue";
-import { defineStore } from "pinia";
+import { defineStore } from "pinia"
 
 import type { Site } from "@/types/site";
 import { useAuthStore } from "./auth";
 import Encryption from "@/utils/encryption";
 
 export const useSiteStore = defineStore("site", () => {
-    let siteInstance: Site = {
+    let siteInstance = ref<Site>({
         uri: "",
         user: "",
         password: "",
-    };
+    });
 
     function useSite(site: Site) {
-        siteInstance = site;
+        siteInstance.value = site;
     }
 
     async function getAuthHeader(): Promise<string> {
         const authStore = useAuthStore();
         const encryption = new Encryption();
         const deserialisedPassword = encryption.deserialise(
-            atob(siteInstance.password)
+            atob(siteInstance.value.password)
         );
         const decryptedPassword = await encryption.decrypt(
             deserialisedPassword,
@@ -29,7 +29,7 @@ export const useSiteStore = defineStore("site", () => {
             throw new Error(error);
         });
 
-        return `Basic ${btoa(`${siteInstance.user}:${decryptedPassword}`)}`;
+        return `Basic ${btoa(`${siteInstance.value.user}:${decryptedPassword}`)}`;
     }
 
     // API
@@ -43,6 +43,7 @@ export const useSiteStore = defineStore("site", () => {
             method: method,
             headers: {
                 Authorization: await getAuthHeader(),
+                "Access-Control-Max-Age": "86400"
             },
             body: body,
         };
@@ -51,11 +52,11 @@ export const useSiteStore = defineStore("site", () => {
         return response.json();
     }
 
-    async function apiGetCore() {
-        const url = new URL(`https://${siteInstance.uri}/wp-json/wp/v2`);
+    async function getSiteSettings() {
+        const url = new URL(`https://${siteInstance.value.uri}/wp-json/wp/v2/settings`);
         const params = new URLSearchParams();
         return await apiRequest(url, "GET", params, null);
     }
 
-    return { useSite, apiGetCore };
+    return { siteInstance, useSite, getSiteSettings };
 });
