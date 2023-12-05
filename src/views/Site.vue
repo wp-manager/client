@@ -4,7 +4,7 @@ import { ref } from 'vue';
 
 const siteStore = useSiteStore();
 
-let siteSettings = ref({});
+let siteSettings = ref({}) as any;
 siteStore.getSiteSettings().then((res) => {
   siteSettings.value = res;
 });
