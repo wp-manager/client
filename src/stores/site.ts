@@ -42,8 +42,7 @@ export const useSiteStore = defineStore("site", () => {
         const options = {
             method: method,
             headers: {
-                Authorization: await getAuthHeader(),
-                "Access-Control-Max-Age": "86400"
+                Authorization: await getAuthHeader()
             },
             body: body,
         };
