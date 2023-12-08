@@ -17,3 +17,11 @@ app.mount('#app')
 import { useAuthStore } from './stores/auth'
 const authStore = useAuthStore()
 
+// Plugins
+import { usePluginsStore } from './stores/plugins'
+const pluginsStore = usePluginsStore()
+
+await pluginsStore.load('wp-engine');
+function toggleDSAP(){
+    pluginsStore.toggle(pluginsStore.plugins[0]);
+}

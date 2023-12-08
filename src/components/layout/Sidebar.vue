@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {useAuthStore} from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth';
 import { useSitesStore } from '@/stores/sites';
 
 const authStore = useAuthStore();
@@ -7,13 +7,12 @@ const authStore = useAuthStore();
 const sitesStore = useSitesStore();
 const firstSite = sitesStore.getSites()[0];
 
-
 defineProps<{
 	msg?: string
 }>()
 
 const changePassphrase = () => {
-	if(authStore.ask()){
+	if (authStore.ask()) {
 		window.location.reload();
 	}
 }
@@ -37,12 +36,17 @@ const changePassphrase = () => {
 			<RouterLink :to="{ name: 'site-core', params: { uri: firstSite.uri } }" v-if="firstSite">
 				<i class="bi bi-braces"></i> Core
 			</RouterLink>
-			</div>
-			<div class="sidebar__nav">
-				<a @click="changePassphrase">
-					<i class="bi bi-key"></i> Change Passphrase
-				</a>
-			</div>
+			<div v-for="route in $router.getRoutes()" :key="route.path">
+				<RouterLink :to="route.path">
+					{{ route.name }}
+				</RouterLink>
+					</div>
+		</div>
+		<div class="sidebar__nav">
+			<a @click="changePassphrase">
+				<i class="bi bi-key"></i> Change Passphrase
+			</a>
+		</div>
 	</div>
 </template>
 
@@ -64,35 +68,35 @@ const changePassphrase = () => {
 		&:nth-child(1) {
 			flex-grow: 1;
 		}
-	
 
-	a {
-		align-items: center;
-		display: flex;
-		gap: 1rem;
-		cursor: pointer;
-		font-size: .875rem;
-		font-weight: 500;
-		padding: .75rem .675rem;
-		border-radius: 6px;
-		transition: background-color .2s ease-in-out;
 
-		&:hover {
-			background-color: var(--sidebar-nav-item-hover)
-		}
-		
-		&.router-link-exact-active {
+		a {
+			align-items: center;
+			display: flex;
+			gap: 1rem;
+			cursor: pointer;
+			font-size: .875rem;
+			font-weight: 500;
+			padding: .75rem .675rem;
+			border-radius: 6px;
+			transition: background-color .2s ease-in-out;
 
-			&,
 			&:hover {
-				background-color: var(--sidebar-nav-item-active)
+				background-color: var(--sidebar-nav-item-hover)
+			}
+
+			&.router-link-exact-active {
+
+				&,
+				&:hover {
+					background-color: var(--sidebar-nav-item-active)
+				}
+			}
+
+			i {
+				font-size: 1.25rem;
 			}
 		}
-
-		i {
-			font-size: 1.25rem;
-		}
-	}
 	}
 }
 </style>
