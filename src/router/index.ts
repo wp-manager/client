@@ -9,10 +9,11 @@ import Site from "@/views/Site.vue";
 import SiteCore from "@/views/SiteCore.vue";
 import AddSite from "@/views/AddSite.vue";
 import { useSitesStore } from "@/stores/sites";
-import Encryption from "@/utils/encryption";
 import { useAuthStore } from "@/stores/auth";
+import Encryption from "@/utils/encryption";
 import { useSiteStore } from "@/stores/site";
 import { useFlashStore } from "@/stores/flash";
+import Login from "@/views/Login.vue";
 
 let historyMode = createWebHistory(import.meta.env.BASE_URL);
 // Change the history mode to hash if we're in a GitHub Action
@@ -30,6 +31,11 @@ const router = createRouter({
             path: "/",
             name: "home",
             component: Home,
+        },
+        {
+            path: "/login",
+            name: "login",
+            component: Login            
         },
         {
             path: "/sites",
@@ -66,6 +72,8 @@ const router = createRouter({
                             return { path: "/sites", query: {} };
                         }
 
+                        return { path: "/sites", query: {} };
+
                         const authStore = useAuthStore();
                         // Encrypt the password
                         const encryption = new Encryption();
@@ -96,25 +104,7 @@ const router = createRouter({
             component: Site,
             props: true,
             beforeEnter: (to) => {
-                const sitesStore = useSitesStore();
-                const site = sitesStore.getSite(to.params.uri as string);
-
-                if (!site) {
-                    const flashStore = useFlashStore();
-                    flashStore.addFlash({
-                        type: "error",
-                        message: "Site not found",
-                    });
-                    return {
-                        path: "/sites",
-                        query: {
-                            flash: null,
-                        },
-                    };
-                }
-
-                const siteStore = useSiteStore();
-                siteStore.useSite(site);
+                
             },
             children: [
                 {

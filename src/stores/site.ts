@@ -1,8 +1,8 @@
 import { ref } from "vue";
 import { defineStore } from "pinia"
+import { useAuthStore } from "@/stores/auth";
 
 import type { Site } from "@/types/site";
-import { useAuthStore } from "./auth";
 import Encryption from "@/utils/encryption";
 
 export const useSiteStore = defineStore("site", () => {
@@ -17,6 +17,7 @@ export const useSiteStore = defineStore("site", () => {
     }
 
     async function getAuthHeader(): Promise<string> {
+        return;
         const authStore = useAuthStore();
         const encryption = new Encryption();
         const deserialisedPassword = encryption.deserialise(

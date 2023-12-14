@@ -1,22 +1,19 @@
 <script setup lang="ts">
-import {useAuthStore} from '@/stores/auth';
 import { useSitesStore } from '@/stores/sites';
+import { usePasskeyStore } from '@/stores/passkey';
+import { useNewAuthStore } from '@/stores/newAuth';
+import { watch } from 'vue';
 
-const authStore = useAuthStore();
+
+const passkeyStore = usePasskeyStore();
 
 const sitesStore = useSitesStore();
 const firstSite = sitesStore.getSites()[0];
-
+const newAuthStore = useNewAuthStore();
 
 defineProps<{
 	msg?: string
 }>()
-
-const changePassphrase = () => {
-	if(authStore.ask()){
-		window.location.reload();
-	}
-}
 </script>
 
 <template>
@@ -37,12 +34,18 @@ const changePassphrase = () => {
 			<RouterLink :to="{ name: 'site-core', params: { uri: firstSite.uri } }" v-if="firstSite">
 				<i class="bi bi-braces"></i> Core
 			</RouterLink>
-			</div>
-			<div class="sidebar__nav">
-				<a @click="changePassphrase">
-					<i class="bi bi-key"></i> Change Passphrase
-				</a>
-			</div>
+		</div>
+		<div class="sidebar__nav" v-if="newAuthStore.user">
+			<a class="user">
+				<i class="bi bi-person"></i>
+				<div>{{ newAuthStore.user.username }} <small>{{ newAuthStore.user.id }}</small></div>
+			</a>
+		</div>
+		<div class="sidebar__nav" v-if="false">
+			<a @click="passkeyStore.authenticate()">
+				<i class="bi bi-key"></i> Use Passkey
+			</a>
+		</div>
 	</div>
 </template>
 
@@ -64,35 +67,47 @@ const changePassphrase = () => {
 		&:nth-child(1) {
 			flex-grow: 1;
 		}
-	
 
-	a {
-		align-items: center;
-		display: flex;
-		gap: 1rem;
-		cursor: pointer;
-		font-size: .875rem;
-		font-weight: 500;
-		padding: .75rem .675rem;
-		border-radius: 6px;
-		transition: background-color .2s ease-in-out;
+		a.user {
+			div {
+				display: flex;
+				flex-direction: column;
 
-		&:hover {
-			background-color: var(--sidebar-nav-item-hover)
-		}
-		
-		&.router-link-exact-active {
-
-			&,
-			&:hover {
-				background-color: var(--sidebar-nav-item-active)
+				small {
+					font-size: 10px;
+					color: rgba(255, 255, 255, .3);
+				}
 			}
 		}
 
-		i {
-			font-size: 1.25rem;
+
+		a {
+			align-items: center;
+			display: flex;
+			gap: 1rem;
+			cursor: pointer;
+			font-size: .875rem;
+			font-weight: 500;
+			padding: .75rem .675rem;
+			border-radius: 6px;
+			transition: background-color .2s ease-in-out;
+
+			&:hover {
+				background-color: var(--sidebar-nav-item-hover)
+			}
+
+			&.router-link-exact-active {
+
+				&,
+				&:hover {
+					background-color: var(--sidebar-nav-item-active)
+				}
+			}
+
+			i {
+				font-size: 1.25rem;
+			}
 		}
-	}
 	}
 }
 </style>
