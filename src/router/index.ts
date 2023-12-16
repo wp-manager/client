@@ -14,6 +14,7 @@ import Encryption from "@/utils/encryption";
 import { useSiteStore } from "@/stores/site";
 import { useFlashStore } from "@/stores/flash";
 import Login from "@/views/Login.vue";
+import { useApiStore } from "@/stores/api";
 
 let historyMode = createWebHistory(import.meta.env.BASE_URL);
 // Change the history mode to hash if we're in a GitHub Action
@@ -104,7 +105,8 @@ const router = createRouter({
             component: Site,
             props: true,
             beforeEnter: (to) => {
-                
+                const apiStore = useApiStore();
+                apiStore.siteUri = to.params.uri.toString();
             },
             children: [
                 {
