@@ -17,6 +17,3 @@ app.mount('#app')
 // import { useAuthStore } from './stores/auth'
 // const authStore = useAuthStore()
 
-import { useNewAuthStore } from './stores/newAuth'
-const newAuthStore = useNewAuthStore()
-

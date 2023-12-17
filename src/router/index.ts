@@ -15,6 +15,10 @@ import { useSiteStore } from "@/stores/site";
 import { useFlashStore } from "@/stores/flash";
 import Login from "@/views/Login.vue";
 import { useApiStore } from "@/stores/api";
+import SiteComponents from "@/views/SiteComponents.vue";
+import SiteDashboard from "@/views/SiteDashboard.vue";
+import SitesPlugins from "@/views/SitesPlugins.vue";
+import WPEngine from "@/views/WPEngine.vue";
 
 let historyMode = createWebHistory(import.meta.env.BASE_URL);
 // Change the history mode to hash if we're in a GitHub Action
@@ -36,12 +40,24 @@ const router = createRouter({
         {
             path: "/login",
             name: "login",
-            component: Login            
+            component: Login,
         },
         {
             path: "/sites",
             name: "sites",
             component: Sites,
+            children: [
+                {
+                    path: "plugins",
+                    name: "sites-plugins",
+                    component: SitesPlugins,
+                },
+            ],
+        },
+        {
+            path: "/wpengine",
+            name: "wpengine",
+            component: WPEngine
         },
         {
             path: "/sites/add",
@@ -110,10 +126,20 @@ const router = createRouter({
             },
             children: [
                 {
+                    path: "",
+                    name: "site-dashboard",
+                    component: SiteDashboard,
+                },
+                {
                     path: "core",
                     name: "site-core",
                     component: SiteCore,
                 },
+                {
+                    path: "components",
+                    name: "site-components",
+                    component: SiteComponents,
+                }
             ],
         },
     ],

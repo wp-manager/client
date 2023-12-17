@@ -16,9 +16,12 @@ export const useApiStore = defineStore("api", () => {
 
     let authCheck: (user: any) => void = () => {};
 
+    
     getAuthdUser();
     getSites().then((resp) => (sites.value = resp));
+    if(siteUri.value){
     root().then((resp) => (rootData.value = resp));
+    }
 
     async function getAuthdUser() {
         user.value = await fetch(`https://${apiBase}/auth/user`).then((res) =>
@@ -43,11 +46,17 @@ export const useApiStore = defineStore("api", () => {
         ).then((res) => res.json());
     }
 
+    async function getWPEngineRoute(route: string) {
+        return fetch(
+            `https://${apiBase}/wpengine/${route}`
+        ).then((res) => res.json());
+    }
+
     function onAuth(callback: (user: any) => void) {
         authCheck = callback;
     }
 
-    return { getSites, onAuth, user, sites, rootData, getRoute, siteUri };
+    return { getSites, onAuth, user, sites, rootData, getRoute, siteUri, getWPEngineRoute };
 });
 
 export type { Site };

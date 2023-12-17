@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Site } from '@/types/site';
-import { defineProps } from 'vue';
 
 import { useApiStore } from '@/stores/api';
 import { ref } from 'vue';

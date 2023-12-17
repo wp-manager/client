@@ -2,7 +2,6 @@
 import { useSitesStore } from '@/stores/sites';
 import { usePasskeyStore } from '@/stores/passkey';
 import { useNewAuthStore } from '@/stores/newAuth';
-import { watch } from 'vue';
 
 
 const passkeyStore = usePasskeyStore();
@@ -18,7 +17,7 @@ defineProps<{
 
 <template>
 	<div class="sidebar">
-		<div class="sidebar__nav">
+		<div class="sidebar__nav" v-if="!$route.params.uri">
 			<RouterLink to="/">
 				<i class="bi bi-house"></i>Home
 			</RouterLink>
@@ -33,6 +32,23 @@ defineProps<{
 			</RouterLink>
 			<RouterLink :to="{ name: 'site-core', params: { uri: firstSite.uri } }" v-if="firstSite">
 				<i class="bi bi-braces"></i> Core
+			</RouterLink>
+			<RouterLink :to="{ name: 'sites-plugins' }">
+				<i class="bi bi-plug"></i> All Plugins
+			</RouterLink>
+			<RouterLink :to="{ name: 'wpengine' }">
+				<i class="bi bi-server"></i> WP Engine
+			</RouterLink>
+		</div>
+		<div class="sidebar__nav" v-if="$route.params.uri">
+			<RouterLink :to="{ name: 'sites' }">
+				<i class="bi bi-arrow-left"></i>Back
+			</RouterLink>
+			<RouterLink :to="{ name: 'site', params: { uri: $route.params.uri } }">
+				<i class="bi bi-columns-gap"></i> Dashboard
+			</RouterLink>
+			<RouterLink :to="{ name: 'site-components', params: { uri: $route.params.uri } }">
+				<i class="bi bi-grid"></i> Components
 			</RouterLink>
 		</div>
 		<div class="sidebar__nav" v-if="newAuthStore.user">
@@ -72,6 +88,7 @@ defineProps<{
 			div {
 				display: flex;
 				flex-direction: column;
+				flex-grow: 1;
 
 				small {
 					font-size: 10px;
@@ -90,7 +107,7 @@ defineProps<{
 			font-weight: 500;
 			padding: .75rem .675rem;
 			border-radius: 6px;
-			transition: background-color .2s ease-in-out;
+			transition: background-color .4s ease-in-out;
 
 			&:hover {
 				background-color: var(--sidebar-nav-item-hover)

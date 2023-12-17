@@ -20,6 +20,8 @@ const flashStore = useFlashStore();
             <small>{{ site._id }}</small>
         </RouterLink>
     </div>
+    <hr>
+    <RouterView />
 </template>
 
 <style scoped lang="scss">
