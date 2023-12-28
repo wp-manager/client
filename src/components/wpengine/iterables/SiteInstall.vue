@@ -18,7 +18,7 @@ const abbreviate = (environment: string) => {
 </script>
 
 <template>
-    <div class="site-install" :class="siteInstall.environment">
+    <div class="site-install" :class="siteInstall.environment" :data-id="siteInstall.id">
         <div class="site-install__environment" :class="siteInstall.environment">
             {{ abbreviate(siteInstall.environment) }}
         </div>

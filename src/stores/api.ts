@@ -8,19 +8,24 @@ type Site = {
 };
 
 export const useApiStore = defineStore("api", () => {
-    const apiBase = import.meta.env.UI_API;
+    const apiBase = import.meta.env.APP_SERVER_URI;
     let siteUri = ref("");
+    let wpengineInstallId = ref("");
     let user = ref({});
     let sites: Ref<Site[]> = ref([] as Site[]);
     let rootData = ref({});
 
+    let site: Ref<Site> = ref({} as Site);
+
     let authCheck: (user: any) => void = () => {};
 
-    
     getAuthdUser();
-    getSites().then((resp) => (sites.value = resp));
-    if(siteUri.value){
-    root().then((resp) => (rootData.value = resp));
+    getSites().then((resp) => {
+        sites.value = resp;
+    });
+
+    if (siteUri.value) {
+        root().then((resp) => (rootData.value = resp));
     }
 
     async function getAuthdUser() {
@@ -47,16 +52,42 @@ export const useApiStore = defineStore("api", () => {
     }
 
     async function getWPEngineRoute(route: string) {
-        return fetch(
-            `https://${apiBase}/wpengine/${route}`
-        ).then((res) => res.json());
+        return fetch(`https://${apiBase}/wpengine/${route}`).then((res) =>
+            res.json()
+        );
+    }
+
+    async function postWPEngineRoute(route: string, data: any) {
+        return fetch(`https://${apiBase}/wpengine/${route}`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify(data),
+        }).then(async (response) => {
+            return response.text().then(function (text) {
+                return text ? JSON.parse(text) : {};
+            });
+        });
     }
 
     function onAuth(callback: (user: any) => void) {
         authCheck = callback;
     }
 
-    return { getSites, onAuth, user, sites, rootData, getRoute, siteUri, getWPEngineRoute };
+    return {
+        getSites,
+        onAuth,
+        user,
+        sites,
+        rootData,
+        getRoute,
+        siteUri,
+        getWPEngineRoute,
+        site,
+        postWPEngineRoute,
+        wpengineInstallId,
+    };
 });
 
 export type { Site };

@@ -25,7 +25,7 @@ apiStore.getRoute('').then((res) => {
 		<p v-if="siteData.description" v-html="siteData.description"></p>
 	</div>
 	<hr>
-	<RouterView />
+	<RouterView v-if="!loading" />
 </template>
 
 <style scoped lang="scss">

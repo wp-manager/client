@@ -9,7 +9,7 @@ defineProps({
 </script>
 
 <template>
-    <div class="site">
+    <div class="site" :data-id="site.id">
         <div class="site__group">
             {{ site.group_name }}
         </div>

@@ -21,7 +21,7 @@ export default defineConfig({
         "import.meta.env.GITHUB_ACTION": isGitHubAction,
     },
     base,
-    envPrefix: "UI_",
+    envPrefix: "APP_",
     resolve: {
         alias: {
             "@": fileURLToPath(new URL("./src", import.meta.url)),

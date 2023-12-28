@@ -2,6 +2,7 @@
 import { useSitesStore } from '@/stores/sites';
 import { usePasskeyStore } from '@/stores/passkey';
 import { useNewAuthStore } from '@/stores/newAuth';
+import { useApiStore } from '@/stores/api';
 
 
 const passkeyStore = usePasskeyStore();
@@ -9,6 +10,7 @@ const passkeyStore = usePasskeyStore();
 const sitesStore = useSitesStore();
 const firstSite = sitesStore.getSites()[0];
 const newAuthStore = useNewAuthStore();
+const apiStore = useApiStore();
 
 defineProps<{
 	msg?: string
@@ -36,9 +38,6 @@ defineProps<{
 			<RouterLink :to="{ name: 'sites-plugins' }">
 				<i class="bi bi-plug"></i> All Plugins
 			</RouterLink>
-			<RouterLink :to="{ name: 'wpengine' }">
-				<i class="bi bi-server"></i> WP Engine
-			</RouterLink>
 		</div>
 		<div class="sidebar__nav" v-if="$route.params.uri">
 			<RouterLink :to="{ name: 'sites' }">
@@ -49,6 +48,10 @@ defineProps<{
 			</RouterLink>
 			<RouterLink :to="{ name: 'site-components', params: { uri: $route.params.uri } }">
 				<i class="bi bi-grid"></i> Components
+			</RouterLink>
+			<RouterLink :to="{ name: 'site-wpengine', params: { uri: $route.params.uri } }"
+				v-if="apiStore.sites.find(a => a.uri == $route.params.uri)?.wpeInstallId">
+				<i class="bi bi-server"></i> WP Engine
 			</RouterLink>
 		</div>
 		<div class="sidebar__nav" v-if="newAuthStore.user">
@@ -62,6 +65,7 @@ defineProps<{
 				<i class="bi bi-key"></i> Use Passkey
 			</a>
 		</div>
+
 	</div>
 </template>
 

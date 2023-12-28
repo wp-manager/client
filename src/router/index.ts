@@ -19,6 +19,7 @@ import SiteComponents from "@/views/SiteComponents.vue";
 import SiteDashboard from "@/views/SiteDashboard.vue";
 import SitesPlugins from "@/views/SitesPlugins.vue";
 import WPEngine from "@/views/WPEngine.vue";
+import SiteWPEngine from "@/views/SiteWPEngine.vue";
 
 let historyMode = createWebHistory(import.meta.env.BASE_URL);
 // Change the history mode to hash if we're in a GitHub Action
@@ -90,27 +91,6 @@ const router = createRouter({
                         }
 
                         return { path: "/sites", query: {} };
-
-                        const authStore = useAuthStore();
-                        // Encrypt the password
-                        const encryption = new Encryption();
-                        const encryptedPassword = await encryption.encrypt(
-                            to.query.password as string,
-                            authStore.get()
-                        );
-
-                        const serializedEncryptedPassword =
-                            encryption.serialise(encryptedPassword);
-
-                        const sitesStore = useSitesStore();
-
-                        sitesStore.addSite(
-                            to.query.site_url as string,
-                            to.query.user_login as string,
-                            btoa(serializedEncryptedPassword)
-                        );
-
-                        return { path: "/sites", query: {} };
                     },
                 },
             ],
@@ -139,6 +119,16 @@ const router = createRouter({
                     path: "components",
                     name: "site-components",
                     component: SiteComponents,
+                },
+                {
+                    path: "plugins",
+                    name: "site-plugins",
+                    component: SitesPlugins,
+                },
+                {
+                    path: "site-wpengine",
+                    name: "site-wpengine",
+                    component: SiteWPEngine,
                 }
             ],
         },

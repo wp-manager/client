@@ -13,12 +13,12 @@ export const useNewAuthStore = defineStore('newAuth', () => {
     let sites: Ref<Site[]> = ref([] as Site[]);
     let authCheck: (user: any) => void = () => {};
 
-    if(import.meta.env.UI_API){
+    if(import.meta.env.APP_SERVER_URI){
         getUserFromAPI();
     }
 
     async function getUserFromAPI(){
-        const apiUser = await fetch(`https://${import.meta.env.UI_API}/auth/user`).then(res => res.json());
+        const apiUser = await fetch(`https://${import.meta.env.APP_SERVER_URI}/auth/user`).then(res => res.json());
         if(!apiUser.id){
             authCheck(false);
             return;
@@ -29,7 +29,7 @@ export const useNewAuthStore = defineStore('newAuth', () => {
     }
 
     async function getUserSites(){
-        sites.value = await fetch(`https://${import.meta.env.UI_API}/sites`).then(res => res.json());
+        sites.value = await fetch(`https://${import.meta.env.APP_SERVER_URI}/sites`).then(res => res.json());
     }
 
     function authCallback(callback: (user: any) => void){
