@@ -25,7 +25,6 @@ export const useNewAuthStore = defineStore('newAuth', () => {
         };
         user.value = apiUser;
         authCheck(user);
-        getUserSites();
     }
 
     async function getUserSites(){

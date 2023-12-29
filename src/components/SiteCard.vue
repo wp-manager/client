@@ -10,5 +10,3 @@ defineProps({
 <template>
     I am a site card: {{ msg }}
 </template>
-
-<style scoped lang="scss"></style>

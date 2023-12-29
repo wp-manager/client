@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { isValidURL } from '@/utils/url';
+import { isValidURL, sanitiseURL } from '@/utils/url';
 import WordpressAuth from '@/utils/wordpressAuth';
 import { onMounted, ref } from 'vue';
+let apiBase = import.meta.env.APP_SERVER_URI;
 
 const url = ref('');
 const authError = ref('');
 
 const beginAuthFlow = () => {
   if (!isValidURL(url.value)) return;
+  url.value = sanitiseURL(url.value);
 
-  const auth = new WordpressAuth(url.value);
-  window.location.replace(auth.getAuthorisationURL());
+  
+  window.location.replace(`https://${apiBase}/site-auth/${url.value}`);
 };
 
 const checkURLValidity = () => {

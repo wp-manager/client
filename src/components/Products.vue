@@ -40,6 +40,3 @@ apiStore.getRoute('wc/v3/products').then((res) => {
         </div>
     </div>
 </template>
-
-<style scoped lang="scss">
-</style>

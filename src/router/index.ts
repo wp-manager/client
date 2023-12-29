@@ -5,21 +5,19 @@ import {
 } from "vue-router";
 import Home from "@/views/Home.vue";
 import Sites from "@/views/Sites.vue";
-import Site from "@/views/Site.vue";
+import SiteVue from "@/views/Site.vue";
 import SiteCore from "@/views/SiteCore.vue";
 import AddSite from "@/views/AddSite.vue";
 import { useSitesStore } from "@/stores/sites";
-import { useAuthStore } from "@/stores/auth";
-import Encryption from "@/utils/encryption";
 import { useSiteStore } from "@/stores/site";
-import { useFlashStore } from "@/stores/flash";
 import Login from "@/views/Login.vue";
-import { useApiStore } from "@/stores/api";
 import SiteComponents from "@/views/SiteComponents.vue";
 import SiteDashboard from "@/views/SiteDashboard.vue";
 import SitesPlugins from "@/views/SitesPlugins.vue";
 import WPEngine from "@/views/WPEngine.vue";
 import SiteWPEngine from "@/views/SiteWPEngine.vue";
+import { useNewSitesStore } from "@/stores/sitesNew";
+import Site from "@/classes/site.class";
 
 let historyMode = createWebHistory(import.meta.env.BASE_URL);
 // Change the history mode to hash if we're in a GitHub Action
@@ -32,6 +30,7 @@ if (
 
 const router = createRouter({
     history: historyMode,
+    linkExactActiveClass: "active",
     routes: [
         {
             path: "/",
@@ -98,11 +97,19 @@ const router = createRouter({
         {
             path: "/sites/:uri",
             name: "site",
-            component: Site,
+            component: SiteVue,
             props: true,
             beforeEnter: (to) => {
-                const apiStore = useApiStore();
-                apiStore.siteUri = to.params.uri.toString();
+                const newSitesStore = useNewSitesStore();
+
+                if(newSitesStore.sites.find((s) => s.uri === to.params.uri)){
+                    newSitesStore.setSite(newSitesStore.sites.find((s) => s.uri === to.params.uri) as Site);
+                    return;
+                }
+
+                const targetSite = new Site(to.params.uri as string);
+                newSitesStore.addSite(targetSite);
+                newSitesStore.setSite(targetSite);
             },
             children: [
                 {

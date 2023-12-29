@@ -27,5 +27,3 @@ apiStore.getRoute('wp/v2/plugins').then((res) => {
         </div>
     </div>
 </template>
-
-<style scoped lang="scss"></style>

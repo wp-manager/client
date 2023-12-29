@@ -17,22 +17,3 @@ defineProps({
     </div>
 </template>
 
-<style scoped lang="scss">
-.plugin {
-    border: 1px solid var(--text-color);
-    border-radius: .5rem;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: .5rem;
-    p{
-        font-size: .875rem;
-        margin: 0;
-        flex-grow: 1;
-    }
-    small{
-        opacity: .6;
-        font-size: .75rem;
-    }
-}
-</style>

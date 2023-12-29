@@ -44,14 +44,3 @@ apiStore.getSites().then((sites) => {
     </div>
   </div>
 </template>
-
-<style scoped lang="scss">
-.plugins {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  .plugin{
-    flex-basis: 400px;
-  }
-}
-</style>

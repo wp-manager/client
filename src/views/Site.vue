@@ -1,41 +1,24 @@
 <script setup lang="ts">
-import { useApiStore } from '@/stores/api';
+import SiteIcon from '@/components/SiteIcon.vue';
+import { useNewSitesStore } from '@/stores/sitesNew';
 import { ref } from 'vue';
 
-const apiStore = useApiStore();
-
-const siteData = ref({});
-const loading = ref(true);
-
-apiStore.getRoute('').then((res) => {
-	loading.value = false;
-
-	siteData.value = res;
-});
-
+const sitesStore = useNewSitesStore();
 
 </script>
 
 <template>
-	<Transition name="fade">
-		<div class="loading" v-if="loading"></div>
-	</Transition>
-	<div v-if="!loading">
-		<h1 v-html="siteData.name"></h1>
-		<p v-if="siteData.description" v-html="siteData.description"></p>
+	<div class="d-flex flex-column gap-2">
+		<div class="d-flex align-items-center gap-2">
+			<SiteIcon :site="sitesStore.currentSite" />
+			<h1 v-html="sitesStore.currentSite?.getSiteInfo().title || sitesStore.currentSite.uri" class="mb-0 lh-1" />
+		</div>
+		<p v-html="sitesStore.currentSite?.getSiteInfo().description" class="mb-0" />
 	</div>
-	<hr>
-	<RouterView v-if="!loading" />
+		
+		<hr />
+	<RouterView />
 </template>
 
 <style scoped lang="scss">
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 0.25s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-	opacity: 0;
-}
 </style>

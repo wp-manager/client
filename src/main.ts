@@ -1,4 +1,4 @@
-import './assets/main.scss'
+//import './assets/main.scss'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -14,6 +14,5 @@ app.use(router)
 
 app.mount('#app')
 
-// import { useAuthStore } from './stores/auth'
-// const authStore = useAuthStore()
-
+import { useNewSitesStore } from './stores/sitesNew';
+const newSitesStore = useNewSitesStore();

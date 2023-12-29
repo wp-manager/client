@@ -36,6 +36,3 @@ apiStore.getRoute(`wp/v2/media/${props.id}`).then((res) => {
             :alt="image.alt_text">
     </div>
 </template>
-
-<style scoped lang="scss">
-</style>

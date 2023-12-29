@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, watch, type Ref } from "vue";
 import { useRoute, useRouter, type Router } from "vue-router";
+import Site from "@/classes/site.class";
 
 type Site = {
     _id: string;
@@ -15,8 +16,7 @@ export const useApiStore = defineStore("api", () => {
     let sites: Ref<Site[]> = ref([] as Site[]);
     let rootData = ref({});
 
-    let site: Ref<Site> = ref({} as Site);
-
+    let site: Site;
     let authCheck: (user: any) => void = () => {};
 
     getAuthdUser();
@@ -84,7 +84,6 @@ export const useApiStore = defineStore("api", () => {
         getRoute,
         siteUri,
         getWPEngineRoute,
-        site,
         postWPEngineRoute,
         wpengineInstallId,
     };
