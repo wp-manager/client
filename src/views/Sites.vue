@@ -44,14 +44,15 @@ const newSitesStore = useNewSitesStore();
                         </td>
                         <td>
                             <div v-if="site.getWpManagerWpCore()?.available" class="badge rounded-pill"
-                                :class="{ 'text-bg-success': !site.getWpManagerWpCore().available, 'text-bg-warning': site.getWpManagerWpCore().available }">
+                                :class="{ 'text-bg-success': !site.getWpManagerWpCore().available, 'text-bg-warning': site.getWpManagerWpCore().available, 'placeholder': site.getWpManagerWpCore().loading }">
                                 {{ site.getWpManagerWpCore().current }}
                                 <span v-if="site.getWpManagerWpCore().available"><i class="bi bi-arrow-right"></i> {{
                                     site.getWpManagerWpCore().available }}</span>
                             </div>
                         </td>
                         <td>
-                            {{ site.getPlugins().length }}
+                            <div class="spinner spinner-border spinner-border-sm ms-2 text-muted" v-if="site.getPlugins().loading"></div>
+                            <span v-if="site.getPlugins()">{{ site.getPlugins().length }}</span>
                         </td>
                         <td></td>
                         <td></td>
