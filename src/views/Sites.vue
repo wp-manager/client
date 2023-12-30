@@ -44,7 +44,7 @@ const newSitesStore = useNewSitesStore();
                             </small>
                         </td>
                         <td>
-                            <div v-if="site.getWpManagerWpCore()?.available" class="badge rounded-pill"
+                            <div v-if="site.getWpManagerWpCore().current" class="badge rounded-pill"
                                 :class="{ 'text-bg-success': !site.getWpManagerWpCore().available, 'text-bg-warning': site.getWpManagerWpCore().available, 'placeholder': site.getWpManagerWpCore().loading }">
                                 {{ site.getWpManagerWpCore().current }}
                                 <span v-if="site.getWpManagerWpCore().available"><i class="bi bi-arrow-right"></i> {{
