@@ -9,6 +9,7 @@ class Site {
     discovery = ref({});
     siteInfo = ref({});
     plugins = ref({});
+    themes = ref({});
 
     responses = {};
 
@@ -24,7 +25,7 @@ class Site {
 
     discover() {
         if (!this.discovery.value) {
-            this.discovery.value = { loading: true};
+            this.discovery.value = { loading: true };
             this.makeRequest("").then((res) => {
                 this.discovery.value = res;
             });
@@ -34,8 +35,8 @@ class Site {
 
     getSiteInfo() {
         if (!this.siteInfo.value) {
-            this.siteInfo.value = { loading: true};
-            this.makeRequest("wp/v2/settings").then((res) => {
+            this.siteInfo.value = { loading: true };
+            this.makeRequest("wp/v2/settings", true).then((res) => {
                 this.siteInfo.value = res;
             });
         }
@@ -44,7 +45,7 @@ class Site {
 
     getPlugins() {
         if (!this.plugins.value) {
-            this.plugins.value = { loading: true};
+            this.plugins.value = { loading: true };
             this.makeRequest("wp/v2/plugins").then((res) => {
                 this.plugins.value = res;
             });
@@ -52,13 +53,23 @@ class Site {
         return this.plugins.value;
     }
 
+    getThemes() {
+        if (!this.themes.value) {
+            this.themes.value = { loading: true };
+            this.makeRequest("wp/v2/themes?context=embed").then((res) => {
+                this.themes.value = res;
+            });
+        }
+        return this.themes.value;
+    }
+
     getFavicon(size: number = 32) {
         return `https://www.google.com/s2/favicons?domain=${this.uri}&sz=${size}`;
     }
 
     getWpManagerWpCore() {
-        if(!this.responses.wpManagerWpCore){
-            this.responses.wpManagerWpCore = { loading: true};
+        if (!this.responses.wpManagerWpCore) {
+            this.responses.wpManagerWpCore = { loading: true };
             this.makeRequest("wp-manager/v1/wp-core").then((res) => {
                 this.responses.wpManagerWpCore = res;
             });
@@ -66,7 +77,7 @@ class Site {
         return this.responses.wpManagerWpCore;
     }
 
-    private async makeRequest(path: string) {
+    private async makeRequest(path: string, validateAuth: boolean = false) {
         return fetch(
             `https://${apiBase}/site/${this.uri}/wp-json/${path}`
         ).then((res) => {
@@ -74,7 +85,10 @@ class Site {
                 return res.json();
             }
 
-            this.authOk = false;
+            if(validateAuth){
+                this.authOk = false;
+            }
+
             return res.json();
         });
     }

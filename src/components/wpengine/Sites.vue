@@ -17,7 +17,6 @@ apiStore.getWPEngineRoute('sites').then((res) => {
 
 <template>
     <div class="sites" :class="{ loading: loading }">
-        
         <Site v-for="site in wpeSites.results" :key="site.id" :site="site" />
 
     </div>

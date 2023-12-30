@@ -7,7 +7,7 @@ import Sidebar from './components/layout/Sidebar.vue';
   <div class="app">
     
     <Sidebar />
-    <div class="view">
+    <div class="view flex-grow-1 p-3">
       <RouterView />
     </div>
   </div>
@@ -16,10 +16,8 @@ import Sidebar from './components/layout/Sidebar.vue';
 <style scoped lang="scss">
 .app {
   display: flex;
-
-  .view{
-    flex-grow: 1;
-    padding: .75rem;
-  }
+}
+.view{
+  overflow: hidden;
 }
 </style>

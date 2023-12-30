@@ -19,9 +19,9 @@ const newSitesStore = useNewSitesStore();
                     <tr>
                         <th scope="col" style="width:0"></th>
                         <th scope="col">Site</th>
-                        <th scope="col">Version</th>
+                        <th scope="col" style="width:0">Version</th>
                         <th scope="col">Plugins</th>
-                        <th scope="col">Crawl</th>
+                        <th scope="col">Theme</th>
                         <th scope="col">Integrations</th>
                         <th scope="col">Runners</th>
                     </tr>
@@ -33,6 +33,7 @@ const newSitesStore = useNewSitesStore();
                             <SiteIcon :site="site" />
                         </td>
                         <td>
+                            <i class="bi bi-exclamation-triangle-fill text-warning me-2 bi-sm" style="font-size:14px;" v-if="!site.authOk" title="Authentication failed"></i>
                             <RouterLink :to="{ name: 'site', params: { uri: site.uri } }"
                                 v-html="site.getSiteInfo().title || site.uri">
                             </RouterLink>
@@ -54,7 +55,15 @@ const newSitesStore = useNewSitesStore();
                             <div class="spinner spinner-border spinner-border-sm ms-2 text-muted" v-if="site.getPlugins().loading"></div>
                             <span v-if="site.getPlugins()">{{ site.getPlugins().length }}</span>
                         </td>
-                        <td></td>
+                        <td>
+                            <div class="spinner spinner-border spinner-border-sm ms-2 text-muted" v-if="site.getThemes().loading"></div>
+                            <div v-if="site.getThemes().length && site.getThemes().find((theme) => theme.status == 'active')">
+                                <span>{{ site.getThemes().find((theme) => theme.status == 'active')?.name.rendered }}</span>
+                                <small class="text-muted d-flex">
+                                    v{{ site.getThemes().find((theme) => theme.status == 'active')?.version }}
+                                </small>
+                            </div>
+                        </td>
                         <td></td>
                         <td></td>
                     </tr>
