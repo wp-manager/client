@@ -21,7 +21,7 @@ export const useAuthStore = defineStore("auth", () => {
     });
 
     async function getUserFromAPI() {
-        return fetch(`https://${import.meta.env.APP_SERVER_URI}/auth/user`, {
+        return fetch(`${import.meta.env.APP_SERVER_URL}/auth/user`, {
             credentials: "include",
         })
             .then((res) => {
@@ -41,7 +41,7 @@ export const useAuthStore = defineStore("auth", () => {
     async function checkEmailAvailability(email: string) {
         return fetch(
             `https://${
-                import.meta.env.APP_SERVER_URI
+                import.meta.env.APP_SERVER_URL
             }/auth/email-availability/`,
             {
                 headers: {
@@ -64,7 +64,7 @@ export const useAuthStore = defineStore("auth", () => {
 
     async function register(email: string, password: string) {
         return fetch(
-            `https://${import.meta.env.APP_SERVER_URI}/auth/register/`,
+            `${import.meta.env.APP_SERVER_URL}/auth/register/`,
             {
                 headers: {
                     "Content-Type": "application/json",
@@ -85,7 +85,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     async function login(email: string, password: string) {
-        return fetch(`https://${import.meta.env.APP_SERVER_URI}/auth/login/`, {
+        return fetch(`${import.meta.env.APP_SERVER_URL}/auth/login/`, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -102,7 +102,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     async function logout() {
-        return fetch(`https://${import.meta.env.APP_SERVER_URI}/auth/logout/`, {
+        return fetch(`${import.meta.env.APP_SERVER_URL}/auth/logout/`, {
             headers: {
                 "Content-Type": "application/json",
             },

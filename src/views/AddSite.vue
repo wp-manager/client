@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isValidURL, sanitiseURL } from '@/utils/url';
 import { ref } from 'vue';
-let apiBase = import.meta.env.APP_SERVER_URI;
+let apiBase = import.meta.env.APP_SERVER_URL;
 
 const url = ref('');
 
@@ -10,14 +10,14 @@ const beginAuthFlow = () => {
   url.value = sanitiseURL(url.value);
 
 
-  window.location.replace(`https://${apiBase}/site-auth/${url.value}`);
+  window.location.replace(`${apiBase}/site-auth/${url.value}`);
 };
 </script>
 
 <template>
   <main>
     <form id="addSite" @submit.prevent="beginAuthFlow" style="max-width: 500px;">
-      <div class="input-group mb-3">
+      <div class="input-group mb-2">
         <input type="text" class="form-control" name="url" id="url" v-model="url" placeholder="https://example.com"
         aria-describedby="submitBtn">
         <button class="btn btn-primary" type="submit" id="submitBtn" :disabled="!isValidURL(url)">Add WordPress Site</button>

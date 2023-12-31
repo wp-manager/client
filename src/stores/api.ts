@@ -8,7 +8,7 @@ type TypeSite = {
 };
 
 export const useApiStore = defineStore("api", () => {
-    const apiBase = import.meta.env.APP_SERVER_URI;
+    const apiBase = import.meta.env.APP_SERVER_URL;
     let siteUri = ref("");
     let wpengineInstallId = ref("");
     let user = ref({});
@@ -16,23 +16,23 @@ export const useApiStore = defineStore("api", () => {
     let rootData = ref({});
 
     async function getSites(): Promise<Site[]> {
-        return fetch(`https://${apiBase}/sites`).then((res) => res.json());
+        return fetch(`${apiBase}/sites`).then((res) => res.json());
     }
 
     async function getRoute(route: string) {
         return fetch(
-            `https://${apiBase}/site/${siteUri.value}/wp-json/${route}`
+            `${apiBase}/site/${siteUri.value}/wp-json/${route}`
         ).then((res) => res.json());
     }
 
     async function getWPEngineRoute(route: string) {
-        return fetch(`https://${apiBase}/wpengine/${route}`, {credentials: 'include'}).then(
+        return fetch(`${apiBase}/wpengine/${route}`, {credentials: 'include'}).then(
             (res) => res.json()
         );
     }
 
     async function postWPEngineRoute(route: string, data: any) {
-        return fetch(`https://${apiBase}/wpengine/${route}`, {
+        return fetch(`${apiBase}/wpengine/${route}`, {
             headers: {
                 "Content-Type": "application/json",
             },

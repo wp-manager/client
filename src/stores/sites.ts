@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 
-const apiBase = import.meta.env.APP_SERVER_URI;
+const apiBase = import.meta.env.APP_SERVER_URL;
 
 import Site from "@/classes/site.class";
 import { ref } from "vue";
@@ -33,7 +33,7 @@ export const useSitesStore = defineStore("sites", () => {
     }
 
     async function getUserSites(){
-        return fetch(`https://${apiBase}/sites`, {credentials: "include"}).then((res) => res.json());
+        return fetch(`${apiBase}/sites`, {credentials: "include"}).then((res) => res.json());
     }
 
     return { sites, addSite, setSite, currentSite };

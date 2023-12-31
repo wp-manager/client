@@ -1,6 +1,6 @@
 import FetchUtils from "@/utils/fetch";
 import { ref } from "vue";
-let apiBase = import.meta.env.APP_SERVER_URI;
+let apiBase = import.meta.env.APP_SERVER_URL;
 
 class Site {
     uri: string;
@@ -79,7 +79,7 @@ class Site {
 
     private async makeRequest(path: string, validateAuth: boolean = false) {
         return fetch(
-            `https://${apiBase}/site/${this.uri}/wp-json/${path}`,
+            `${apiBase}/site/${this.uri}/wp-json/${path}`,
             {
                 credentials: "include",
                 signal: FetchUtils.abortController.signal
