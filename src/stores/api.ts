@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref, type Ref } from "vue";
+import { ref } from "vue";
 import Site from "@/classes/site.class";
 
 type TypeSite = {
@@ -15,32 +15,8 @@ export const useApiStore = defineStore("api", () => {
     let sites = ref<Site[]>([] as Site[]);
     let rootData = ref({});
 
-    let authCheck: (user: any) => void = () => {};
-
-    getAuthdUser();
-    getSites().then((resp) => {
-        sites.value = resp as any;
-    });
-
-    if (siteUri.value) {
-        root().then((resp) => (rootData.value = resp));
-    }
-
-    async function getAuthdUser() {
-        user.value = await fetch(`https://${apiBase}/auth/user`, {credentials: 'include'}).then((res) =>
-            res.json()
-        );
-        authCheck(user.value);
-    }
-
     async function getSites(): Promise<Site[]> {
         return fetch(`https://${apiBase}/sites`).then((res) => res.json());
-    }
-
-    async function root() {
-        return fetch(`https://${apiBase}/site/${siteUri.value}/wp-json/`).then(
-            (res) => res.json()
-        );
     }
 
     async function getRoute(route: string) {
@@ -69,13 +45,8 @@ export const useApiStore = defineStore("api", () => {
         });
     }
 
-    function onAuth(callback: (user: any) => void) {
-        authCheck = callback;
-    }
-
     return {
         getSites,
-        onAuth,
         user,
         sites,
         rootData,

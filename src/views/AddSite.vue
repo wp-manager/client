@@ -4,32 +4,28 @@ import { ref } from 'vue';
 let apiBase = import.meta.env.APP_SERVER_URI;
 
 const url = ref('');
-const authError = ref('');
 
 const beginAuthFlow = () => {
   if (!isValidURL(url.value)) return;
   url.value = sanitiseURL(url.value);
 
-  
-  window.location.replace(`https://${apiBase}/site-auth/${url.value}`);
-};
 
-const checkURLValidity = () => {
-  if (!isValidURL(url.value)) {
-    authError.value = 'Please enter a valid URL';
-  } else {
-    authError.value = '';
-  }
+  window.location.replace(`https://${apiBase}/site-auth/${url.value}`);
 };
 </script>
 
 <template>
   <main>
-    <form id="addSite" @submit.prevent="beginAuthFlow">
-      <input type="text" name="url" id="url" v-model="url" placeholder="https://example.com" @keyup="checkURLValidity" />
-      <span class="error" v-if="authError">{{ authError }}</span>
-      {{ url }}
-      <button type="submit">Add Site</button>
+    <form id="addSite" @submit.prevent="beginAuthFlow" style="max-width: 500px;">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" name="url" id="url" v-model="url" placeholder="https://example.com"
+        aria-describedby="submitBtn">
+        <button class="btn btn-primary" type="submit" id="submitBtn" :disabled="!isValidURL(url)">Add WordPress Site</button>
+      </div>
+      <div class="form-text">You will be redirected to the WordPress site you are trying to add and asked to
+        login and authorise the application. This will then allow WP Manager to access your site based on the permissions
+        of the user you logged in as.</div>
+
     </form>
   </main>
 </template>

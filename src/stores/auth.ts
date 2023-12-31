@@ -1,26 +1,41 @@
+import router from "@/router";
 import { defineStore } from "pinia";
 import { ref, type Ref } from "vue";
 
 type User = {
-    id: string,
-    email: string
+    id: string;
+    email: string;
 };
 
 export const useAuthStore = defineStore("auth", () => {
-    let user: Ref<User> = ref({} as User);
+    let user = ref<User | null>(null);
 
-    if(import.meta.env.APP_SERVER_URI){
-        getUserFromAPI();
-    }
+    getUserFromAPI().then(() => {
+        if (router.currentRoute.value.name === "login") {
+            router.push({ name: "home" });
+        }
+    }).catch(() => {
+        if (router.currentRoute.value.name !== "login") {
+            router.push({ name: "login" });
+        }
+    });
 
-    async function getUserFromAPI(){
-        fetch(`https://${import.meta.env.APP_SERVER_URI}/auth/user`, {credentials: 'include'}).then(res => res.json()).then(apiUser => {
-            if(!apiUser.id){
-                return;
-            };
-            user.value = apiUser;
-        });
-        return user;
+    async function getUserFromAPI() {
+        return fetch(`https://${import.meta.env.APP_SERVER_URI}/auth/user`, {
+            credentials: "include",
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Not logged in");
+                }
+                return res.json();
+            })
+            .then((apiUser) => {
+                if (!apiUser || !apiUser.id) {
+                    return;
+                }
+                user.value = apiUser;
+            });
     }
 
     async function checkEmailAvailability(email: string) {
@@ -77,10 +92,13 @@ export const useAuthStore = defineStore("auth", () => {
             credentials: "include",
             method: "POST",
             body: JSON.stringify({ email, password }),
-        })
-            .then(async (res) => {
-                return res.ok;
-            })
+        }).then(async (res) => {
+            if (res.ok) {
+                user.value = await res.json();
+            }
+
+            return res.ok;
+        });
     }
 
     async function logout() {
@@ -90,11 +108,21 @@ export const useAuthStore = defineStore("auth", () => {
             },
             credentials: "include",
             method: "POST",
-        })
-            .then(async (res) => {
-                return res.ok;
-            });
+        }).then(async (res) => {
+            if (res.ok) {
+                user.value = null;
+            }
+
+            return res.ok;
+        });
     }
 
-    return { checkEmailAvailability, register, login, logout, user };
+    return {
+        checkEmailAvailability,
+        register,
+        login,
+        logout,
+        user,
+        getUserFromAPI,
+    };
 });

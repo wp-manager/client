@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import Sidebar from './components/layout/Sidebar.vue';
+import { useAuthStore } from './stores/auth';
+
+const authStore = useAuthStore();
+
 </script>
 
 <template>
-  <div class="app">  
+  <div class="app">
     <Sidebar />
     <div class="view flex-grow-1 p-3">
       <RouterView />
@@ -16,7 +20,8 @@ import Sidebar from './components/layout/Sidebar.vue';
 .app {
   display: flex;
 }
-.view{
+
+.view {
   overflow: hidden;
   max-width: calc(100% - var(--sidebar-width));
   transition: max-width 0.2s ease-in-out;
