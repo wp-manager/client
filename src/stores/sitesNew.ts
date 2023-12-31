@@ -33,7 +33,7 @@ export const useNewSitesStore = defineStore("newSites", () => {
     }
 
     async function getUserSites(){
-        return fetch(`https://${apiBase}/sites`).then((res) => res.json());
+        return fetch(`https://${apiBase}/sites`, {credentials: "include"}).then((res) => res.json());
     }
 
     return { sites, addSite, setSite, currentSite };
