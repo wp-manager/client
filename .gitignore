@@ -18,6 +18,7 @@ coverage
 /cypress/screenshots/
 
 .env
+update.sh
 
 # Editor directories and files
 .vscode/*
