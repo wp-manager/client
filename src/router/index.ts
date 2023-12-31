@@ -1,24 +1,27 @@
+// Vue
 import {
     createRouter,
     createWebHashHistory,
     createWebHistory,
 } from "vue-router";
-import Home from "@/views/Home.vue";
-import Sites from "@/views/Sites.vue";
-import SiteVue from "@/views/Site.vue";
-import SiteCore from "@/views/SiteCore.vue";
-import AddSite from "@/views/AddSite.vue";
-import { useSitesStore } from "@/stores/sites";
-import { useSiteStore } from "@/stores/site";
+import Site from "@/classes/site.class";
+
+// Stores
 import { useAuthStore } from "@/stores/auth";
+import { useSitesStore } from "@/stores/sites";
+
+// Components
+import AddSite from "@/views/AddSite.vue";
+import Home from "@/views/Home.vue";
 import Login from "@/views/Login.vue";
 import SiteComponents from "@/views/SiteComponents.vue";
+import SiteCore from "@/views/SiteCore.vue";
 import SiteDashboard from "@/views/SiteDashboard.vue";
+import Sites from "@/views/Sites.vue";
 import SitesPlugins from "@/views/SitesPlugins.vue";
-import WPEngine from "@/views/WPEngine.vue";
+import SiteVue from "@/views/Site.vue";
 import SiteWPEngine from "@/views/SiteWPEngine.vue";
-import { useNewSitesStore } from "@/stores/sitesNew";
-import Site from "@/classes/site.class";
+import WPEngine from "@/views/WPEngine.vue";
 
 let historyMode = createWebHistory(import.meta.env.BASE_URL);
 // Change the history mode to hash if we're in a GitHub Action
@@ -74,37 +77,7 @@ const router = createRouter({
         {
             path: "/sites/add",
             name: "add-site",
-            component: AddSite,
-            children: [
-                {
-                    path: "callback",
-                    name: "add-site-callback",
-                    component: () => {},
-                    beforeEnter: async (to) => {
-                        const params = new URLSearchParams(
-                            to.query as Record<string, string>
-                        );
-
-                        if (
-                            !params.has("site_url") ||
-                            !params.has("user_login") ||
-                            !params.has("password")
-                        ) {
-                            return { path: "/sites", query: {} };
-                        }
-
-                        if (
-                            params.get("site_url") == "" ||
-                            params.get("user_login") == "" ||
-                            params.get("password") == ""
-                        ) {
-                            return { path: "/sites", query: {} };
-                        }
-
-                        return { path: "/sites", query: {} };
-                    },
-                },
-            ],
+            component: AddSite
         },
         {
             path: "/sites/:uri",
@@ -112,16 +85,17 @@ const router = createRouter({
             component: SiteVue,
             props: true,
             beforeEnter: (to) => {
-                const newSitesStore = useNewSitesStore();
+                const sitesStore = useSitesStore();
 
-                if(newSitesStore.sites.find((s) => s.uri === to.params.uri)){
-                    newSitesStore.setSite(newSitesStore.sites.find((s) => s.uri === to.params.uri) as Site);
+                if(sitesStore.sites.find((s) => s.uri === to.params.uri)){
+                    sitesStore.setSite(sitesStore.sites.find((s) => s.uri === to.params.uri) as any);
                     return;
                 }
 
                 const targetSite = new Site(to.params.uri as string);
-                newSitesStore.addSite(targetSite);
-                newSitesStore.setSite(targetSite);
+
+                sitesStore.addSite(targetSite);
+                sitesStore.setSite(targetSite);
             },
             children: [
                 {
@@ -145,40 +119,13 @@ const router = createRouter({
                     component: SitesPlugins,
                 },
                 {
-                    path: "site-wpengine",
+                    path: "wpengine",
                     name: "site-wpengine",
                     component: SiteWPEngine,
                 }
             ],
         },
     ],
-});
-
-router.afterEach((to, from) => {
-    // remove ?flash if it exists
-    const params = new URLSearchParams(window.location.search);
-    if (params.has("flash")) {
-        params.delete("flash");
-        if (params.size > 0) {
-            window.history.replaceState(
-                {},
-                "",
-                `${to.path}?${params.toString()}`
-            );
-        } else {
-            window.history.replaceState({}, "", window.location.pathname);
-        }
-    }
-
-    if (to.params.uri) {
-        const sitesStore = useSitesStore();
-        const site = sitesStore.getSite(to.params.uri as string);
-
-        if (site) {
-            const siteStore = useSiteStore();
-            siteStore.useSite(site);
-        }
-    }
 });
 
 export default router;

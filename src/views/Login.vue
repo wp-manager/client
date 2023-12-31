@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import debounce from '@/utils/debounce';
 import { useAuthStore } from '@/stores/auth';
 import { ref } from 'vue';
 
@@ -12,9 +11,8 @@ const checking = ref(false);
 const available = ref(false);
 const submitted = ref(false);
 
-
-
 const formValidation = ref(false as string | false);
+
 const inputValidation = ref({
   email: false as string | false,
   password: false as string | false,

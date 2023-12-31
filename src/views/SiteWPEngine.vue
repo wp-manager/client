@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import Sites from '@/components/wpengine/Sites.vue';
 import { useApiStore } from '@/stores/api';
-import { useSiteStore } from '@/stores/site';
 import { ref } from 'vue';
 
 const apiStore = useApiStore();
@@ -18,7 +16,6 @@ apiStore.getWPEngineRoute(`installs/${install}`).then((res) => {
     loading.value = false;
     wpeUserData.value = res;
 });
-
 
 const purgeCache = () => {
     cacheData.value = 'sending request...';
@@ -48,10 +45,7 @@ const backup = () => {
             }, 2000);
         }
     });
-
-
 }
-
 </script>
 
 <template>

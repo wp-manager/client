@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Site } from '@/types/site';
-
 import { useApiStore } from '@/stores/api';
 import { ref } from 'vue';
 
@@ -25,8 +23,6 @@ apiStore.getRoute(`wp/v2/media/${props.id}`).then((res) => {
 
     image.value = res;
 });
-
-
 </script>
 
 <template>

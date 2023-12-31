@@ -14,12 +14,6 @@ dist-ssr
 coverage
 *.local
 
-/cypress/videos/
-/cypress/screenshots/
-
-.env
-update.sh
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -30,7 +24,10 @@ update.sh
 *.sln
 *.sw?
 
-test-results/
-playwright-report/
+# Certificates
+*.pem
+certs/
 
+# Other
 .env
+update.sh

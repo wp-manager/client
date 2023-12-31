@@ -1,74 +1,41 @@
-import { ref } from "vue";
-import { defineStore } from "pinia";
+import { defineStore } from "pinia"
 
-import { sanitiseURL } from "@/utils/url";
-import type { Site } from "@/types/site";
+const apiBase = import.meta.env.APP_SERVER_URI;
+
+import Site from "@/classes/site.class";
+import { ref } from "vue";
 
 export const useSitesStore = defineStore("sites", () => {
     let sites = ref<Site[]>([]);
+    let currentSite = ref<Site|null>();
 
-    loadSites();
-
-    function loadSites() {
-        if (localStorage.getItem("sites")) {
-            sites.value = [];
-
-            let sitesJSON = localStorage.getItem("sites") as string;
-            let unparsedSites = JSON.parse(sitesJSON) as Site[];
-
-            unparsedSites.forEach((site) => {
-                sites.value.push({
-                    uri: sanitiseURL(site.uri),
-                    user: site.user,
-                    password: site.password,
-                });
-            });
-        }
-    }
-
-    function addSite(
-        uri: Site["uri"],
-        user: Site["user"],
-        password: Site["password"]
-    ) {
-        let existingSite = sites.value.find((site) => site.uri === uri);
-
-        if (existingSite) {
-            existingSite.user = user;
-            existingSite.password = password;
-        } else {
-            sites.value.push({
-                uri: sanitiseURL(uri),
-                user: user,
-                password: password,
-            });
+    getUserSites().then((resp) => {
+        if(!resp.length){
+            return;
         }
 
-        saveSites();
-    }
-
-    function saveSites() {
-        let encryptedSites: Site[] = [];
-
-        sites.value.forEach((site) => {
-            encryptedSites.push({
-                uri: site.uri,
-                user: site.user,
-                password: site.password
-            });
+        resp.forEach((site: Site) => {
+            addSite(new Site(site.uri));
         });
+    });
 
-        let sitesJSON = JSON.stringify(encryptedSites);
-        localStorage.setItem("sites", sitesJSON);
+    function addSite(site: Site) {
+        // if sites already has this site, don't add it again
+        if(sites.value.find((s) => s.uri === site.uri)){
+            return;
+        }
+
+        sites.value.push(site as any);
     }
 
-    function getSites(): Site[] {
-        return sites.value;
+    function setSite(site: Site) {
+        currentSite.value = site;
     }
 
-    function getSite(uri: Site["uri"]): Site | undefined {
-        return sites.value.find((site) => site.uri === uri);
+    async function getUserSites(){
+        return fetch(`https://${apiBase}/sites`, {credentials: "include"}).then((res) => res.json());
     }
 
-    return { loadSites, addSite, getSites, getSite };
+    return { sites, addSite, setSite, currentSite };
 });
+

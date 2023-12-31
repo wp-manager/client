@@ -1,14 +1,8 @@
 <script setup lang="ts">
-import Site from '@/classes/site.class';
-import { useApiStore } from '@/stores/api';
-import { useFlashStore } from '@/stores/flash';
-import { ref } from 'vue';
-import { useNewSitesStore } from '@/stores/sitesNew';
-import { storeToRefs } from 'pinia';
+import { useSitesStore } from '@/stores/sites';
 import SiteIcon from '@/components/SiteIcon.vue';
 
-const newSitesStore = useNewSitesStore();
-
+const sitesStore = useSitesStore();
 </script>
 <template>
     <div class="main overflow-hidden flex-grow-1">
@@ -28,7 +22,7 @@ const newSitesStore = useNewSitesStore();
                 </thead>
                 <tbody>
 
-                    <tr v-for="site in newSitesStore.sites.sort((a, b) => a.uri.localeCompare(b.uri))" :key="site.uri">
+                    <tr v-for="site in sitesStore.sites.sort((a, b) => a.uri.localeCompare(b.uri))" :key="site.uri">
                         <td>
                             <SiteIcon :site="site" />
                         </td>
@@ -111,4 +105,5 @@ const newSitesStore = useNewSitesStore();
         width: 100%;
         height: 100%;
     }
-}</style>
+}
+</style>

@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import Sidebar from './components/layout/Sidebar.vue';
 </script>
 
 <template>
-  <div class="app">
-    
+  <div class="app">  
     <Sidebar />
     <div class="view flex-grow-1 p-3">
       <RouterView />

@@ -1,9 +1,8 @@
 import { defineStore } from "pinia";
-import { ref, watch, type Ref } from "vue";
-import { useRoute, useRouter, type Router } from "vue-router";
+import { ref, type Ref } from "vue";
 import Site from "@/classes/site.class";
 
-type Site = {
+type TypeSite = {
     _id: string;
     uri: string;
 };
@@ -13,15 +12,14 @@ export const useApiStore = defineStore("api", () => {
     let siteUri = ref("");
     let wpengineInstallId = ref("");
     let user = ref({});
-    let sites: Ref<Site[]> = ref([] as Site[]);
+    let sites = ref<Site[]>([] as Site[]);
     let rootData = ref({});
 
-    let site: Site;
     let authCheck: (user: any) => void = () => {};
 
     getAuthdUser();
     getSites().then((resp) => {
-        sites.value = resp;
+        sites.value = resp as any;
     });
 
     if (siteUri.value) {
@@ -52,8 +50,8 @@ export const useApiStore = defineStore("api", () => {
     }
 
     async function getWPEngineRoute(route: string) {
-        return fetch(`https://${apiBase}/wpengine/${route}`).then((res) =>
-            res.json()
+        return fetch(`https://${apiBase}/wpengine/${route}`, {credentials: 'include'}).then(
+            (res) => res.json()
         );
     }
 

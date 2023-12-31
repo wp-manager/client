@@ -3,13 +3,11 @@ import Plugin from '@/components/wordpress/iterables/Plugin.vue';
 import { useApiStore } from '@/stores/api';
 import { ref } from 'vue';
 
-
 const apiStore = useApiStore();
 
-const plugins = ref({});
-
 let finished = ref(0);
-let times = ref({})
+let times = ref({} as any);
+const plugins = ref({} as any);
 
 apiStore.getSites().then((sites) => {
   sites.forEach((site) => {
@@ -24,8 +22,6 @@ apiStore.getSites().then((sites) => {
     });
   });
 });
-
-
 </script>
 
 <template>

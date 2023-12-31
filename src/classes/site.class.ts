@@ -1,4 +1,3 @@
-import { useApiStore } from "@/stores/api";
 import { ref } from "vue";
 let apiBase = import.meta.env.APP_SERVER_URI;
 
@@ -11,7 +10,7 @@ class Site {
     plugins = ref({});
     themes = ref({});
 
-    responses = {};
+    responses = {} as any;
 
     error: boolean|string = false;
 

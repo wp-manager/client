@@ -13,6 +13,3 @@ app.use(pinia)
 app.use(router)
 
 app.mount('#app')
-
-import { useNewSitesStore } from './stores/sitesNew';
-const newSitesStore = useNewSitesStore();

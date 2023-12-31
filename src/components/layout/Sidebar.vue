@@ -1,19 +1,7 @@
 <script setup lang="ts">
-import { useSitesStore } from '@/stores/sites';
-import { usePasskeyStore } from '@/stores/passkey';
 import { useAuthStore } from '@/stores/auth';
-import { useApiStore } from '@/stores/api';
-import { useNewSitesStore } from '@/stores/sitesNew';
 
 const authStore = useAuthStore();
-
-
-const newSitesStore = useNewSitesStore();
-
-
-defineProps<{
-	msg?: string
-}>()
 </script>
 
 <template>
