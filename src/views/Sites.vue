@@ -33,11 +33,13 @@ const newSitesStore = useNewSitesStore();
                             <SiteIcon :site="site" />
                         </td>
                         <td>
-                            <i class="bi bi-exclamation-triangle-fill text-warning me-2 bi-sm" style="font-size:14px;" v-if="!site.authOk" title="Authentication failed"></i>
                             <RouterLink :to="{ name: 'site', params: { uri: site.uri } }"
                                 v-html="site.getSiteInfo().title || site.uri">
                             </RouterLink>
-                            <div class="spinner spinner-border spinner-border-sm ms-2 text-muted" v-if="site.getSiteInfo().loading">
+                            <i class="bi bi-exclamation-triangle-fill text-warning ms-2 bi-sm" style="font-size:14px;"
+                                v-if="site.error && !site.getSiteInfo().loading" :title="site.error"></i>
+                            <div class="spinner spinner-border spinner-border-sm ms-2 text-muted"
+                                v-if="site.getSiteInfo().loading">
                             </div>
                             <small class="text-muted d-flex" v-if="site.getSiteInfo().title">
                                 {{ site.uri }}
@@ -52,12 +54,15 @@ const newSitesStore = useNewSitesStore();
                             </div>
                         </td>
                         <td>
-                            <div class="spinner spinner-border spinner-border-sm ms-2 text-muted" v-if="site.getPlugins().loading"></div>
+                            <div class="spinner spinner-border spinner-border-sm ms-2 text-muted"
+                                v-if="site.getPlugins().loading"></div>
                             <span v-if="site.getPlugins()">{{ site.getPlugins().length }}</span>
                         </td>
                         <td>
-                            <div class="spinner spinner-border spinner-border-sm ms-2 text-muted" v-if="site.getThemes().loading"></div>
-                            <div v-if="site.getThemes().length && site.getThemes().find((theme) => theme.status == 'active')">
+                            <div class="spinner spinner-border spinner-border-sm ms-2 text-muted"
+                                v-if="site.getThemes().loading"></div>
+                            <div
+                                v-if="site.getThemes().length && site.getThemes().find((theme) => theme.status == 'active')">
                                 <span>{{ site.getThemes().find((theme) => theme.status == 'active')?.name.rendered }}</span>
                                 <small class="text-muted d-flex">
                                     v{{ site.getThemes().find((theme) => theme.status == 'active')?.version }}

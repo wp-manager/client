@@ -13,7 +13,7 @@ class Site {
 
     responses = {};
 
-    authOk = true;
+    error: boolean|string = false;
 
     constructor(uri: string) {
         if (!uri) {
@@ -79,14 +79,17 @@ class Site {
 
     private async makeRequest(path: string, validateAuth: boolean = false) {
         return fetch(
-            `https://${apiBase}/site/${this.uri}/wp-json/${path}`
+            `https://${apiBase}/site/${this.uri}/wp-json/${path}`,
+            {
+                credentials: "include"
+            }
         ).then((res) => {
             if (res.ok) {
                 return res.json();
             }
 
             if(validateAuth){
-                this.authOk = false;
+                this.error = res.statusText
             }
 
             return res.json();

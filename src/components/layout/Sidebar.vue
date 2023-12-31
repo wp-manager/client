@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { useSitesStore } from '@/stores/sites';
 import { usePasskeyStore } from '@/stores/passkey';
-import { useNewAuthStore } from '@/stores/newAuth';
+import { useAuthStore } from '@/stores/auth';
 import { useApiStore } from '@/stores/api';
 import { useNewSitesStore } from '@/stores/sitesNew';
 
-const newAuthStore = useNewAuthStore();
+const authStore = useAuthStore();
+
 
 const newSitesStore = useNewSitesStore();
 
@@ -16,8 +17,8 @@ defineProps<{
 </script>
 
 <template>
-	<div class="sidebar-wrapper p-3 border-end bg-dark">
-		<div class="sidebar ">
+	<div class="sidebar  p-3 border-end bg-dark">
+		<div class="sidebar-main">
 			<div class="sidebar__nav nav nav-pills flex-column" v-if="!$route.params.uri">
 				<div class="nav-item">
 					<RouterLink class="nav-link text-white" to="/">
@@ -44,13 +45,7 @@ defineProps<{
 						<i class="bi bi-braces me-2"></i> Core
 					</RouterLink>
 				</div>
-				<div class="nav-item">
-					<RouterLink class="nav-link text-white" :to="{ name: 'sites-plugins' }">
-						<i class="bi bi-plug me-2"></i> All Plugins
-					</RouterLink>
-				</div>
 			</div>
-			{{ $route.params.uri }}
 			<div class="sidebar__nav nav nav-pills flex-column" v-if="$route.params.uri">
 				<div class="nav-item">
 					<RouterLink class="nav-link text-white" :to="{ name: 'sites' }">
@@ -73,22 +68,47 @@ defineProps<{
 						:to="{ name: 'site-wpengine', params: { uri: $route.params.uri } }">
 						<i class="bi bi-server me-2"></i> WP Engine
 					</RouterLink>
-				</div>				
+				</div>
 			</div>
-			<div class="sidebar__nav" v-if="newAuthStore.user">
-				<a class="user">
-					<i class="bi bi-person me-2"></i>
-					<div>{{ newAuthStore.user.username }} <small>{{ newAuthStore.user.id }}</small></div>
-				</a>
+		</div>
+		<div class="sidebar-footer">
+			<div class="sidebar__nav nav nav-pills flex-column" v-if="authStore.user">
+				<RouterLink class="nav-link text-white" :to="{ name: 'logout' }" v-if="authStore.user.email">
+					<i class="bi bi-box-arrow-right me-2"></i> Logout
+					<small class="text-muted d-block">{{ authStore.user.email }}</small>
+				</RouterLink>
+				<div class="nav-item">
+					<RouterLink class="nav-link text-white" :to="{ name: 'login' }" v-if="!authStore.user.email">
+						<i class="bi bi-box-arrow-in-right me-2"></i> Login
+					</RouterLink>
+				</div>
 			</div>
-
 		</div>
 	</div>
 </template>
 
 <style scoped lang="scss">
-.sidebar-wrapper {
+.sidebar {
 	width: var(--sidebar-width);
+	height: 100%;
+	position: fixed;
+	display: flex;
+	flex-direction: column;
 	transition: width 0.2s ease-in-out;
+
+	&-main{
+		flex-grow: 1;
+	}
+
+	.user{
+		display: flex;
+		div{
+			display: flex;
+			flex-direction: column;
+		}
+		small{
+			font-size: 10px;
+		}
+	}
 }
 </style>

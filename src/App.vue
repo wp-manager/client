@@ -19,5 +19,8 @@ import Sidebar from './components/layout/Sidebar.vue';
 }
 .view{
   overflow: hidden;
+  max-width: calc(100% - var(--sidebar-width));
+  transition: max-width 0.2s ease-in-out;
+  margin-left: auto;
 }
 </style>

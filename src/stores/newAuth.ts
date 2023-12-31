@@ -4,7 +4,7 @@ import type { Site } from './api';
 
 type User = {
     id: string,
-    username: string
+    email: string
 };
 
 export const useNewAuthStore = defineStore('newAuth', () => {
@@ -18,7 +18,7 @@ export const useNewAuthStore = defineStore('newAuth', () => {
     }
 
     async function getUserFromAPI(){
-        const apiUser = await fetch(`https://${import.meta.env.APP_SERVER_URI}/auth/user`).then(res => res.json());
+        const apiUser = await fetch(`https://${import.meta.env.APP_SERVER_URI}/auth/user`, {credentials: 'include'}).then(res => res.json());
         if(!apiUser.id){
             authCheck(false);
             return;

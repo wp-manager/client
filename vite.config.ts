@@ -15,10 +15,16 @@ if (process.env.GITHUB_ACTION) {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [vue(), basicSsl()],
+    plugins: [vue()],
     // Add import.meta.env.GITHUB_ACTION to the global scope
     define: {
         "import.meta.env.GITHUB_ACTION": isGitHubAction,
+    },
+    server: {
+        https: {
+            key: "./certs/key.pem",
+            cert: "./certs/cert.pem",
+        }
     },
     base,
     envPrefix: "APP_",

@@ -10,6 +10,7 @@ import SiteCore from "@/views/SiteCore.vue";
 import AddSite from "@/views/AddSite.vue";
 import { useSitesStore } from "@/stores/sites";
 import { useSiteStore } from "@/stores/site";
+import { useAuthStore } from "@/stores/auth";
 import Login from "@/views/Login.vue";
 import SiteComponents from "@/views/SiteComponents.vue";
 import SiteDashboard from "@/views/SiteDashboard.vue";
@@ -41,6 +42,17 @@ const router = createRouter({
             path: "/login",
             name: "login",
             component: Login,
+        },
+        {
+            path: "/logout",
+            name: "logout",
+            component: () => {},
+            beforeEnter: async () => {
+                const authStore = useAuthStore();
+                authStore.logout().then(() => {
+                    window.location.href = "/";
+                });
+            },
         },
         {
             path: "/sites",

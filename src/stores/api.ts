@@ -29,7 +29,7 @@ export const useApiStore = defineStore("api", () => {
     }
 
     async function getAuthdUser() {
-        user.value = await fetch(`https://${apiBase}/auth/user`).then((res) =>
+        user.value = await fetch(`https://${apiBase}/auth/user`, {credentials: 'include'}).then((res) =>
             res.json()
         );
         authCheck(user.value);
