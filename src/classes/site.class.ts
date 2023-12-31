@@ -1,3 +1,4 @@
+import FetchUtils from "@/utils/fetch";
 import { ref } from "vue";
 let apiBase = import.meta.env.APP_SERVER_URI;
 
@@ -80,13 +81,14 @@ class Site {
         return fetch(
             `https://${apiBase}/site/${this.uri}/wp-json/${path}`,
             {
-                credentials: "include"
+                credentials: "include",
+                signal: FetchUtils.abortController.signal
             }
         ).then((res) => {
             if (res.ok) {
                 return res.json();
             }
-
+            
             if(validateAuth){
                 this.error = res.statusText
             }

@@ -22,6 +22,7 @@ import SitesPlugins from "@/views/SitesPlugins.vue";
 import SiteVue from "@/views/Site.vue";
 import SiteWPEngine from "@/views/SiteWPEngine.vue";
 import WPEngine from "@/views/WPEngine.vue";
+import FetchUtils from "@/utils/fetch";
 
 let historyMode = createWebHistory(import.meta.env.BASE_URL);
 // Change the history mode to hash if we're in a GitHub Action
@@ -50,10 +51,13 @@ const router = createRouter({
             path: "/logout",
             name: "logout",
             component: () => {},
-            beforeEnter: async () => {
+            beforeEnter: () => {
+                // Abort any pending requests
+                FetchUtils.abortFetches('User logged out');
+
                 const authStore = useAuthStore();
                 authStore.logout().then(() => {
-                    window.location.href = "/";
+                    router.push({ name: "login" });
                 });
             },
         },
