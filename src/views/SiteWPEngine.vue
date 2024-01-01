@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { useApiStore } from '@/stores/api';
+import { useAuthStore } from '@/stores/auth';
 import { ref } from 'vue';
 
 const apiStore = useApiStore();
+const authStore = useAuthStore();
 
 const loading = ref(true);
 const wpeUserData = ref({});
@@ -28,8 +30,8 @@ const backup = () => {
     backupData.value = {status: 'requesting from WP Engine'}
     apiStore.postWPEngineRoute(`installs/${install}/backups`,
     {
-        description: 'Site Manager API Test',
-        notification_emails: ['darren.griffin@strategiq.co']
+        description: 'WP Manager API Test',
+        notification_emails: [authStore.user?.email],
     }).then((res) => {
         backupData.value = res;
         if(res.id){
@@ -64,6 +66,7 @@ const backup = () => {
         <h3>Backup</h3>
         {{ backupData.status }}
         <button @click="backup" :disabled="!enableBackup">Backup</button>
+        <p>A notification email will be sent to {{ authStore.user?.email }}</p>
 
     </div>
 </template>
