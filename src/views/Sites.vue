@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSitesStore } from '@/stores/sites';
 import SiteIcon from '@/components/SiteIcon.vue';
+import { SiteConnectionStatus } from '@/types/site';
 
 const sitesStore = useSitesStore();
 </script>
@@ -22,50 +23,91 @@ const sitesStore = useSitesStore();
                 </thead>
                 <tbody>
 
-                    <tr v-for="site in sitesStore.sites.sort((a, b) => a.uri.localeCompare(b.uri))" :key="site.uri">
-                        <td>
-                            <SiteIcon :site="site" />
-                        </td>
-                        <td>
-                            <RouterLink :to="{ name: 'site', params: { uri: site.uri } }"
-                                v-html="site.getSiteInfo().title || site.uri">
-                            </RouterLink>
-                            <i class="bi bi-exclamation-triangle-fill text-warning ms-2 bi-sm" style="font-size:14px;"
-                                v-if="site.error && !site.getSiteInfo().loading" :title="site.error"></i>
-                            <div class="spinner spinner-border spinner-border-sm ms-2 text-muted"
-                                v-if="site.getSiteInfo().loading">
-                            </div>
-                            <small class="text-muted d-flex" v-if="site.getSiteInfo().title">
-                                {{ site.uri }}
-                            </small>
-                        </td>
-                        <td>
-                            <div v-if="site.getWpManagerWpCore().current" class="badge rounded-pill"
-                                :class="{ 'text-bg-success': !site.getWpManagerWpCore().available, 'text-bg-warning': site.getWpManagerWpCore().available, 'placeholder': site.getWpManagerWpCore().loading }">
-                                {{ site.getWpManagerWpCore().current }}
-                                <span v-if="site.getWpManagerWpCore().available"><i class="bi bi-arrow-right"></i> {{
-                                    site.getWpManagerWpCore().available }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="spinner spinner-border spinner-border-sm ms-2 text-muted"
-                                v-if="site.getPlugins().loading"></div>
-                            <span v-if="site.getPlugins()">{{ site.getPlugins().length }}</span>
-                        </td>
-                        <td>
-                            <div class="spinner spinner-border spinner-border-sm ms-2 text-muted"
-                                v-if="site.getThemes().loading"></div>
-                            <div
-                                v-if="site.getThemes().length && site.getThemes().find((theme) => theme.status == 'active')">
-                                <span>{{ site.getThemes().find((theme) => theme.status == 'active')?.name.rendered }}</span>
-                                <small class="text-muted d-flex">
-                                    v{{ site.getThemes().find((theme) => theme.status == 'active')?.version }}
+                    <!-- Show available sites first, then alphabetical -->
+                    <template v-for="site in sitesStore.sites.sort((a, b) => {
+                        if (a.getSiteAvailability() == SiteConnectionStatus.AVAILABLE && b.getSiteAvailability() != SiteConnectionStatus.AVAILABLE) {
+                            return -1;
+                        } else if (a.getSiteAvailability() != SiteConnectionStatus.AVAILABLE && b.getSiteAvailability() == SiteConnectionStatus.AVAILABLE) {
+                            return 1;
+                        } else {
+                            return a.uri.localeCompare(b.getSiteInfo().title || b.uri);
+                        }
+                    })" :key="site.uri">
+                        <tr v-if="site.getSiteAvailability() !== SiteConnectionStatus.AVAILABLE">
+                            <td>
+                                <SiteIcon :site="site" />
+                            </td>
+                            <td colspan="6">
+                                <div v-html="site.getSiteInfo().title || site.uri"></div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi text-warning d-inline-flex" style="font-size:18px;" :class="{
+                                        'bi-wifi-off': site.connectionStatus == SiteConnectionStatus.OFFLINE,
+                                        'bi-exclamation-triangle-fill': site.connectionStatus == SiteConnectionStatus.ERROR,
+                                        'bi-person-fill-lock': site.connectionStatus == SiteConnectionStatus.UNAUTHORIZED
+                                    }" :title="site.error"></i>
+                                    <div class="spinner spinner-border spinner-border-sm text-muted"
+                                        v-if="site.connectionStatus == SiteConnectionStatus.UNKNOWN || site.connectionStatus == SiteConnectionStatus.CHECKING">
+                                    </div>
+                                    <small class="text-muted" v-if="site.getSiteInfo().title">
+                                        {{ site.uri }}
+                                    </small>
+                                    <small class="text-muted" v-else>
+                                        {{ site.connectionStatus }}
+                                    </small>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr v-else-if="site.getSiteAvailability() == SiteConnectionStatus.AVAILABLE">
+                            <td>
+                                <SiteIcon :site="site" />
+                            </td>
+                            <td>
+                                <RouterLink :to="{ name: 'site', params: { uri: site.uri } }"
+                                    v-html="site.getSiteInfo().title || site.uri">
+                                </RouterLink>
+                                <i class="bi bi-exclamation-triangle-fill text-warning ms-2 bi-sm" style="font-size:14px;"
+                                    v-if="site.error && !site.siteInfo.loading" :title="site.error"></i>
+                                <div class="spinner spinner-border spinner-border-sm ms-2 text-muted"
+                                    v-if="site.getSiteInfo().loading">
+                                </div>
+                                <small class="text-muted d-flex" v-if="site.getSiteInfo().title">
+                                    {{ site.uri }}
                                 </small>
-                            </div>
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                            </td>
+                            <td>
+                                <div v-if="site.getWpManagerWpCore().current" class="badge rounded-pill"
+                                    :class="{ 'text-bg-success': !site.getWpManagerWpCore().available, 'text-bg-warning': site.getWpManagerWpCore().available, 'placeholder': site.getWpManagerWpCore().loading }">
+                                    {{ site.getWpManagerWpCore().current }}
+                                    <span v-if="site.getWpManagerWpCore().available"><i class="bi bi-arrow-right"></i> {{
+                                        site.getWpManagerWpCore().available }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="spinner spinner-border spinner-border-sm ms-2 text-muted"
+                                    v-if="site.connectionStatus == SiteConnectionStatus.AVAILABLE && site.getPlugins().loading">
+                                </div>
+                                <span v-if="site.getPlugins()">{{ site.getPlugins().length }}</span>
+                            </td>
+                            <td>
+                                <div class="spinner spinner-border spinner-border-sm ms-2 text-muted"
+                                    v-if="site.getThemes().loading"></div>
+                                <div
+                                    v-if="site.getThemes().length && site.getThemes().find((theme) => theme.status == 'active')">
+                                    <span>{{ site.getThemes().find((theme) => theme.status == 'active')?.name.rendered
+                                    }}</span>
+                                    <small class="text-muted d-flex">
+                                        v{{ site.getThemes().find((theme) => theme.status == 'active')?.version }}
+                                    </small>
+                                </div>
+                            </td>
+                            <td>
+                                <div v-if="site.discover()?.namespaces.includes('wp-manager/v1')">
+                                    WP Manager Essentials
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </template>
                 </tbody>
             </table>
         </div>

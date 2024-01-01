@@ -1,19 +1,23 @@
+import { SiteConnectionStatus } from "@/types/site";
 import FetchUtils from "@/utils/fetch";
-import { ref } from "vue";
+import { reactive, ref, type Ref } from "vue";
 let apiBase = import.meta.env.APP_SERVER_URL;
 
 class Site {
     uri: string;
 
+    // reactive
+    connectionStatus: SiteConnectionStatus = SiteConnectionStatus.UNKNOWN;
+
     icon = ref("");
-    discovery = ref({});
+    discovery = null;
     siteInfo = ref({});
     plugins = ref({});
     themes = ref({});
 
     responses = {} as any;
 
-    error: boolean|string = false;
+    error: boolean | string = false;
 
     constructor(uri: string) {
         if (!uri) {
@@ -21,23 +25,43 @@ class Site {
         }
 
         this.uri = uri;
+
+    }
+    
+    getSiteAvailability() {
+        if (this.connectionStatus !== SiteConnectionStatus.UNKNOWN) {
+            return this.connectionStatus;
+        }
+
+        this.connectionStatus = SiteConnectionStatus.CHECKING;
+        this.discover();
+        return this.connectionStatus;
     }
 
     discover() {
-        if (!this.discovery.value) {
-            this.discovery.value = { loading: true };
+        if (!this.discovery) {
+            this.discovery = { loading: true };
             this.makeRequest("").then((res) => {
-                this.discovery.value = res;
+                this.discovery = res;
             });
         }
-        return this.discovery.value;
+        return this.discovery;
     }
 
     getSiteInfo() {
         if (!this.siteInfo.value) {
             this.siteInfo.value = { loading: true };
             this.makeRequest("wp/v2/settings", true).then((res) => {
+                this.connectionStatus = SiteConnectionStatus.AVAILABLE;
                 this.siteInfo.value = res;
+            }).catch((err) => {
+                if (err.status === 401) {
+                    this.connectionStatus = SiteConnectionStatus.UNAUTHORIZED;
+                } else if(err.status === 502) {
+                    this.connectionStatus = SiteConnectionStatus.OFFLINE;
+                } else {
+                    this.connectionStatus = SiteConnectionStatus.ERROR;
+                }
             });
         }
         return this.siteInfo.value;
@@ -78,24 +102,26 @@ class Site {
     }
 
     private async makeRequest(path: string, validateAuth: boolean = false) {
-        return fetch(
-            `${apiBase}/site/${this.uri}/wp-json/${path}`,
-            {
+        return new Promise((resolve, reject) => {
+            fetch(`${apiBase}/site/${this.uri}/wp-json/${path}`, {
                 credentials: "include",
-                signal: FetchUtils.abortController.signal
-            }
-        ).then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            
-            if(validateAuth){
-                this.error = res.statusText
-            }
+                signal: FetchUtils.abortController.signal,
+            }).then((res) => {
+                if (res.ok) {
+                    return resolve(res.json());
+                }
 
-            return res.json();
+                if (validateAuth) {
+                    this.error = res.statusText;
+                }
+
+                return reject(res);
+            });
         });
     }
 }
 
-export default Site;
+export {
+    Site,
+    SiteConnectionStatus
+}

@@ -4,7 +4,7 @@ import {
     createWebHashHistory,
     createWebHistory,
 } from "vue-router";
-import Site from "@/classes/site.class";
+import {Site} from "@/classes/site.class";
 
 // Stores
 import { useAuthStore } from "@/stores/auth";

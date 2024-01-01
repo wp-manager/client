@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import Site from "@/classes/site.class";
+import {Site} from "@/classes/site.class";
 
 type TypeSite = {
     _id: string;

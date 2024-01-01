@@ -2,7 +2,7 @@ import { defineStore } from "pinia"
 
 const apiBase = import.meta.env.APP_SERVER_URL;
 
-import Site from "@/classes/site.class";
+import {Site} from "@/classes/site.class";
 import { ref } from "vue";
 
 export const useSitesStore = defineStore("sites", () => {
