@@ -101,7 +101,7 @@ const sitesStore = useSitesStore();
                                 </div>
                             </td>
                             <td>
-                                <div v-if="site.discover()?.namespaces.includes('wp-manager/v1')">
+                                <div v-if="site.discover()?.namespaces?.includes('wp-manager/v1')">
                                     WP Manager Essentials
                                 </div>
                             </td>

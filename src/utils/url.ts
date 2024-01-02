@@ -22,7 +22,8 @@ function sanitiseURL(url: string) {
         .trim()
         .toLowerCase()
         .replace(/(https?:\/\/)?(www\.)?/i, "")
-        .replace(/\/$/, "");
+        .replace(/\/$/, "")
+        .trim();
 
     return url;
 }

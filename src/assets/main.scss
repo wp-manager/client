@@ -5,6 +5,10 @@
     }
 }
 
+.row{
+    --bs-gutter-x: 1rem;
+}
+
 hr[data-content] {
     overflow: visible;
     position: relative;
