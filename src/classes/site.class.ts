@@ -26,9 +26,11 @@ class Site {
 
         this.uri = uri;
 
+        this.discover();
     }
     
     getSiteAvailability() {
+        return this.connectionStatus;
         if (this.connectionStatus !== SiteConnectionStatus.UNKNOWN) {
             return this.connectionStatus;
         }
@@ -38,20 +40,15 @@ class Site {
         return this.connectionStatus;
     }
 
-    discover() {
-        if (!this.discovery) {
-            this.discovery = { loading: true };
-            this.makeRequest("").then((res) => {
-                this.discovery = res;
-            });
-        }
-        return this.discovery;
+    async discover() {
+        return await this.request("");
     }
 
     getSiteInfo() {
+        return {};
         if (!this.siteInfo.value) {
             this.siteInfo.value = { loading: true };
-            this.makeRequest("wp/v2/settings", true).then((res) => {
+            this.request("wp/v2/settings", true).then((res) => {
                 this.connectionStatus = SiteConnectionStatus.AVAILABLE;
                 this.siteInfo.value = res;
             }).catch((err) => {
@@ -70,7 +67,7 @@ class Site {
     getPlugins() {
         if (!this.plugins.value) {
             this.plugins.value = { loading: true };
-            this.makeRequest("wp/v2/plugins").then((res) => {
+            this.request("wp/v2/plugins").then((res) => {
                 this.plugins.value = res;
             });
         }
@@ -80,7 +77,7 @@ class Site {
     getThemes() {
         if (!this.themes.value) {
             this.themes.value = { loading: true };
-            this.makeRequest("wp/v2/themes?context=embed").then((res) => {
+            this.request("wp/v2/themes?context=embed").then((res) => {
                 this.themes.value = res;
             });
         }
@@ -94,30 +91,21 @@ class Site {
     getWpManagerWpCore() {
         if (!this.responses.wpManagerWpCore) {
             this.responses.wpManagerWpCore = { loading: true };
-            this.makeRequest("wp-manager/v1/wp-core").then((res) => {
+            this.request("wp-manager/v1/wp-core").then((res) => {
                 this.responses.wpManagerWpCore = res;
             });
         }
         return this.responses.wpManagerWpCore;
     }
 
-    private async makeRequest(path: string, validateAuth: boolean = false) {
-        return new Promise((resolve, reject) => {
-            fetch(`${apiBase}/site/${this.uri}/wp-json/${path}`, {
-                credentials: "include",
-                signal: FetchUtils.abortController.signal,
-            }).then((res) => {
-                if (res.ok) {
-                    return resolve(res.json());
-                }
+    private async request(path: string) {
+        this.queueRequest(path);
+        return;
+        return fetch(`${apiBase}/site/${this.uri}/wp-json/${path}`, { credentials: "include" }).then((res) => res.json());
+    }
 
-                if (validateAuth) {
-                    this.error = res.statusText;
-                }
-
-                return reject(res);
-            });
-        });
+    private queueRequest(path: string) {
+        FetchUtils.queueRequest(`${apiBase}/site/${this.uri}/wp-json/${path}`, { credentials: "include" });
     }
 }
 
@@ -125,3 +113,9 @@ export {
     Site,
     SiteConnectionStatus
 }
+
+setTimeout(() => {
+    FetchUtils.processQueue().then((res) => {
+        console.log(res);
+    });
+},2000);

@@ -24,16 +24,8 @@ const sitesStore = useSitesStore();
                 <tbody>
 
                     <!-- Show available sites first, then alphabetical -->
-                    <template v-for="site in sitesStore.sites.sort((a, b) => {
-                        if (a.getSiteAvailability() == SiteConnectionStatus.AVAILABLE && b.getSiteAvailability() != SiteConnectionStatus.AVAILABLE) {
-                            return -1;
-                        } else if (a.getSiteAvailability() != SiteConnectionStatus.AVAILABLE && b.getSiteAvailability() == SiteConnectionStatus.AVAILABLE) {
-                            return 1;
-                        } else {
-                            return a.uri.localeCompare(b.getSiteInfo().title || b.uri);
-                        }
-                    })" :key="site.uri">
-                        <tr v-if="site.getSiteAvailability() !== SiteConnectionStatus.AVAILABLE">
+                    <template v-for="site in sitesStore.sites" :key="site.uri">
+                        <tr v-if="site.connectionStatus !== SiteConnectionStatus.AVAILABLE">
                             <td>
                                 <SiteIcon :site="site" />
                             </td>
@@ -57,7 +49,7 @@ const sitesStore = useSitesStore();
                                 </div>
                             </td>
                         </tr>
-                        <tr v-else-if="site.getSiteAvailability() == SiteConnectionStatus.AVAILABLE">
+                        <tr v-else-if="site.connectionStatus == SiteConnectionStatus.AVAILABLE">
                             <td>
                                 <SiteIcon :site="site" />
                             </td>
