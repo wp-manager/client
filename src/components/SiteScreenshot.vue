@@ -4,15 +4,29 @@ import { ref } from 'vue';
 
 const missing = ref(false)
 const loading = ref(true);
+const hide = ref(false);
 
-defineProps({
+const props = defineProps({
     url: String
 });
+
+const newUrl = ref(props.url);
+
+const retry = () => {
+    newUrl.value = '';
+    setTimeout(() => {
+        newUrl.value = props.url;
+    }, 5000);
+}
 </script>
 
 <template>
     <div class="screenshot" :class="{ missing, loading }">
-        <img :src="url" @error="missing = true; loading = false;" @load="loading = false;" />
+        <img 
+        :src="newUrl"
+        @error=" retry();"
+        @load="loading = false;"
+        >
     </div>
 </template>
 
@@ -29,6 +43,9 @@ defineProps({
     &.missing {
         &:before {
             content: '';
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         img {
@@ -43,7 +60,7 @@ defineProps({
             height: 1rem;
             position: absolute;
             opacity: 0.25;
-            rotate: 0deg;
+            transform: translate(-50%, -50%) rotate(0deg);
             border: 2px solid #ffffff;
             border-radius: 50%;
             border-top-color: transparent;
@@ -60,9 +77,11 @@ defineProps({
             background-position: center;
             background-size: 24px;
             opacity: 0.25;
+            width: 1rem;
+            height: 1rem;
             position: absolute;
-            inset: 0;
             z-index: -1;
+            transform-origin: center;
         }
     }
 
@@ -77,7 +96,7 @@ defineProps({
 
 @keyframes spin {
     to {
-        rotate: 360deg;
+        transform: translate(-50%, -50%) rotate(360deg);
     }
 }
 </style>
