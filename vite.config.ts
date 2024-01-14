@@ -26,6 +26,9 @@ export default defineConfig({
             cert: "./certs/cert.pem",
         }
     },
+    build: {
+        target: "esnext",
+    },
     base,
     envPrefix: "APP_",
     resolve: {
