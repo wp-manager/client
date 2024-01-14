@@ -52,15 +52,26 @@ const accountStore = useAccountStore();
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" :to="{ name: 'site', params: { uri: '' } }" v-if="false">
-							<i class="bi bi-window me-2"></i> Site
+						<RouterLink class="nav-link text-white" :to="{ name: 'sites-application-passwords' }">
+							<i class="bi bi-key me-2"></i> App Passwords
 						</RouterLink>
 					</div>
+					<hr>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" :to="{ name: 'site-core', params: { uri: '' } }"
-							v-if="false">
-							<i class="bi bi-braces me-2"></i> Core
-						</RouterLink>
+						<small class="d-flex flex-column gap-1">
+							<div class="d-flex justify-content-between">
+								<div class="text-muted">Current API requests</div>
+								<div>{{ metaStore.finishedRequests }} / {{ metaStore.pendingRequests }}</div>
+							</div>
+							<div class="progress" role="progressbar" aria-label="Animated striped example"
+								style="height:4px"
+								:class="{ 'visible': (metaStore.finishedRequests !== metaStore.pendingRequests) }">
+								<div class="progress-bar"
+									:class="{ 'bg-success': (metaStore.finishedRequests === metaStore.pendingRequests) }"
+									:style="{ width: (metaStore.finishedRequests / metaStore.pendingRequests) * 100 + '%' }">
+								</div>
+							</div>
+						</small>
 					</div>
 				</div>
 				<div class="sidebar__nav nav nav-pills flex-column" v-if="$route.meta.site">
@@ -138,7 +149,7 @@ const accountStore = useAccountStore();
 		}
 	}
 
-	.nav-screenshot{
+	.nav-screenshot {
 		position: relative;
 		margin: -1rem -1rem 0 -1rem;
 		display: grid;
@@ -147,7 +158,7 @@ const accountStore = useAccountStore();
 		overflow: hidden;
 		height: 8rem;
 
-		&__content{
+		&__content {
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -156,28 +167,29 @@ const accountStore = useAccountStore();
 			font-weight: 500;
 		}
 
-		.screenshot{
+		.screenshot {
 			position: absolute;
 			z-index: -1;
+
 			&:after {
-                content: '';
-                position: absolute;
-                inset: 0;
-                background: linear-gradient(0deg, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0.5) 100%);
-                transition: opacity .25s ease-in-out;
-            }
+				content: '';
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(0deg, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0.5) 100%);
+				transition: opacity .25s ease-in-out;
+			}
 		}
 
-		.icon{
+		.icon {
 			background: white;
-			
+
 			z-index: 1;
-			
-			img{
+
+			img {
 				margin: 1rem;
 			}
 		}
-		
+
 	}
 
 }
