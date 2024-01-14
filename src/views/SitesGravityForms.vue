@@ -3,6 +3,7 @@ import { useAccountStore } from '@/stores/account';
 import { useSiteStore } from '@/stores/site';
 
 import SitePluginRow from '@/components/tables/SitePluginRow.vue';
+import SiteGravityFormRow from '@/components/tables/SiteGravityFormRow.vue';
 
 const siteStore = useSiteStore();
 
@@ -17,14 +18,15 @@ const siteStore = useSiteStore();
                     <tr>
                         <th scope="col" style="width:0"></th>
                         <th scope="col">Site</th>
-                        <th scope="col">Plugin</th>
-                        <th scope="col">Version</th>
+                        <th scope="col">Form</th>
                         <th scope="col">Active</th>
+                        <th scope="col">Notifications</th>
+                        <th scope="col">Confirmations</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <SitePluginRow v-for="site in siteStore.sites" :key="site.url" :site="site" />
+                    <SiteGravityFormRow v-for="site in siteStore.sites" :key="site.url" :site="site" />
                 </tbody>
             </table>
         </div>

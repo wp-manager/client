@@ -10,18 +10,10 @@ type User = {
 export const useAuthStore = defineStore("auth", () => {
     let user = ref<User | null>(null);
 
-    getUserFromAPI().then(() => {
-        if (router.currentRoute.value.name === "login") {
-            router.push({ name: "home" });
-        }
-    }).catch(() => {
-        if (router.currentRoute.value.name !== "login") {
-            router.push({ name: "login" });
-        }
-    });
+    
 
     async function getUserFromAPI() {
-        return fetch(`${import.meta.env.APP_SERVER_URL}/auth/user`, {
+        return fetch(`${import.meta.env.APP_SERVER_URL}/account`, {
             credentials: "include",
         })
             .then((res) => {
@@ -31,7 +23,7 @@ export const useAuthStore = defineStore("auth", () => {
                 return res.json();
             })
             .then((apiUser) => {
-                if (!apiUser || !apiUser.id) {
+                if (!apiUser || !apiUser.email) {
                     return;
                 }
                 user.value = apiUser;
@@ -42,7 +34,7 @@ export const useAuthStore = defineStore("auth", () => {
         return fetch(
             `https://${
                 import.meta.env.APP_SERVER_URL
-            }/auth/email-availability/`,
+            }/account/email-availability/`,
             {
                 headers: {
                     "Content-Type": "application/json",
@@ -64,7 +56,7 @@ export const useAuthStore = defineStore("auth", () => {
 
     async function register(email: string, password: string) {
         return fetch(
-            `${import.meta.env.APP_SERVER_URL}/auth/register/`,
+            `${import.meta.env.APP_SERVER_URL}/account/register/`,
             {
                 headers: {
                     "Content-Type": "application/json",
@@ -85,7 +77,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     async function login(email: string, password: string) {
-        return fetch(`${import.meta.env.APP_SERVER_URL}/auth/login/`, {
+        return fetch(`${import.meta.env.APP_SERVER_URL}/account/login/`, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -102,7 +94,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     async function logout() {
-        return fetch(`${import.meta.env.APP_SERVER_URL}/auth/logout/`, {
+        return fetch(`${import.meta.env.APP_SERVER_URL}/account/logout/`, {
             headers: {
                 "Content-Type": "application/json",
             },

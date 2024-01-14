@@ -2,7 +2,7 @@
 import { useAccountStore } from '@/stores/account';
 import { useSiteStore } from '@/stores/site';
 
-import SitePluginRow from '@/components/tables/SitePluginRow.vue';
+import SiteUserRow from '@/components/tables/SiteUserRow.vue';
 
 const siteStore = useSiteStore();
 
@@ -19,12 +19,10 @@ const siteStore = useSiteStore();
                         <th scope="col">Site</th>
                         <th scope="col">Plugin</th>
                         <th scope="col">Version</th>
-                        <th scope="col">Active</th>
-                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <SitePluginRow v-for="site in siteStore.sites" :key="site.url" :site="site" />
+                    <SiteUserRow v-for="site in siteStore.sites" :key="site.url" :site="site" />
                 </tbody>
             </table>
         </div>

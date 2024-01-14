@@ -9,6 +9,10 @@
     --bs-gutter-x: 1rem;
 }
 
+hr{
+    margin: .75rem 0;
+}
+
 hr[data-content] {
     overflow: visible;
     position: relative;

@@ -23,6 +23,12 @@ import SiteVue from "@/views/Site.vue";
 import SiteWPEngine from "@/views/SiteWPEngine.vue";
 import WPEngine from "@/views/WPEngine.vue";
 import FetchUtils from "@/utils/fetch";
+import SitesUsers from "@/views/SitesUsers.vue";
+import { useSiteStore } from "@/stores/site";
+import WPSite from "@/classes/wp.class";
+import { useAccountStore } from "@/stores/account";
+import SitesGravityForms from "@/views/SitesGravityForms.vue";
+import SitesCF7Forms from "@/views/SitesCF7Forms.vue";
 
 let historyMode = createWebHistory(import.meta.env.BASE_URL);
 // Change the history mode to hash if we're in a GitHub Action
@@ -65,13 +71,26 @@ const router = createRouter({
             path: "/sites",
             name: "sites",
             component: Sites,
-            children: [
-                {
-                    path: "plugins",
-                    name: "sites-plugins",
-                    component: SitesPlugins,
-                },
-            ],
+        },
+        {
+            path: "/sites/plugins",
+            name: "sites-plugins",
+            component: SitesPlugins,
+        },
+        {
+            path: "/sites/gravity-forms",
+            name: "sites-gravity-forms",
+            component: SitesGravityForms,
+        },
+        {
+            path: "/sites/cf7-forms",
+            name: "sites-cf7-forms",
+            component: SitesCF7Forms,
+        },
+        {
+            path: "/sites/users",
+            name: "sites-users",
+            component: SitesUsers,
         },
         {
             path: "/wpengine",
@@ -87,19 +106,20 @@ const router = createRouter({
             path: "/sites/:uri",
             name: "site",
             component: SiteVue,
-            props: true,
-            beforeEnter: (to) => {
-                const sitesStore = useSitesStore();
-
-                if(sitesStore.sites.find((s) => s.uri === to.params.uri)){
-                    sitesStore.setSite(sitesStore.sites.find((s) => s.uri === to.params.uri) as any);
-                    return;
+            meta: {
+                site: null
+            },
+            beforeEnter: async (to) => {
+                if(to.params.uri){
+                    const accountStore = useAccountStore();
+                    await accountStore.getSession();
+                    const siteStore = useSiteStore();
+                    let foundSite = siteStore.sites.find(site => site.url === to.params.uri);
+                    if(!foundSite){
+                        return router.push({ name: "sites" });
+                    }
+                    to.meta.site = foundSite;
                 }
-
-                const targetSite = new Site(to.params.uri as string);
-
-                sitesStore.addSite(targetSite);
-                sitesStore.setSite(targetSite);
             },
             children: [
                 {

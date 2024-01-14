@@ -1,19 +1,25 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/auth';
+import { useAccountStore } from '@/stores/account';
+import SiteScreenshot from '../SiteScreenshot.vue';
+import SiteIcon from '../SiteIcon.vue';
+import { useMetaStore } from '@/stores/meta';
 
-const authStore = useAuthStore();
+const metaStore = useMetaStore();
+
+const accountStore = useAccountStore();
 </script>
 
 <template>
 	<div class="sidebar  p-3 border-end bg-dark">
 		<div class="sidebar-main">
-			<div v-if="authStore.user">
+			<div v-if="accountStore.account">
 				<div class="sidebar__nav nav nav-pills flex-column" v-if="!$route.params.uri">
 					<div class="nav-item">
 						<RouterLink class="nav-link text-white" to="/">
 							<i class="bi bi-house me-2"></i>Home
 						</RouterLink>
 					</div>
+					<hr>
 					<div class="nav-item">
 						<RouterLink class="nav-link text-white" to="/sites/add">
 							<i class="bi bi-window-plus me-2"></i> Add Site
@@ -22,6 +28,27 @@ const authStore = useAuthStore();
 					<div class="nav-item">
 						<RouterLink class="nav-link text-white" to="/sites">
 							<i class="bi bi-window-stack me-2"></i> Sites
+						</RouterLink>
+					</div>
+					<hr>
+					<div class="nav-item">
+						<RouterLink class="nav-link text-white" to="/sites/plugins">
+							<i class="bi bi-plug me-2"></i> Plugins Overview
+						</RouterLink>
+					</div>
+					<div class="nav-item">
+						<RouterLink class="nav-link text-white" to="/sites/gravity-forms">
+							<i class="bi bi-input-cursor-text me-2"></i> Gravity Forms
+						</RouterLink>
+					</div>
+					<div class="nav-item">
+						<RouterLink class="nav-link text-white" to="/sites/cf7-forms">
+							<i class="bi bi-input-cursor-text me-2"></i> Contact Form 7
+						</RouterLink>
+					</div>
+					<div class="nav-item">
+						<RouterLink class="nav-link text-white" to="/sites/users">
+							<i class="bi bi-people me-2"></i> Users Overview
 						</RouterLink>
 					</div>
 					<div class="nav-item">
@@ -36,7 +63,14 @@ const authStore = useAuthStore();
 						</RouterLink>
 					</div>
 				</div>
-				<div class="sidebar__nav nav nav-pills flex-column" v-if="$route.params.uri">
+				<div class="sidebar__nav nav nav-pills flex-column" v-if="$route.meta.site">
+					<div class="nav-screenshot">
+						<SiteScreenshot :url="$route.meta.site?.screenshot" />
+						<div class="nav-screenshot__content">
+							<SiteIcon :site="$route.meta.site" />
+							<span v-html="$route.meta.site?.discover()?.data?.name || $route.meta.site?.url"></span>
+						</div>
+					</div>
 					<div class="nav-item">
 						<RouterLink class="nav-link text-white" :to="{ name: 'sites' }">
 							<i class="bi bi-arrow-left me-2"></i> Back
@@ -64,12 +98,12 @@ const authStore = useAuthStore();
 		</div>
 		<div class="sidebar-footer">
 			<div class="sidebar__nav nav nav-pills flex-column">
-				<RouterLink class="nav-link text-white" :to="{ name: 'logout' }" v-if="authStore.user">
+				<RouterLink class="nav-link text-white" :to="{ name: 'logout' }" v-if="accountStore.account">
 					<i class="bi bi-box-arrow-right me-2"></i> Logout
-					<small class="text-muted d-block">{{ authStore.user.email }}</small>
+					<small class="text-muted d-block">{{ accountStore.account?.data?.email }}</small>
 				</RouterLink>
 				<div class="nav-item">
-					<RouterLink class="nav-link text-white" :to="{ name: 'login' }" v-if="!authStore.user">
+					<RouterLink class="nav-link text-white" :to="{ name: 'login' }" v-if="!accountStore.account">
 						<i class="bi bi-box-arrow-in-right me-2"></i> Login
 					</RouterLink>
 				</div>
@@ -103,4 +137,48 @@ const authStore = useAuthStore();
 			font-size: 10px;
 		}
 	}
-}</style>
+
+	.nav-screenshot{
+		position: relative;
+		margin: -1rem -1rem 0 -1rem;
+		display: grid;
+
+		isolation: isolate;
+		overflow: hidden;
+		height: 8rem;
+
+		&__content{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			gap: .25rem;
+			font-weight: 500;
+		}
+
+		.screenshot{
+			position: absolute;
+			z-index: -1;
+			&:after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(0deg, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0.5) 100%);
+                transition: opacity .25s ease-in-out;
+            }
+		}
+
+		.icon{
+			background: white;
+			
+			z-index: 1;
+			
+			img{
+				margin: 1rem;
+			}
+		}
+		
+	}
+
+}
+</style>
