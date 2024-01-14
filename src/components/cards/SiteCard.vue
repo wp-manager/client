@@ -20,13 +20,15 @@ const props = defineProps({
                 <SiteIcon :site="site" />
                 <span class="site-header__name" v-html="site?.discover()?.data?.name || site?.url"></span>
             </div>
-            <div class="site-header__meta">
+            <div class="site-header__meta" v-if="site?.discover()?.data">
                 <template v-if="site?.hasNamespace('wp-manager/v1')">
-                    <div class="badge bg-warning text-dark" v-if="site?.wpm_core_version()?.data?.available">
-                        <i class="bi bi-wordpress me-1"></i> {{ site.wpm_core_version()?.data?.available }}
-                    </div>
-                    <div class="badge bg-primary" v-else-if="site?.wpm_core_version()?.data?.current">
-                        <i class="bi bi-wordpress me-1"></i> {{ site.wpm_core_version()?.data?.current }}
+                    <div>
+                        <div class="badge bg-warning text-dark" v-if="site?.wpm_core_version()?.data?.available">
+                            <i class="bi bi-wordpress me-1"></i> {{ site.wpm_core_version()?.data?.available }}
+                        </div>
+                        <div class="badge bg-primary" v-else-if="site?.wpm_core_version()?.data?.current">
+                            <i class="bi bi-wordpress me-1"></i> {{ site.wpm_core_version()?.data?.current }}
+                        </div>
                     </div>
                 </template>
             </div>
@@ -36,6 +38,7 @@ const props = defineProps({
 <style scoped lang="scss">
 .card {
     height: 10rem;
+
     .screenshots {
         display: flex;
         height: 100%;
@@ -43,15 +46,18 @@ const props = defineProps({
 
         .screenshot {
             height: 100%;
-            img{
+
+            img {
                 height: 100%;
                 width: 100%;
                 object-fit: cover;
-                
+
             }
+
             &:first-child {
                 flex-grow: 1;
             }
+
             &:last-child {
                 aspect-ratio: 4/9;
                 flex-shrink: 0;
@@ -108,6 +114,9 @@ const props = defineProps({
             top: 0;
             right: 0;
             display: flex;
+            justify-content: space-between;
+            width: calc(100% - 1rem);
         }
     }
-}</style>
+}
+</style>

@@ -22,6 +22,7 @@ const siteStore = useSiteStore();
                     <tr>
                         <th scope="col" style="width:0"></th>
                         <th scope="col">Site</th>
+                        <th scope="col">PageSpeed Scores</th>
                         <th scope="col" style="width:0">Version</th>
                         <th scope="col">Plugins</th>
                         <th scope="col">Theme</th>

@@ -20,67 +20,72 @@ class WPSite {
     makeRequest(path: string) {
         if (this.data[path]) return this.data[path];
         return (this.data[path] = useFetch(
-            `${apiBase}/site/${this.url}/wp-json${path}`,
+            `${apiBase}/site/${this.url}/${path}`,
             { credentials: "include" }
         ));
     }
 
     hasNamespace(namespace: string) {
-        if (!this.data["/"]) return false;
-        if (!this.data["/"].data) return false;
-        if (!this.data["/"].data.namespaces) return false;
-        return this.data["/"].data.namespaces.includes(namespace);
+        if (!this.data["wp-json/"]) return false;
+        if (!this.data["wp-json/"].data) return false;
+        if (!this.data["wp-json/"].data.namespaces) return false;
+        return this.data["wp-json/"].data.namespaces.includes(namespace);
     }
 
     discover() {
-        return this.makeRequest("/");
+        return this.makeRequest("wp-json/");
     }
 
     plugins() {
-        return this.makeRequest("/wp/v2/plugins");
+        return this.makeRequest("wp-json/wp/v2/plugins");
     }
 
     users() {
-        return this.makeRequest("/wp/v2/users?context=edit");
+        return this.makeRequest("wp-json/wp/v2/users?context=edit");
     }
 
     userApplicationPasswords(userId: string) {
-        return this.makeRequest(`/wp/v2/users/${userId}/application-passwords`);
+        return this.makeRequest(`wp-json/wp/v2/users/${userId}/application-passwords`);
     }
 
     themes() {
-        return this.makeRequest("/wp/v2/themes");
+        return this.makeRequest("wp-json/wp/v2/themes");
     }
 
     // WP Manager Companion
     wpm_core_version() {
-        return this.makeRequest("/wp-manager/v1/wp-core");
+        return this.makeRequest("wp-json/wp-manager/v1/wp-core");
     }
 
     // StrategiQ Dev Toolkit
     stq_gravity_forms() {
-        return this.makeRequest("/stq/v1/gravity-forms");
+        return this.makeRequest("wp-json/stq/v1/gravity-forms");
     }
     stq_cf7_forms() {
-        return this.makeRequest("/stq/v1/cf7-forms");
+        return this.makeRequest("wp-json/stq/v1/cf7-forms");
     }
     stq_wp_core() {
-        return this.makeRequest("/stq/v1/wp-core");
+        return this.makeRequest("wp-json/stq/v1/wp-core");
     }
     stq_plugin_audit() {
-        return this.makeRequest("/stq/v1/plugin-audit");
+        return this.makeRequest("wp-json/stq/v1/plugin-audit");
     }
     stq_akismet() {
-        return this.makeRequest("/stq/v1/akismet");
+        return this.makeRequest("wp-json/stq/v1/akismet");
     }
     stq_password_cycle() {
-        return this.makeRequest("/stq/v1/strategiq-password-cycle");
+        return this.makeRequest("wp-json/stq/v1/strategiq-password-cycle");
     }
     stq_sucuri_audit() {
-        return this.makeRequest("/stq/v1/sucuri-audit");
+        return this.makeRequest("wp-json/stq/v1/sucuri-audit");
     }
     stq_sucuri_audit_logs() {
-        return this.makeRequest("/stq/v1/sucuri-audit/logs");
+        return this.makeRequest("wp-json/stq/v1/sucuri-audit/logs");
+    }
+
+    // PageSpeed
+    pagespeed() {
+        return this.makeRequest("pagespeed");
     }
 }
 

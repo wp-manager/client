@@ -20,6 +20,41 @@ props.site?.discover();
             <small v-html="site.discover()?.data?.description"></small>
         </td>
         <td>
+            <template v-if="site?.pagespeed()?.data">
+                <div class="d-flex flex-column gap-1 lh-1">
+                    <div v-if="site?.pagespeed()?.data?.mobile" class="d-flex gap-2 align-items-center">
+                        <div class="d-flex gap-1">
+                            <div class="badge" :title="type + ' - Mobile'"
+                                v-if="site?.pagespeed()?.data && site?.pagespeed()?.data?.mobile"
+                                v-for="(score, type) in site?.pagespeed()?.data?.mobile" :class="{
+                                    'bg-success': score > .9,
+                                    'bg-warning text-dark': score > .6 && score < .9,
+                                    'bg-danger': score <= .6
+                                }">
+                                {{ type.charAt(0).toUpperCase() }}: {{ (score * 100).toFixed(0) }}
+                            </div>
+                        </div>
+                        <small>Mobile</small>
+                    </div>
+                    <div v-if="site?.pagespeed()?.data?.desktop" class="d-flex gap-2 align-items-center">
+                        <div class="d-flex gap-1">
+                            <div class="badge" :title="type + ' - Desktop'"
+                                v-if="site?.pagespeed()?.data && site?.pagespeed()?.data?.desktop"
+                                v-for="(score, type) in site?.pagespeed()?.data?.desktop" :class="{
+                                    'bg-success': score > .9,
+                                    'bg-warning text-dark': score > .5 && score < .9,
+                                    'bg-danger': score <= .5
+                                }">
+                                {{ type.charAt(0).toUpperCase() }}: {{ (score * 100).toFixed(0) }}
+                            </div>
+                        </div>
+                        <small>Desktop</small>
+                    </div>
+                </div>
+            </template>
+
+        </td>
+        <td>
             <template v-if="site.hasNamespace('wp-manager/v1')">
                 <template v-if="site.wpm_core_version()?.loading">
                     <div class="spinner-border spinner-border-sm" role="status">
