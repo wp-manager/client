@@ -37,7 +37,7 @@ const props = defineProps({
 </template>
 <style scoped lang="scss">
 .card {
-    height: 10rem;
+    height: 7rem;
 
     .screenshots {
         display: flex;
