@@ -15,7 +15,6 @@ const props = defineProps({
         <div class="site-header">
             <div class="screenshots">
                 <SiteScreenshot :url="site?.screenshot" />
-                <SiteScreenshot :url="site?.mobileScreenshot" />
             </div>
             <div class="site-header__content">
                 <SiteIcon :site="site" />
