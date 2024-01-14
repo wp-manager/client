@@ -50,7 +50,7 @@ props.site?.discover();
                     <span class="visually-hidden">Loading...</span>
                 </div>
             </template>
-            <template v-else-if="site.plugins()?.data.length">
+            <template v-else-if="site.plugins()?.data?.length">
                 <div class="d-flex gap-2">
                     <div class="badge bg-success">{{ site.plugins()?.data?.length }} Installed</div>
                     <div class="badge bg-warning text-dark">{{ site.plugins()?.data?.filter((a: any) => {
@@ -67,10 +67,10 @@ props.site?.discover();
                     <span class="visually-hidden">Loading...</span>
                 </div>
             </template>
-            <template v-else-if="site.themes()?.data.length">
+            <template v-else-if="site.themes()?.data?.length">
                 <div>Active: {{ site.themes()?.data?.find((a: any) => { return a.status == 'active' }).name.rendered }}
                 </div>
-                <div>Total: {{ site.themes()?.data.length }}</div>
+                <div>Total: {{ site.themes()?.data?.length }}</div>
             </template>
         </td>
         <td>
