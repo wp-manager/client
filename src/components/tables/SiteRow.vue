@@ -27,9 +27,9 @@ props.site?.discover();
                             <div class="badge" :title="type + ' - Mobile'"
                                 v-if="site?.pagespeed()?.data && site?.pagespeed()?.data?.mobile"
                                 v-for="(score, type) in site?.pagespeed()?.data?.mobile" :class="{
-                                    'bg-success': score > .9,
-                                    'bg-warning text-dark': score > .6 && score < .9,
-                                    'bg-danger': score <= .6
+                                    'bg-success': score >= .9,
+                                    'bg-warning text-dark': score >= .5 && score < .9,
+                                    'bg-danger': score < .5
                                 }">
                                 {{ type.charAt(0).toUpperCase() }}: {{ (score * 100).toFixed(0) }}
                             </div>
@@ -41,9 +41,9 @@ props.site?.discover();
                             <div class="badge" :title="type + ' - Desktop'"
                                 v-if="site?.pagespeed()?.data && site?.pagespeed()?.data?.desktop"
                                 v-for="(score, type) in site?.pagespeed()?.data?.desktop" :class="{
-                                    'bg-success': score > .9,
-                                    'bg-warning text-dark': score > .5 && score < .9,
-                                    'bg-danger': score <= .5
+                                    'bg-success': score >= .9,
+                                    'bg-warning text-dark': score >= .5 && score < .9,
+                                    'bg-danger': score < .5
                                 }">
                                 {{ type.charAt(0).toUpperCase() }}: {{ (score * 100).toFixed(0) }}
                             </div>
