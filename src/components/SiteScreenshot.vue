@@ -16,7 +16,7 @@ const retry = () => {
     newUrl.value = '';
     setTimeout(() => {
         newUrl.value = props.url;
-    }, 5000);
+    }, 30000);
 }
 </script>
 
