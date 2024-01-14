@@ -29,6 +29,7 @@ import WPSite from "@/classes/wp.class";
 import { useAccountStore } from "@/stores/account";
 import SitesGravityForms from "@/views/SitesGravityForms.vue";
 import SitesCF7Forms from "@/views/SitesCF7Forms.vue";
+import SitesApplicationPasswords from "@/views/SitesApplicationPasswords.vue";
 
 let historyMode = createWebHistory(import.meta.env.BASE_URL);
 // Change the history mode to hash if we're in a GitHub Action
@@ -93,6 +94,11 @@ const router = createRouter({
             component: SitesUsers,
         },
         {
+            path: "/sites/application-passwords",
+            name: "sites-application-passwords",
+            component: SitesApplicationPasswords
+        },
+        {
             path: "/wpengine",
             name: "wpengine",
             component: WPEngine
@@ -103,7 +109,7 @@ const router = createRouter({
             component: AddSite
         },
         {
-            path: "/sites/:uri",
+            path: "/site/:uri",
             name: "site",
             component: SiteVue,
             meta: {
