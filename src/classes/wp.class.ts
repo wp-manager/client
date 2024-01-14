@@ -17,7 +17,6 @@ class WPSite {
         this.screenshot = `${apiBase}/site/${this.url}/screenshot`;
         this.mobileScreenshot = `${apiBase}/site/${this.url}/screenshot/mobile`;
     }
-
     makeRequest(path: string) {
         if (this.data[path]) return this.data[path];
         return (this.data[path] = useFetch(
@@ -43,6 +42,10 @@ class WPSite {
 
     users() {
         return this.makeRequest("/wp/v2/users?context=edit");
+    }
+
+    userApplicationPasswords(userId: string) {
+        return this.makeRequest(`/wp/v2/users/${userId}/application-passwords`);
     }
 
     themes() {
