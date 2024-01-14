@@ -14,14 +14,14 @@ class WPSite {
     constructor(url: string) {
         this.url = url;
         this.favicon = `https://${url}/favicon.ico`;
-        this.screenshot = `https://localhost:8443/site/${this.url}/screenshot`;
-        this.mobileScreenshot = `https://localhost:8443/site/${this.url}/screenshot/mobile`;
+        this.screenshot = `${apiBase}/site/${this.url}/screenshot`;
+        this.mobileScreenshot = `${apiBase}/site/${this.url}/screenshot/mobile`;
     }
 
     makeRequest(path: string) {
         if (this.data[path]) return this.data[path];
         return (this.data[path] = useFetch(
-            `https://localhost:8443/site/${this.url}/wp-json${path}`,
+            `${apiBase}/site/${this.url}/wp-json${path}`,
             { credentials: "include" }
         ));
     }

@@ -4,6 +4,7 @@ import { defineStore } from "pinia";
 import { useSiteStore } from "./site";
 import WPSite from "@/classes/wp.class";
 
+let apiBase = import.meta.env.APP_SERVER_URL;
 
 type AccountState = {
     account: any;
@@ -17,7 +18,7 @@ export const useAccountStore = defineStore("accountStore", {
     }),
     actions: {
         async getSession(){
-            const { data } = await useFetch("https://localhost:8443/account", {credentials: "include"}).json();
+            const { data } = await useFetch(`${apiBase}/account`, {credentials: "include"}).json();
             this.account = data.value
             const siteStore = useSiteStore()
             this.account.sites.forEach((site: string) => {
