@@ -62,6 +62,11 @@ const accountStore = useAccountStore();
 							<i class="bi bi-shield me-2"></i> Wordfence
 						</RouterLink>
 					</div>
+					<div class="nav-item">
+						<RouterLink class="nav-link text-white" to="/sites/cf7-forms">
+							<i class="bi bi-shield me-2"></i> Sucuri
+						</RouterLink>
+					</div>
 					<hr>
 					<div class="nav-item">
 						<small class="d-flex flex-column gap-1">
