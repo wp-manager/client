@@ -18,8 +18,8 @@ export const useAccountStore = defineStore("accountStore", {
         account: null,
     }),
     actions: {
-        async getSession(){
-            if(this.pending) return;
+        async getSession(force = false){
+            if(this.pending && !force) return;
             this.pending = true;
 
             const { data } = await useFetch(`${apiBase}/account`, {credentials: "include"}).json();

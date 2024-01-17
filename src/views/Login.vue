@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import router from '@/router';
+import { useAccountStore } from '@/stores/account';
 import { useAuthStore } from '@/stores/auth';
 import { ref } from 'vue';
 
 const authStore = useAuthStore();
+const accountStore = useAccountStore();
 
 const email = ref('');
 const password = ref('');
@@ -29,14 +32,19 @@ const checkUserAvailability = () => {
 
 const login = () => {
   checking.value = true;
-  authStore.login(email.value, password.value).then(() => {
-    formValidation.value = false;
-    window.location.href = '/';
-  }).catch(() => {
-    formValidation.value = 'Invalid email or password';
+  authStore.login(email.value, password.value).then(async data => {
+    checking.value = false;
+    if (data.message) {
+      formValidation.value = data.message;
+    } else {
+      formValidation.value = false;
+      await accountStore.getSession(true);
+      router.push({ name: 'home' });
+    }
+  }).catch(err => {
+    formValidation.value = err.message;
     checking.value = false;
   })
-
 }
 
 </script>
@@ -49,20 +57,18 @@ const login = () => {
     <form style="width: 100%;max-width: 350px;" @submit.prevent>
       <h1 class="h4 mb-2">Login</h1>
       <hr class="mb-3">
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" placeholder="example@gmail.com" aria-label="Email" v-model="email"
-          :class="{ 'is-invalid': inputValidation.email }">
-        <div class="form-text invalid-feedback" v-if="inputValidation.email">
-          {{ inputValidation.email }}
-        </div>
+      <div class="alert alert-info" role="alert" v-if="$route.query.registered">
+        Your account has been created, please login.
       </div>
       <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" placeholder="example@gmail.com" aria-label="Email" v-model="email">
+      </div>
+      <div class="mb-4">
         <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" placeholder="Password" v-model="password"
-          :class="{ 'is-invalid': inputValidation.password }">
-        <div class="form-text invalid-feedback" v-if="inputValidation.password">
-          {{ inputValidation.password }}
+        <input type="password" class="form-control" id="password" placeholder="Password" v-model="password">
+        <div class="form-text text-danger text-center mt-0 mt-2" v-if="formValidation">
+          {{ formValidation }}
         </div>
       </div>
       <div class="text-center">
@@ -70,13 +76,10 @@ const login = () => {
           @click.prevent="login">Login</button>
         <small class="d-block text-muted mt-2">
           Don't have an account? <router-link :to="{ name: 'register' }" class="text-white text-decoration-none" :class="{
-            'disabled': !email || !password || checking || available
+            'disabled': checking
           }">Register</router-link>
         </small>
 
-      </div>
-      <div class="form-text text-danger" v-if="formValidation">
-        {{ formValidation }}
       </div>
     </form>
   </div>

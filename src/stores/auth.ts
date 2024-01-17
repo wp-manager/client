@@ -64,16 +64,7 @@ export const useAuthStore = defineStore("auth", () => {
                 method: "POST",
                 body: JSON.stringify({ email, password }),
             }
-        )
-            .then(async (res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-                return false;
-            })
-            .then((resp) => {
-                return resp;
-            });
+            ).then(res => res.json());
     }
 
     async function login(email: string, password: string) {
@@ -84,13 +75,7 @@ export const useAuthStore = defineStore("auth", () => {
             credentials: "include",
             method: "POST",
             body: JSON.stringify({ email, password }),
-        }).then(async (res) => {
-            if (res.ok) {
-                user.value = await res.json();
-            }
-
-            return res.ok;
-        });
+        }).then(res => res.json());
     }
 
     async function logout() {
