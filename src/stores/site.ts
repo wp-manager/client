@@ -7,16 +7,20 @@ export const useSiteStore = defineStore("site", () => {
 
     function addSite(uri: string): WPSite{
         const foundSite = sites.find(site => site.url === uri);
+
         if(foundSite){
-            console.log('Existing site', uri)
             return foundSite;
         }
-        console.log('New site', uri)
         
         const newSite = new WPSite(uri);
         sites.push(newSite);
+
         return newSite;
     }
 
-    return { sites, addSite }
+    function hasSite(uri: string): boolean{
+        return sites.find(site => site.url === uri) !== undefined;
+    }
+
+    return { sites, addSite, hasSite };
 });

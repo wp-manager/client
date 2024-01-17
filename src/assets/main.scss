@@ -1,15 +1,28 @@
-:root{   
+:root {
+
+    --wpm-primary: #1B57F2;
+    --wpm-client: #FF02A9;
+    --wpm-server: #FF5D02;
+    --wpm-plugin: #1BC300;
+
     --sidebar-width: 200px;
+
     @media (min-width: 992px) {
         --sidebar-width: 250px;
     }
 }
 
-.row{
+html,
+body,
+#app {
+    height: 100%;
+}
+
+.row {
     --bs-gutter-x: 1rem;
 }
 
-hr{
+hr {
     margin: .75rem 0;
 }
 

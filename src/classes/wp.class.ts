@@ -1,5 +1,6 @@
 import { useFetch } from "@/composables/fetch";
-import { reactive, ref } from "vue";
+import FetchUtils from "@/utils/fetch";
+import { reactive } from "vue";
 
 let apiBase = import.meta.env.APP_SERVER_URL;
 
@@ -21,7 +22,7 @@ class WPSite {
         if (this.data[path]) return this.data[path];
         return (this.data[path] = useFetch(
             `${apiBase}/site/${this.url}/${path}`,
-            { credentials: "include" }
+            { credentials: "include", signal: FetchUtils.abortController.signal }
         ));
     }
 
@@ -46,8 +47,8 @@ class WPSite {
         return this.makeRequest("wp-json/wp/v2/plugins");
     }
 
-    users() {
-        return this.makeRequest("wp-json/wp/v2/users?context=edit");
+    users(roles: string = '') {
+        return this.makeRequest(`wp-json/wp/v2/users?context=edit&roles=${roles}`);
     }
 
     userApplicationPasswords(userId: string) {

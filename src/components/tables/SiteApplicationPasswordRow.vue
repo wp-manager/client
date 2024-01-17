@@ -20,7 +20,7 @@ const groupByUuid = (data: any) => {
 </script>
 
 <template>
-    <tr v-if="site?.discover()?.data && site?.users()?.data.length > 0" v-for="(user, index) in site.users()?.data"
+    <tr v-if="site?.discover()?.data && site?.users('administrator')?.data?.length > 0" v-for="(user, index) in site?.users('administrator')?.data"
         :key="user?.slug">
         <td>
             <SiteIcon :site="site" />
@@ -38,12 +38,12 @@ const groupByUuid = (data: any) => {
             </div>
         </td>
         <td>
-            <tempmate v-if="site?.userApplicationPasswords(user.id)?.loading">
+            <template v-if="site?.userApplicationPasswords(user.id)?.loading">
                 <div class="spinner-border text-white spinner-border-sm" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
-            </tempmate>
-            <tempmate v-if="site?.userApplicationPasswords(user.id)?.data">
+            </template>
+            <template v-if="site?.userApplicationPasswords(user.id)?.data">
                 <div v-if="site?.userApplicationPasswords(user.id)?.data"
                     v-for="(creds, uuid) in groupByUuid(site?.userApplicationPasswords(user.id)?.data)">
                     <small v-if="uuid">{{ uuid }}</small>
@@ -54,7 +54,7 @@ const groupByUuid = (data: any) => {
                         {{ cred.name }}
                     </div>
                 </div>
-            </tempmate>
+            </template>
         </td>
 
     </tr>

@@ -1,47 +1,34 @@
 // Vue
 import {
     createRouter,
-    createWebHashHistory,
     createWebHistory,
 } from "vue-router";
-import {Site} from "@/classes/site.class";
 
 // Stores
-import { useAuthStore } from "@/stores/auth";
-import { useSitesStore } from "@/stores/sites";
+import { useSiteStore } from "@/stores/site";
+import { useAccountStore } from "@/stores/account";
 
 // Components
 import AddSite from "@/views/AddSite.vue";
+import FetchUtils from "@/utils/fetch";
 import Home from "@/views/Home.vue";
 import Login from "@/views/Login.vue";
+import Register from "@/views/Register.vue";
 import SiteComponents from "@/views/SiteComponents.vue";
 import SiteCore from "@/views/SiteCore.vue";
 import SiteDashboard from "@/views/SiteDashboard.vue";
 import Sites from "@/views/Sites.vue";
+import SitesApplicationPasswords from "@/views/SitesApplicationPasswords.vue";
+import SitesCF7Forms from "@/views/SitesCF7Forms.vue";
+import SitesGravityForms from "@/views/SitesGravityForms.vue";
 import SitesPlugins from "@/views/SitesPlugins.vue";
+import SitesUsers from "@/views/SitesUsers.vue";
 import SiteVue from "@/views/Site.vue";
 import SiteWPEngine from "@/views/SiteWPEngine.vue";
 import WPEngine from "@/views/WPEngine.vue";
-import FetchUtils from "@/utils/fetch";
-import SitesUsers from "@/views/SitesUsers.vue";
-import { useSiteStore } from "@/stores/site";
-import WPSite from "@/classes/wp.class";
-import { useAccountStore } from "@/stores/account";
-import SitesGravityForms from "@/views/SitesGravityForms.vue";
-import SitesCF7Forms from "@/views/SitesCF7Forms.vue";
-import SitesApplicationPasswords from "@/views/SitesApplicationPasswords.vue";
-
-let historyMode = createWebHistory(import.meta.env.BASE_URL);
-// Change the history mode to hash if we're in a GitHub Action
-if (
-    Object.keys(import.meta.env).includes("GITHUB_ACTION") &&
-    import.meta.env.GITHUB_ACTION
-) {
-    historyMode = createWebHashHistory(import.meta.env.BASE_URL);
-}
 
 const router = createRouter({
-    history: historyMode,
+    history: createWebHistory(import.meta.env.BASE_URL),
     linkExactActiveClass: "active",
     routes: [
         {
@@ -55,17 +42,22 @@ const router = createRouter({
             component: Login,
         },
         {
+            path: "/register",
+            name: "register",
+            component: Register,
+        },
+        {
             path: "/logout",
             name: "logout",
             component: () => {},
-            beforeEnter: () => {
+            beforeEnter: async () => {
                 // Abort any pending requests
                 FetchUtils.abortFetches('User logged out');
 
-                const authStore = useAuthStore();
-                authStore.logout().then(() => {
-                    router.push({ name: "login" });
-                });
+                const accountStore = useAccountStore();
+                await accountStore.logout();
+                router.push({ name: "login" });
+
             },
         },
         {
@@ -117,13 +109,13 @@ const router = createRouter({
             },
             beforeEnter: async (to) => {
                 if(to.params.uri){
-                    const accountStore = useAccountStore();
-                    await accountStore.getSession();
                     const siteStore = useSiteStore();
                     let foundSite = siteStore.sites.find(site => site.url === to.params.uri);
+
                     if(!foundSite){
                         return router.push({ name: "sites" });
                     }
+
                     to.meta.site = foundSite;
                 }
             },
@@ -158,4 +150,22 @@ const router = createRouter({
     ],
 });
 
+router.beforeEach(async (to, from, next) => {
+    const accountStore = useAccountStore();
+    await accountStore.getSession();
+
+    if(to.name === "login" || to.name === "register"){
+        // Redirect to homepage if we're already logged in
+        if(accountStore.account){
+            return next({ name: "home" });
+        }
+    }else{
+        // Redirect to login page if we're not logged in
+        if(!accountStore.account){
+            return next({ name: "login" });
+        }
+    }
+
+    next();
+});
 export default router;

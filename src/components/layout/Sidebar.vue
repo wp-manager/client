@@ -10,60 +10,63 @@ const accountStore = useAccountStore();
 </script>
 
 <template>
-	<div class="sidebar  p-3 border-end bg-dark">
+	<div class="sidebar border-end">
 		<div class="sidebar-main">
+			<div class="d-flex justify-content-center logo">
+				<img src="/wpm-logo.svg" alt="Logo"/>
+			</div>
 			<div v-if="accountStore.account">
 				<div class="sidebar__nav nav nav-pills flex-column" v-if="!$route.params.uri">
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" to="/">
+						<RouterLink class="nav-link" to="/">
 							<i class="bi bi-house me-2"></i>Home
 						</RouterLink>
 					</div>
 					<hr>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" to="/sites/add">
+						<RouterLink class="nav-link" to="/sites/add">
 							<i class="bi bi-window-plus me-2"></i> Add Site
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" to="/sites">
+						<RouterLink class="nav-link" to="/sites">
 							<i class="bi bi-window-stack me-2"></i> Sites
 						</RouterLink>
 					</div>
 					<hr>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" to="/sites/plugins">
+						<RouterLink class="nav-link" to="/sites/plugins">
 							<i class="bi bi-plug me-2"></i> Plugins Overview
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" to="/sites/users">
+						<RouterLink class="nav-link" to="/sites/users">
 							<i class="bi bi-people me-2"></i> Users Overview
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" :to="{ name: 'sites-application-passwords' }">
+						<RouterLink class="nav-link" :to="{ name: 'sites-application-passwords' }">
 							<i class="bi bi-key me-2"></i> App Passwords
 						</RouterLink>
 					</div>
 					<hr>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" to="/sites/gravity-forms">
+						<RouterLink class="nav-link" to="/sites/gravity-forms">
 							<i class="bi bi-ui-checks me-2"></i> Gravity Forms
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" to="/sites/cf7-forms">
+						<RouterLink class="nav-link" to="/sites/cf7-forms">
 							<i class="bi bi-input-cursor-text me-2"></i> Contact Form 7
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" to="/sites/cf7-forms">
+						<RouterLink class="nav-link" to="/sites/cf7-forms">
 							<i class="bi bi-shield me-2"></i> Wordfence
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" to="/sites/cf7-forms">
+						<RouterLink class="nav-link" to="/sites/cf7-forms">
 							<i class="bi bi-shield me-2"></i> Sucuri
 						</RouterLink>
 					</div>
@@ -94,48 +97,48 @@ const accountStore = useAccountStore();
 						</div>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" :to="{ name: 'sites' }">
+						<RouterLink class="nav-link" :to="{ name: 'sites' }">
 							<i class="bi bi-arrow-left me-2"></i> Back
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" :to="{ name: 'site', params: { uri: $route.params.uri } }">
+						<RouterLink class="nav-link" :to="{ name: 'site', params: { uri: $route.params.uri } }">
 							<i class="bi bi-columns-gap me-2"></i> Dashboard
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white"
+						<RouterLink class="nav-link"
 							:to="{ name: 'site-components', params: { uri: $route.params.uri } }">
 							<i class="bi bi-grid me-2"></i> Components
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" v-if="$route.meta.site?.hasNamespace('wpe/cache-plugin/v1')"
+						<RouterLink class="nav-link" v-if="$route.meta.site?.hasNamespace('wpe/cache-plugin/v1')"
 							:to="{ name: 'site-wpengine', params: { uri: $route.params.uri } }">
 							<i class="bi bi-server me-2"></i> WP Engine
 						</RouterLink>
 					</div>
 					<hr>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" to="/sites/gravity-forms"
+						<RouterLink class="nav-link" to="/sites/gravity-forms"
 							v-if="$route.meta.site?.hasNamespace('gravityforms/v2')">
 							<i class="bi bi-ui-checks me-2"></i> Gravity Forms
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" to="/sites/cf7-forms"
+						<RouterLink class="nav-link" to="/sites/cf7-forms"
 							v-if="$route.meta.site?.hasNamespace('contact-form-7/v1')">
 							<i class="bi bi-input-cursor-text me-2"></i> Contact Form 7
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" to="/sites/cf7-forms"
+						<RouterLink class="nav-link" to="/sites/cf7-forms"
 							v-if="$route.meta.site?.hasNamespace('wp-rocket/v1')">
 							<i class="bi bi-rocket-takeoff me-2"></i> WP Rocket
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" to="/sites/cf7-forms"
+						<RouterLink class="nav-link" to="/sites/cf7-forms"
 							v-if="$route.meta.site?.hasNamespace('stq/v1') && $route.meta.site?.hasPlugin('sucuri-scanner/sucuri')">
 							<i class="bi bi-shield me-2"></i> Sucuri
 						</RouterLink>
@@ -146,12 +149,12 @@ const accountStore = useAccountStore();
 		</div>
 		<div class="sidebar-footer">
 			<div class="sidebar__nav nav nav-pills flex-column">
-				<RouterLink class="nav-link text-white" :to="{ name: 'logout' }" v-if="accountStore.account">
+				<RouterLink class="nav-link" :to="{ name: 'logout' }" v-if="accountStore.account">
 					<i class="bi bi-box-arrow-right me-2"></i> Logout
 					<small class="text-muted d-block">{{ accountStore.account?.data?.email }}</small>
 				</RouterLink>
 				<div class="nav-item">
-					<RouterLink class="nav-link text-white" :to="{ name: 'login' }" v-if="!accountStore.account">
+					<RouterLink class="nav-link" :to="{ name: 'login' }" v-if="!accountStore.account">
 						<i class="bi bi-box-arrow-in-right me-2"></i> Login
 					</RouterLink>
 				</div>
@@ -161,8 +164,24 @@ const accountStore = useAccountStore();
 </template>
 
 <style scoped lang="scss">
+.logo{
+	margin-bottom: 18px;
+	img{
+	max-width: 12rem;
+	}
+
+	@media(prefers-color-scheme: light){
+		.logo-light{display: block;}
+		.logo-dark{display: none;}
+	}
+	@media(prefers-color-scheme: dark){
+		.logo-light{display: none;}
+		.logo-dark{display: block;}
+	}
+}
 .sidebar {
 	width: var(--sidebar-width);
+	padding: 12px;
 	height: 100%;
 	position: fixed;
 	display: flex;
@@ -183,6 +202,16 @@ const accountStore = useAccountStore();
 
 		small {
 			font-size: 10px;
+		}
+	}
+
+	.nav{
+		--bs-nav-link-color: var(--bs-body-color);
+		--bs-nav-link-hover-color: var(--bs-body-color);
+		&-link{
+			&:hover{
+				background-color: var(--bs-secondary-bg);
+			}
 		}
 	}
 

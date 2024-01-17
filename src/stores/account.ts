@@ -7,24 +7,37 @@ import WPSite from "@/classes/wp.class";
 let apiBase = import.meta.env.APP_SERVER_URL;
 
 type AccountState = {
+    pending: boolean;
     account: any;
 };
 
-let loading = false;
 
 export const useAccountStore = defineStore("accountStore", {
     state: (): AccountState => ({
+        pending: false,
         account: null,
     }),
     actions: {
         async getSession(){
+            if(this.pending) return;
+            this.pending = true;
+
             const { data } = await useFetch(`${apiBase}/account`, {credentials: "include"}).json();
-            this.account = data.value
-            const siteStore = useSiteStore()
+
+            this.account = data.value;
+
+            if(!this.account) return;
+            if(!this.account.sites) return;
+
+            const siteStore = useSiteStore();
             this.account.sites.forEach((site: string) => {
                 siteStore.addSite(site)
             })
 
+        },
+        async logout(){
+            await useFetch(`${apiBase}/account/logout`, {method: 'POST', credentials: "include"});
+            this.account = null;
         }
     }
 });

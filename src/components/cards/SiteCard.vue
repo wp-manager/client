@@ -69,7 +69,7 @@ const props = defineProps({
     &:hover {
         .screenshot {
             &:after {
-                opacity: .8;
+                opacity: .6;
             }
         }
     }
@@ -87,7 +87,7 @@ const props = defineProps({
                 content: '';
                 position: absolute;
                 inset: 0;
-                background: linear-gradient(0deg, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, 0.5) 100%);
+                background: rgba(0,0,0,0.5);
                 transition: opacity .25s ease-in-out;
             }
         }
@@ -100,6 +100,7 @@ const props = defineProps({
             position: absolute;
             bottom: 0;
             margin: .75rem 1rem;
+            color: #ffffff;
         }
 
         .site-header__name {
