@@ -11,7 +11,7 @@ props.site?.discover();
 </script>
 
 <template>
-    <tr v-if="site?.discover()?.data && site?.hasNamespace('stq/v1')"
+    <tr v-if="site?.discover()?.data && site?.hasNamespace('gravityforms/v2') && site?.hasNamespace('stq/v1')"
         v-for="(form, index) in site.stq_gravity_forms()?.data" :key="form?.slug">
         <td>
             <SiteIcon :site="site" />

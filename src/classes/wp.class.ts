@@ -32,6 +32,12 @@ class WPSite {
         return this.data["wp-json/"].data.namespaces.includes(namespace);
     }
 
+    hasPlugin(pluginName: string){
+        if (!this.data["wp-json/wp/v2/plugins"]) return false;
+        if (!this.data["wp-json/wp/v2/plugins"].data) return false;
+        return this.data["wp-json/wp/v2/plugins"].data.some((plugin: any) => plugin.plugin === pluginName);
+    }
+
     discover() {
         return this.makeRequest("wp-json/");
     }

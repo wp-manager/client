@@ -37,8 +37,19 @@ const accountStore = useAccountStore();
 						</RouterLink>
 					</div>
 					<div class="nav-item">
+						<RouterLink class="nav-link text-white" to="/sites/users">
+							<i class="bi bi-people me-2"></i> Users Overview
+						</RouterLink>
+					</div>
+					<div class="nav-item">
+						<RouterLink class="nav-link text-white" :to="{ name: 'sites-application-passwords' }">
+							<i class="bi bi-key me-2"></i> App Passwords
+						</RouterLink>
+					</div>
+					<hr>
+					<div class="nav-item">
 						<RouterLink class="nav-link text-white" to="/sites/gravity-forms">
-							<i class="bi bi-input-cursor-text me-2"></i> Gravity Forms
+							<i class="bi bi-ui-checks me-2"></i> Gravity Forms
 						</RouterLink>
 					</div>
 					<div class="nav-item">
@@ -47,13 +58,8 @@ const accountStore = useAccountStore();
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white" to="/sites/users">
-							<i class="bi bi-people me-2"></i> Users Overview
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link text-white" :to="{ name: 'sites-application-passwords' }">
-							<i class="bi bi-key me-2"></i> App Passwords
+						<RouterLink class="nav-link text-white" to="/sites/cf7-forms">
+							<i class="bi bi-shield me-2"></i> Wordfence
 						</RouterLink>
 					</div>
 					<hr>
@@ -99,11 +105,37 @@ const accountStore = useAccountStore();
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link text-white"
+						<RouterLink class="nav-link text-white" v-if="$route.meta.site?.hasNamespace('wpe/cache-plugin/v1')"
 							:to="{ name: 'site-wpengine', params: { uri: $route.params.uri } }">
 							<i class="bi bi-server me-2"></i> WP Engine
 						</RouterLink>
 					</div>
+					<hr>
+					<div class="nav-item">
+						<RouterLink class="nav-link text-white" to="/sites/gravity-forms"
+							v-if="$route.meta.site?.hasNamespace('gravityforms/v2')">
+							<i class="bi bi-ui-checks me-2"></i> Gravity Forms
+						</RouterLink>
+					</div>
+					<div class="nav-item">
+						<RouterLink class="nav-link text-white" to="/sites/cf7-forms"
+							v-if="$route.meta.site?.hasNamespace('contact-form-7/v1')">
+							<i class="bi bi-input-cursor-text me-2"></i> Contact Form 7
+						</RouterLink>
+					</div>
+					<div class="nav-item">
+						<RouterLink class="nav-link text-white" to="/sites/cf7-forms"
+							v-if="$route.meta.site?.hasNamespace('wp-rocket/v1')">
+							<i class="bi bi-rocket-takeoff me-2"></i> WP Rocket
+						</RouterLink>
+					</div>
+					<div class="nav-item">
+						<RouterLink class="nav-link text-white" to="/sites/cf7-forms"
+							v-if="$route.meta.site?.hasNamespace('stq/v1') && $route.meta.site?.hasPlugin('sucuri-scanner/sucuri')">
+							<i class="bi bi-shield me-2"></i> Sucuri
+						</RouterLink>
+					</div>
+
 				</div>
 			</div>
 		</div>

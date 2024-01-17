@@ -26,6 +26,7 @@ const retry = () => {
         :src="newUrl"
         @error=" retry();"
         @load="loading = false;"
+        fetchpriority="high"
         >
     </div>
 </template>

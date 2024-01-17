@@ -26,7 +26,7 @@ const siteStore = useSiteStore();
                     </tr>
                 </thead>
                 <tbody>
-                    <SiteGravityFormRow v-for="site in siteStore.sites" :key="site.url" :site="site" />
+                    <SiteGravityFormRow v-for="site in siteStore.sites" :key="site.url" :site="site"/>
                 </tbody>
             </table>
         </div>

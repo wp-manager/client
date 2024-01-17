@@ -11,7 +11,7 @@ props.site?.discover();
 </script>
 
 <template>
-    <tr v-if="site?.discover()?.data && site?.hasNamespace('stq/v1')" v-for="(form, index) in site.stq_cf7_forms()?.data"
+    <tr v-if="site?.discover()?.data && site?.hasNamespace('contact-form-7/v1') && site?.hasNamespace('stq/v1')" v-for="(form, index) in site.stq_cf7_forms()?.data"
         :key="form?.slug">
         <td>
             <SiteIcon :site="site" />
