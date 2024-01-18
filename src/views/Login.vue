@@ -1,50 +1,43 @@
 <script setup lang="ts">
 import router from '@/router';
 import { useAccountStore } from '@/stores/account';
-import { useAuthStore } from '@/stores/auth';
 import { ref } from 'vue';
 
-const authStore = useAuthStore();
 const accountStore = useAccountStore();
 
 const email = ref('');
 const password = ref('');
 
 const checking = ref(false);
-const available = ref(false);
-const submitted = ref(false);
 
 const formValidation = ref(false as string | false);
 
-const inputValidation = ref({
-  email: false as string | false,
-  password: false as string | false,
-})
 
-const checkUserAvailability = () => {
-  checking.value = true;
-  submitted.value = true;
-  authStore.checkEmailAvailability(email.value).then(valid => {
-    checking.value = false;
-    available.value = valid;
-  });
-};
+let apiBase = import.meta.env.APP_SERVER_URL;
 
-const login = () => {
+const login = async () => {
   checking.value = true;
-  authStore.login(email.value, password.value).then(async data => {
-    checking.value = false;
-    if (data.message) {
-      formValidation.value = data.message;
-    } else {
-      formValidation.value = false;
+  fetch(`${apiBase}/account/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    body: JSON.stringify({
+      email: email.value,
+      password: password.value
+    })
+  }).then(async (res) => {
+    if (res.ok) {
       await accountStore.getSession(true);
-      router.push({ name: 'home' });
+      await router.push({ name: 'home' });
+      return;
     }
-  }).catch(err => {
-    formValidation.value = err.message;
+
+    const data = await res.json();
+    formValidation.value = data.message;
     checking.value = false;
-  })
+  });
 }
 
 </script>
@@ -57,7 +50,7 @@ const login = () => {
     <form style="width: 100%;max-width: 350px;" @submit.prevent>
       <h1 class="h4 mb-2">Login</h1>
       <hr class="mb-3">
-      <div class="alert alert-info" role="alert" v-if="$route.query.registered">
+      <div class="alert alert-info" role="alert" v-if="Object.keys($route.query).includes('registered')">
         Your account has been created, please login.
       </div>
       <div class="mb-3">

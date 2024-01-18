@@ -14,9 +14,8 @@ defineProps({
 </script>
 
 <template>
-    
     <div class="icon rounded border" :class="{ missing, loading }">
-        <img :src="Object.values(user?.avatar_urls)[Object.values(user?.avatar_urls).length-1]" @error="missing = true; loading = false;" @load="loading = false;" />
+        <img :src="Object.values(user?.avatar_urls)[Object.values(user?.avatar_urls).length-1]" @error="missing = true; loading = false;" @load="loading = false;" /> 
     </div>
 </template>
 

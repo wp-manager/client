@@ -1,8 +1,7 @@
 
-import { useFetch } from "@vueuse/core";
+import { useFetch, type UseFetchReturn } from "@vueuse/core";
 import { defineStore } from "pinia";
 import { useSiteStore } from "./site";
-import WPSite from "@/classes/wp.class";
 
 let apiBase = import.meta.env.APP_SERVER_URL;
 

@@ -1,44 +1,42 @@
 <script setup lang="ts">
 import router from '@/router';
 import { useAccountStore } from '@/stores/account';
-import { useAuthStore } from '@/stores/auth';
 import { ref } from 'vue';
 
-const authStore = useAuthStore();
+const accountStore = useAccountStore();
 
 const email = ref('');
 const password = ref('');
 const passwordConfirm = ref('');
 
 const checking = ref(false);
-const available = ref(false);
-const submitted = ref(false);
 
 const formValidation = ref(false as string | false);
 
-const checkUserAvailability = () => {
-  checking.value = true;
-  submitted.value = true;
-  authStore.checkEmailAvailability(email.value).then(valid => {
-    checking.value = false;
-    available.value = valid;
-  });
-};
+let apiBase = import.meta.env.APP_SERVER_URL;
 
-const register = () => {
+const register = async () => {
   checking.value = true;
-  authStore.register(email.value, password.value).then(async data => {
-    checking.value = false;
-    if (data.message) {
-      formValidation.value = data.message;
-    } else {
-      formValidation.value = false;
-      router.push({ name: 'login', query: { registered: 'true' } });
+  fetch(`${apiBase}/account/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    body: JSON.stringify({
+      email: email.value,
+      password: password.value
+    })
+  }).then(async (res) => {
+    if (res.ok) {
+      await router.push({ name: 'login', query: { registered: ''} });
+      return;
     }
-  }).catch(err => {
-    formValidation.value = err.message;
+
+    const data = await res.json();
+    formValidation.value = data.message;
     checking.value = false;
-  })
+  });
 }
 
 </script>

@@ -14,7 +14,6 @@ import FetchUtils from "@/utils/fetch";
 import Home from "@/views/Home.vue";
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
-import SiteComponents from "@/views/SiteComponents.vue";
 import SiteCore from "@/views/SiteCore.vue";
 import SiteDashboard from "@/views/SiteDashboard.vue";
 import Sites from "@/views/Sites.vue";
@@ -24,8 +23,6 @@ import SitesGravityForms from "@/views/SitesGravityForms.vue";
 import SitesPlugins from "@/views/SitesPlugins.vue";
 import SitesUsers from "@/views/SitesUsers.vue";
 import SiteVue from "@/views/Site.vue";
-import SiteWPEngine from "@/views/SiteWPEngine.vue";
-import WPEngine from "@/views/WPEngine.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -91,11 +88,6 @@ const router = createRouter({
             component: SitesApplicationPasswords
         },
         {
-            path: "/wpengine",
-            name: "wpengine",
-            component: WPEngine
-        },
-        {
             path: "/sites/add",
             name: "add-site",
             component: AddSite
@@ -131,20 +123,10 @@ const router = createRouter({
                     component: SiteCore,
                 },
                 {
-                    path: "components",
-                    name: "site-components",
-                    component: SiteComponents,
-                },
-                {
                     path: "plugins",
                     name: "site-plugins",
                     component: SitesPlugins,
                 },
-                {
-                    path: "wpengine",
-                    name: "site-wpengine",
-                    component: SiteWPEngine,
-                }
             ],
         },
     ],

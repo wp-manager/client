@@ -5,9 +5,9 @@ import { reactive } from "vue";
 let apiBase = import.meta.env.APP_SERVER_URL;
 
 class WPSite {
-    public url: string;
-
+    url: string;
     data: any = reactive({});
+
     favicon = "";
     screenshot = "";
     mobileScreenshot = "";
@@ -18,6 +18,8 @@ class WPSite {
         this.screenshot = `${apiBase}/site/${this.url}/screenshot`;
         this.mobileScreenshot = `${apiBase}/site/${this.url}/screenshot/mobile`;
     }
+
+    // @
     makeRequest(path: string) {
         if (this.data[path]) return this.data[path];
         return (this.data[path] = useFetch(
