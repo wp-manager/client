@@ -34,7 +34,12 @@ export const useFetch = (
         await fetch(requestInfo, requestInit)
             .then(async (res) => {
                 if (!res.ok) {
-                    throw Error("Could not fetch the data for that resource");
+                    const body = await res.json();
+                    if(body.message){
+                        throw Error(body.message);
+                    }
+                    throw Error("Could not fetch data");
+            
                 }
                 return await res.json();
             })
