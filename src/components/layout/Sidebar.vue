@@ -3,20 +3,101 @@ import { useAccountStore } from '@/stores/account';
 import SiteScreenshot from '../SiteScreenshot.vue';
 import SiteIcon from '../SiteIcon.vue';
 import { useMetaStore } from '@/stores/meta';
+import { useSiteStore } from '@/stores/site';
 
 const metaStore = useMetaStore();
 
 const accountStore = useAccountStore();
+const siteStore = useSiteStore();
 </script>
 
 <template>
 	<div class="sidebar border-end">
 		<div class="sidebar-main">
 			<div class="d-flex justify-content-center logo">
-				<img src="/wpm-logo.svg" alt="Logo"/>
+				<img src="/wpm-logo.svg" alt="Logo" />
 			</div>
 			<div v-if="accountStore.account">
-				<div class="sidebar__nav nav nav-pills flex-column" v-if="!$route.params.uri">
+				<div class="sidebar__nav nav nav-pills flex-column" v-if="siteStore.routeSite()">
+					<div class="nav-screenshot">
+						<SiteScreenshot :url="siteStore.routeSite()?.screenshot" />
+						<div class="nav-screenshot__content">
+							<SiteIcon :site="siteStore.routeSite()" />
+							<span
+								v-html="siteStore.routeSite()?.discover()?.data?.name || siteStore.routeSite()?.url"></span>
+						</div>
+					</div>
+					<div class="nav-item">
+						<RouterLink class="nav-link" :to="{ name: 'sites' }">
+							<i class="bi bi-arrow-left me-2"></i> Back
+						</RouterLink>
+					</div>
+					<hr>
+					<div class="nav-item">
+						<RouterLink class="nav-link" :to="{ name: 'site', params: { uri: siteStore.routeSite()?.url } }">
+							<i class="bi bi-columns-gap me-2"></i> Dashboard
+						</RouterLink>
+					</div>
+
+					<div class="nav-item">
+						<RouterLink class="nav-link" to="/"
+							v-if="siteStore.routeSite()?.hasNamespace('wpe/cache-plugin/v1')">
+							<i class="bi bi-server me-2"></i> WP Engine
+						</RouterLink>
+					</div>
+					<div class="nav-item">
+						<RouterLink class="nav-link"
+							:to="{ name: 'site-pagespeed', params: { uri: siteStore.routeSite()?.url } }"
+							v-if="siteStore.routeSite()?.pagespeed()?.data">
+							<i class="bi bi-speedometer me-2"></i> PageSpeed
+						</RouterLink>
+					</div>
+					<hr>
+					<div class="nav-item">
+						<RouterLink class="nav-link" to="/sites/gravity-forms"
+							v-if="siteStore.routeSite()?.hasNamespace('gravityforms/v2')">
+							<i class="bi bi-ui-checks me-2"></i> Gravity Forms
+						</RouterLink>
+					</div>
+					<div class="nav-item">
+						<RouterLink class="nav-link" to="/sites/cf7-forms"
+							v-if="siteStore.routeSite()?.hasNamespace('contact-form-7/v1')">
+							<i class="bi bi-input-cursor-text me-2"></i> Contact Form 7
+						</RouterLink>
+					</div>
+					<div class="nav-item">
+						<RouterLink class="nav-link" to="/sites/cf7-forms"
+							v-if="siteStore.routeSite()?.hasNamespace('wp-rocket/v1')">
+							<i class="bi bi-rocket-takeoff me-2"></i> WP Rocket
+						</RouterLink>
+					</div>
+					<div class="nav-item">
+						<RouterLink class="nav-link disabled" to="/sites"
+							v-if="siteStore.routeSite()?.hasNamespace('stq/v1') && siteStore.routeSite()?.hasPlugin('sucuri-scanner/sucuri')">
+							<i class="bi bi-shield me-2"></i> Sucuri
+						</RouterLink>
+					</div>
+				</div>
+				<!-- if on /account or any sub pages -->
+				<div class="sidebar__nav nav nav-pills flex-column" v-else-if="$route.meta.account">
+					<div class="nav-item">
+						<RouterLink class="nav-link" :to="{ name: 'sites' }">
+							<i class="bi bi-arrow-left me-2"></i> Back
+						</RouterLink>
+					</div>
+					<hr>
+					<div class="nav-item">
+						<RouterLink class="nav-link" :to="{ name: 'account-home' }">
+								General
+						</RouterLink>
+					</div>
+					<div class="nav-item">
+						<RouterLink class="nav-link" :to="{ name: 'account-wp-engine' }">
+							WP Engine
+						</RouterLink>
+					</div>
+				</div>
+				<div class="sidebar__nav nav nav-pills flex-column" v-else>
 					<div class="nav-item">
 						<RouterLink class="nav-link" to="/">
 							<i class="bi bi-house me-2"></i>Home
@@ -88,66 +169,15 @@ const accountStore = useAccountStore();
 						</small>
 					</div>
 				</div>
-				<div class="sidebar__nav nav nav-pills flex-column" v-if="$route.meta.site">
-					<div class="nav-screenshot">
-						<SiteScreenshot :url="$route.meta.site?.screenshot" />
-						<div class="nav-screenshot__content">
-							<SiteIcon :site="$route.meta.site" />
-							<span v-html="$route.meta.site?.discover()?.data?.name || $route.meta.site?.url"></span>
-						</div>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link" :to="{ name: 'sites' }">
-							<i class="bi bi-arrow-left me-2"></i> Back
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link" :to="{ name: 'site', params: { uri: $route.params.uri } }">
-							<i class="bi bi-columns-gap me-2"></i> Dashboard
-						</RouterLink>
-					</div>
-					
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/" v-if="$route.meta.site?.hasNamespace('wpe/cache-plugin/v1')">
-							<i class="bi bi-server me-2"></i> WP Engine
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link" :to="{ name: 'site-pagespeed', params: { uri: $route.params.uri } }" v-if="$route.meta.site?.pagespeed()?.data">
-							<i class="bi bi-speedometer me-2"></i> PageSpeed
-						</RouterLink>
-					</div>
-					<hr>
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites/gravity-forms"
-							v-if="$route.meta.site?.hasNamespace('gravityforms/v2')">
-							<i class="bi bi-ui-checks me-2"></i> Gravity Forms
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites/cf7-forms"
-							v-if="$route.meta.site?.hasNamespace('contact-form-7/v1')">
-							<i class="bi bi-input-cursor-text me-2"></i> Contact Form 7
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites/cf7-forms"
-							v-if="$route.meta.site?.hasNamespace('wp-rocket/v1')">
-							<i class="bi bi-rocket-takeoff me-2"></i> WP Rocket
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link disabled" to="/sites/cf7-forms"
-							v-if="$route.meta.site?.hasNamespace('stq/v1') && $route.meta.site?.hasPlugin('sucuri-scanner/sucuri')">
-							<i class="bi bi-shield me-2"></i> Sucuri
-						</RouterLink>
-					</div>
-
-				</div>
 			</div>
 		</div>
+		<hr>
 		<div class="sidebar-footer">
 			<div class="sidebar__nav nav nav-pills flex-column">
+				<RouterLink class="nav-link" :to="{ name: 'account' }" v-if="accountStore.account">
+					<i class="bi bi-gear me-2"></i> Account Settings
+					<small class="text-muted d-block">{{ accountStore.account?.data?.email }}</small>
+				</RouterLink>
 				<RouterLink class="nav-link" :to="{ name: 'logout' }" v-if="accountStore.account">
 					<i class="bi bi-box-arrow-right me-2"></i> Logout
 					<small class="text-muted d-block">{{ accountStore.account?.data?.email }}</small>
@@ -163,21 +193,34 @@ const accountStore = useAccountStore();
 </template>
 
 <style scoped lang="scss">
-.logo{
+.logo {
 	margin-bottom: 18px;
-	img{
-	max-width: 12rem;
+
+	img {
+		max-width: 12rem;
 	}
 
-	@media(prefers-color-scheme: light){
-		.logo-light{display: block;}
-		.logo-dark{display: none;}
+	@media(prefers-color-scheme: light) {
+		.logo-light {
+			display: block;
+		}
+
+		.logo-dark {
+			display: none;
+		}
 	}
-	@media(prefers-color-scheme: dark){
-		.logo-light{display: none;}
-		.logo-dark{display: block;}
+
+	@media(prefers-color-scheme: dark) {
+		.logo-light {
+			display: none;
+		}
+
+		.logo-dark {
+			display: block;
+		}
 	}
 }
+
 .sidebar {
 	width: var(--sidebar-width);
 	padding: 12px;
@@ -204,11 +247,12 @@ const accountStore = useAccountStore();
 		}
 	}
 
-	.nav{
+	.nav {
 		--bs-nav-link-color: var(--bs-body-color);
 		--bs-nav-link-hover-color: var(--bs-body-color);
-		&-link{
-			&:hover{
+
+		&-link {
+			&:hover {
 				background-color: var(--bs-secondary-bg);
 			}
 		}

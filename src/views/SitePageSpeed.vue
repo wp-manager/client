@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import router from '@/router';
+import { useSiteStore } from '@/stores/site';
 import { ref } from 'vue';
-
 const tab = ref(0);
+
+const siteStore = useSiteStore();
 
 </script>
 
@@ -14,8 +15,8 @@ const tab = ref(0);
                     <div class="nav-link text-body d-flex gap-3 align-items-center lh-1" :class="{ active: tab === 0 }"
                         @click="tab = 0">Mobile <div class="d-flex gap-1">
                             <div class="badge badge-lg" :title="type + ' - Mobile'"
-                                v-if="$route.meta.site?.pagespeed()?.data && $route.meta.site?.pagespeed()?.data?.mobile"
-                                v-for="(score, type) in $route.meta.site?.pagespeed()?.data?.mobile" :class="{
+                                v-if="siteStore.routeSite()?.pagespeed()?.data && siteStore.routeSite()?.pagespeed()?.data?.mobile"
+                                v-for="(score, type) in siteStore.routeSite()?.pagespeed()?.data?.mobile" :class="{
                                     'bg-success': score >= .9,
                                     'bg-warning text-dark': score >= .5 && score < .9,
                                     'bg-danger': score < .5
@@ -29,8 +30,8 @@ const tab = ref(0);
                     <div class="nav-link text-body d-flex gap-3 align-items-center lh-1" :class="{ active: tab === 1 }"
                         @click="tab = 1">Desktop <div class="d-flex gap-1">
                             <div class="badge badge-lg" :title="type + ' - Desktop'"
-                                v-if="$route.meta.site?.pagespeed()?.data && $route.meta.site?.pagespeed()?.data?.desktop"
-                                v-for="(score, type) in $route.meta.site?.pagespeed()?.data?.desktop" :class="{
+                                v-if="siteStore.routeSite()?.pagespeed()?.data && siteStore.routeSite()?.pagespeed()?.data?.desktop"
+                                v-for="(score, type) in siteStore.routeSite()?.pagespeed()?.data?.desktop" :class="{
                                     'bg-success': score >= .9,
                                     'bg-warning text-dark': score >= .5 && score < .9,
                                     'bg-danger': score < .5

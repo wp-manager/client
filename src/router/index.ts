@@ -1,14 +1,14 @@
 // Vue
-import {
-    createRouter,
-    createWebHistory,
-} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 // Stores
 import { useSiteStore } from "@/stores/site";
 import { useAccountStore } from "@/stores/account";
 
 // Components
+import Account from "@/views/Account/Account.vue";
+import AccountHome from "@/views/Account/AccountHome.vue";
+import AccountWPEngine from "@/views/Account/AccountWPEngine.vue";
 import AddSite from "@/views/AddSite.vue";
 import FetchUtils from "@/utils/fetch";
 import Home from "@/views/Home.vue";
@@ -50,12 +50,11 @@ const router = createRouter({
             component: () => {},
             beforeEnter: async () => {
                 // Abort any pending requests
-                FetchUtils.abortFetches('User logged out');
+                FetchUtils.abortFetches("User logged out");
 
                 const accountStore = useAccountStore();
                 await accountStore.logout();
                 router.push({ name: "login" });
-
             },
         },
         {
@@ -86,30 +85,32 @@ const router = createRouter({
         {
             path: "/sites/application-passwords",
             name: "sites-application-passwords",
-            component: SitesApplicationPasswords
+            component: SitesApplicationPasswords,
         },
         {
             path: "/sites/add",
             name: "add-site",
-            component: AddSite
+            component: AddSite,
         },
         {
-            path: "/site/:uri",
+            path: "/site/:uri?",
             name: "site",
             component: SiteVue,
             meta: {
-                site: null
+                site: null,
             },
-            beforeEnter: async (to) => {
-                if(to.params.uri){
+            beforeEnter: async (to, from) => {
+                if (to.params.uri) {
                     const siteStore = useSiteStore();
-                    let foundSite = siteStore.sites.find(site => site.url === to.params.uri);
+                    let foundSite = siteStore.sites.find(
+                        (site) => site.url === to.params.uri
+                    );
 
-                    if(!foundSite){
+                    if (!foundSite) {
                         return router.push({ name: "sites" });
                     }
-
-                    to.meta.site = foundSite;
+                }else{
+                    router.push({ name: "sites" });
                 }
             },
             children: [
@@ -135,6 +136,27 @@ const router = createRouter({
                 },
             ],
         },
+        {
+            path: "/account",
+            name: "account",
+            redirect: { name: "account-home" },
+            component: Account,
+            meta: {
+                account: true
+            },
+            children: [
+                {
+                    path: "",
+                    name: "account-home",
+                    component: AccountHome,
+                },
+                {
+                    path: "wp-engine",
+                    name: "account-wp-engine",
+                    component: AccountWPEngine,
+                }
+            ],
+        },
     ],
 });
 
@@ -142,14 +164,14 @@ router.beforeEach(async (to, from, next) => {
     const accountStore = useAccountStore();
     await accountStore.getSession();
 
-    if(to.name === "login" || to.name === "register"){
+    if (to.name === "login" || to.name === "register") {
         // Redirect to homepage if we're already logged in
-        if(accountStore.account){
+        if (accountStore.account) {
             return next({ name: "home" });
         }
-    }else{
+    } else {
         // Redirect to login page if we're not logged in
-        if(!accountStore.account){
+        if (!accountStore.account) {
             return next({ name: "login" });
         }
     }

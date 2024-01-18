@@ -4,6 +4,7 @@ const apiBase = import.meta.env.APP_SERVER_URL;
 
 import {Site} from "@/classes/site.class";
 import { ref } from "vue";
+import router from "@/router";
 
 export const useSitesStore = defineStore("sites", () => {
     let sites = ref<Site[]>([]);
@@ -36,6 +37,12 @@ export const useSitesStore = defineStore("sites", () => {
         return fetch(`${apiBase}/sites`, {credentials: "include"}).then((res) => res.json());
     }
 
-    return { sites, addSite, setSite, currentSite };
+    function getRouteSite(){
+        // get uri from route
+        let uri = router.currentRoute.value.params.uri;
+        console.log(uri);
+    }
+
+    return { sites, addSite, setSite, currentSite, getRouteSite };
 });
 

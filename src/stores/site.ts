@@ -1,4 +1,5 @@
 import WPSite from "@/classes/wp.class";
+import router from "@/router";
 import { defineStore } from "pinia";
 import { reactive } from "vue";
 
@@ -22,5 +23,15 @@ export const useSiteStore = defineStore("site", () => {
         return sites.find(site => site.url === uri) !== undefined;
     }
 
-    return { sites, addSite, hasSite };
+    function routeSite(){
+        let uri = router.currentRoute.value.params.uri;
+        
+        if(!uri || !hasSite(uri.toString())){
+            return;
+        }
+
+        return sites.find(site => site.url === uri);
+    }
+
+    return { sites, addSite, hasSite, routeSite };
 });
