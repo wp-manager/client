@@ -3,5 +3,5 @@
 </script>
 
 <template>
-    jjk
+    
 </template>

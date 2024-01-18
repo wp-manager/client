@@ -19,7 +19,6 @@ class WPSite {
         this.mobileScreenshot = `${apiBase}/site/${this.url}/screenshot/mobile`;
     }
 
-    // @
     makeRequest(path: string) {
         if (this.data[path]) return this.data[path];
         return (this.data[path] = useFetch(

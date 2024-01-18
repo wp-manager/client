@@ -61,12 +61,12 @@ const accountStore = useAccountStore();
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites/cf7-forms">
+						<RouterLink class="nav-link disabled" to="/sites/wordfence">
 							<i class="bi bi-shield me-2"></i> Wordfence
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites/cf7-forms">
+						<RouterLink class="nav-link disabled" to="/sites/sucuri">
 							<i class="bi bi-shield me-2"></i> Sucuri
 						</RouterLink>
 					</div>
@@ -106,16 +106,15 @@ const accountStore = useAccountStore();
 							<i class="bi bi-columns-gap me-2"></i> Dashboard
 						</RouterLink>
 					</div>
+					
 					<div class="nav-item">
-						<RouterLink class="nav-link"
-							:to="{ name: 'site-components', params: { uri: $route.params.uri } }">
-							<i class="bi bi-grid me-2"></i> Components
+						<RouterLink class="nav-link" to="/" v-if="$route.meta.site?.hasNamespace('wpe/cache-plugin/v1')">
+							<i class="bi bi-server me-2"></i> WP Engine
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link" v-if="$route.meta.site?.hasNamespace('wpe/cache-plugin/v1')"
-							:to="{ name: 'site-wpengine', params: { uri: $route.params.uri } }">
-							<i class="bi bi-server me-2"></i> WP Engine
+						<RouterLink class="nav-link" :to="{ name: 'site-pagespeed', params: { uri: $route.params.uri } }" v-if="$route.meta.site?.pagespeed()?.data">
+							<i class="bi bi-speedometer me-2"></i> PageSpeed
 						</RouterLink>
 					</div>
 					<hr>
@@ -138,7 +137,7 @@ const accountStore = useAccountStore();
 						</RouterLink>
 					</div>
 					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites/cf7-forms"
+						<RouterLink class="nav-link disabled" to="/sites/cf7-forms"
 							v-if="$route.meta.site?.hasNamespace('stq/v1') && $route.meta.site?.hasPlugin('sucuri-scanner/sucuri')">
 							<i class="bi bi-shield me-2"></i> Sucuri
 						</RouterLink>
@@ -217,7 +216,7 @@ const accountStore = useAccountStore();
 
 	.nav-screenshot {
 		position: relative;
-		margin: -1rem -1rem 0 -1rem;
+		margin: 0 -12px 12px -12px;
 		display: grid;
 
 		isolation: isolate;

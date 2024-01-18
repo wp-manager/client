@@ -20,6 +20,7 @@ import Sites from "@/views/Sites.vue";
 import SitesApplicationPasswords from "@/views/SitesApplicationPasswords.vue";
 import SitesCF7Forms from "@/views/SitesCF7Forms.vue";
 import SitesGravityForms from "@/views/SitesGravityForms.vue";
+import SitePagespeed from "@/views/SitePagespeed.vue";
 import SitesPlugins from "@/views/SitesPlugins.vue";
 import SitesUsers from "@/views/SitesUsers.vue";
 import SiteVue from "@/views/Site.vue";
@@ -126,6 +127,11 @@ const router = createRouter({
                     path: "plugins",
                     name: "site-plugins",
                     component: SitesPlugins,
+                },
+                {
+                    path: "pagespeed",
+                    name: "site-pagespeed",
+                    component: SitePagespeed,
                 },
             ],
         },

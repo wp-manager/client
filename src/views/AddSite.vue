@@ -159,7 +159,7 @@ const checkSiteAPI = debounce(() => {
           v-if="manualPassword">
           Add Site
         </button>
-        <a class="form-text m-0" @click="manualPassword = true" style="cursor: pointer;" v-if="!manualPassword">I want to
+        <a class="form-text m-0 d-none" @click="manualPassword = true" style="cursor: pointer;" v-if="!manualPassword">I want to
           manually provide credentials</a>
         <a class="form-text m-0" @click="manualPassword = false" style="cursor: pointer;" v-if="manualPassword">I want to
           authorise with WordPress</a>
