@@ -198,6 +198,7 @@ const siteStore = useSiteStore();
 
 	img {
 		max-width: 12rem;
+		width: 100%;
 	}
 
 	@media(prefers-color-scheme: light) {
