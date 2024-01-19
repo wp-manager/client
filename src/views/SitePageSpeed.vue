@@ -46,11 +46,11 @@ const siteStore = useSiteStore();
         <div class="card-body p-0">
             <div class="tab-content" :class="{ 'd-none': tab !== 0 }">
                 <iframe
-                    :src="`https://googlechrome.github.io/lighthouse/viewer/?psiurl=https://${$route.meta?.site?.url}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO&strategy=MOBILE`"></iframe>
+                    :src="`https://googlechrome.github.io/lighthouse/viewer/?psiurl=https://${siteStore.routeSite()?.url}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO&strategy=MOBILE`"></iframe>
             </div>
             <div class="tab-content" :class="{ 'd-none': tab !== 1 }">
                 <iframe
-                    :src="`https://googlechrome.github.io/lighthouse/viewer/?psiurl=https://${$route.meta?.site?.url}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO&strategy=DESKTOP`"></iframe>
+                    :src="`https://googlechrome.github.io/lighthouse/viewer/?psiurl=https://${siteStore.routeSite()?.url}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO&strategy=DESKTOP`"></iframe>
             </div>
         </div>
     </div>
