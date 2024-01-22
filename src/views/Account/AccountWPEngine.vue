@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useWPEStore } from '@/plugins/wpengine/stores/wpe';
+import { useAccountStore } from '@/stores/account';
 import { useFetch } from '@vueuse/core';
 import { ref } from 'vue';
 
@@ -6,6 +8,9 @@ let success = ref(false);
 let error = ref(false);
 let message = ref('');
 let token = ref('');
+
+const wpeStore = useWPEStore();
+const accountStore = useAccountStore();
 
 let apiBase = import.meta.env.APP_SERVER_URL;
 
@@ -29,8 +34,9 @@ const updateToken = async () => {
         message.value = body.message;
         success.value = res.ok;
         error.value = !res.ok;
-
-
+        accountStore.getSession(true);
+        wpeStore.engine.data = {};
+        wpeStore.engine.getUser();
         checkToken();
 
         if (res.ok) {
@@ -42,6 +48,8 @@ const updateToken = async () => {
         success.value = false;
         error.value = true;
         message.value = err.message;
+        wpeStore.engine.data = {};
+        wpeStore.engine.getUser();
     });
 }
 
@@ -54,10 +62,15 @@ const deleteToken = async () => {
         message.value = body.message;
         success.value = res.ok;
         error.value = !res.ok;
+        accountStore.getSession(true);
+        wpeStore.engine.data = {};
+        wpeStore.engine.getUser();
         checkToken();
     }).catch((err) => {
         success.value = false;
         error.value = true;
+        wpeStore.engine.data = {};
+        wpeStore.engine.getUser();
         message.value = err.message;
     });
 }
@@ -78,7 +91,7 @@ const deleteToken = async () => {
         <div class="input-group mb-3">
             <input type="password" class="form-control " placeholder="WPEngine API Token" aria-label="WPEngine API Token"
                 aria-describedby="button-addon2" v-model="token">
-            <button class="btn btn-primary" type="button" id="button-addon2" @click="updateToken">
+            <button class="btn btn-primary" type="button" id="button-addon2" @click="updateToken" :disabled="!token">
                 <span v-if="!hasToken">Add</span>
                 <span v-else>Update</span>
                 Token</button>
@@ -93,6 +106,75 @@ const deleteToken = async () => {
             <i class="bi bi-exclamation-circle-fill me-2" v-if="error"></i>
             {{ message }}
         </div>
+        <template v-if="hasToken && wpeStore.engine.getUser()">
+            <hr>
+            <h5 class="mb-2">WPEngine User</h5>
+            <template v-if="hasToken && wpeStore.engine.getUser().loading">
+                Loading...
+            </template>
+            <template v-if="hasToken && wpeStore.engine.getUser().data">
+                <div v-if="wpeStore.engine.getUser()?.data?.id">
+                    <strong class="me-1">ID:</strong>
+                    <span class="text-muted">{{ wpeStore.engine.getUser()?.data?.id }}</span>
+                </div>
+                <div v-if="wpeStore.engine.getUser()?.data?.first_name">
+                    <strong class="me-1">First Name:</strong>
+                    <span class="text-muted">{{ wpeStore.engine.getUser()?.data?.first_name }}</span>
+                </div>
+                <div v-if="wpeStore.engine.getUser()?.data?.last_name">
+                    <strong class="me-1">Last Name:</strong>
+                    <span class="text-muted">{{ wpeStore.engine.getUser()?.data?.last_name }}</span>
+                </div>
+                <div v-if="wpeStore.engine.getUser()?.data?.phone_number">
+                    <strong class="me-1">Phone Number:</strong>
+                    <span class="text-muted">{{ wpeStore.engine.getUser()?.data?.phone_number }}</span>
+                </div>
+            </template>
+            <template v-else-if="wpeStore.engine.getUser()?.error">
+                <div class="alert alert-warning" role="alert">
+                    <i class="bi bi-exclamation-circle-fill me-2"></i>
+                    {{ wpeStore.engine.getUser()?.error }}
+                </div>
+            </template>
+        </template>
+        <template v-if="hasToken && wpeStore.engine.getUser()">
+            <hr>
+            <h5 class="mb-2">WPEngine Accounts</h5>
+            <template v-if="hasToken && wpeStore.engine.getAccounts().loading">
+                Loading...
+            </template>
+            <template v-if="hasToken && wpeStore.engine.getAccounts().data">
+                {{ wpeStore.engine.getAccounts().data }}
+            </template>
+        </template>
+        <template v-if="hasToken && wpeStore.engine.getUser()">
+            <hr>
+            <h5 class="mb-2">WPEngine Sites</h5>
+            <template v-if="hasToken && wpeStore.engine.getSites().loading">
+                Loading...
+            </template>
+            <template v-if="hasToken && wpeStore.engine.getSites().data">
+                
+                <ul class="list-group">
+                    <li v-for="site in wpeStore.engine.getSites().data?.results" class="list-group-item">
+                        <div>{{ site?.name }}</div>
+                        <div class="d-flex gap-1">
+                            <div class="badge wpe-env rounded-pill" v-for="install in site?.installs" :title="install?.environment"
+                            :class="{
+                                'wpe-env--production': install?.environment === 'production',
+                                'wpe-env--staging': install?.environment === 'staging',
+                                'wpe-env--development': install?.environment === 'development'
+                                
+                            }"
+                        >{{ install?.name }}</div>
+                    </div>
+                    </li>
+                </ul>
+            </template>
+        </template>
+        
+
+
     </div>
 </template>
 

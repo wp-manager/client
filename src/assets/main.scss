@@ -5,10 +5,32 @@
     --wpm-server: #FF5D02;
     --wpm-plugin: #1BC300;
 
+    --wpe-env-text: #264856;
+    --wpe-env-border: #10CAD4;
+    --wpe-env-production-bg: #9EEAEE;
+    --wpe-env-staging-bg: #E7F9FB;
+    --wpe-env-development-bg: #ffffff;
+
+
     --sidebar-width: 200px;
 
     @media (min-width: 992px) {
         --sidebar-width: 250px;
+    }
+}
+
+
+.badge.wpe-env{
+    color: var(--wpe-env-text);
+    border: 1px solid var(--wpe-env-border);
+    &--production{
+        background-color: var(--wpe-env-production-bg);
+    }
+    &--staging{
+        background-color: var(--wpe-env-staging-bg);
+    }
+    &--development{
+        background-color: var(--wpe-env-development-bg);
     }
 }
 
