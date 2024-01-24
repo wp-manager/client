@@ -8,9 +8,9 @@ let base = "/";
 let isGitHubAction = false;
 // if process.env.GITHUB_ACTION exists, set the base so it works on GitHub pages
 if (process.env.GITHUB_ACTION) {
-  console.log("We're in a GitHub Action! Changing base to /wp-manager-ui/");
+  console.log("We're in a GitHub Action! Changing base to /client/");
     isGitHubAction = true;
-    base = "/wp-manager-ui/";
+    base = "/client/";
 }
 
 // https://vitejs.dev/config/
