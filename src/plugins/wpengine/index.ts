@@ -8,10 +8,17 @@ const wpenginePlugin: Plugin = {
 
         const sharedStore = useSharedStore();
 
-        sharedStore.sidebars.contextual.main.items.filter((item) => {
-            if (item.name === "Home"){
-                item.icon = "bi-hammer";
+        // Remove d-none from the "Integrations" divider
+        sharedStore.sidebars.contextual.settings.items.forEach((item) => {
+            if (item.divider === "Integrations") {
+                item.class = "";
             }
+        });
+
+        // Add WPEngine to the sidebar
+        sharedStore.sidebars.contextual.settings.items.push({
+            label: "WP Engine",
+            name: "account-wp-engine",
         });
     }
 };

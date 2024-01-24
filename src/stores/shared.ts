@@ -3,9 +3,12 @@ import { useRoute, type RouteLocationRaw } from "vue-router";
 import { useSiteStore } from "./site";
 import router from "@/router";
 import { reactive, ref, watch } from "vue";
+import { useAccountStore } from "./account";
 
 export const useSharedStore = defineStore("shared", () => {
     const siteStore = useSiteStore();
+    const accountStore = useAccountStore();
+
     const sidebars = reactive({
         sidebars: {
             contextual: {
@@ -54,51 +57,77 @@ export const useSharedStore = defineStore("shared", () => {
                 },
                 site: {
                     items: <Object[] | RouteLocationRaw[]>[
-                        { label: "Back", path: "/", icon: "bi-arrow-left" },
+                        {
+                            label: "Back",
+                            path: "/sites",
+                            icon: "bi-arrow-left",
+                        },
                         { divider: "Overview" },
                         {
-                            name: "site-dashboard",
                             label: "Dashboard",
+                            name: "site-dashboard",
                             params: { uri: siteStore.routeSite()?.url },
                             icon: "bi-grid",
                         },
-                        { divider: "Site Features" },
+                        { divider: "Core Information" },
+                        {
+                            label: "Posts",
+                            path: "site-posts",
+                            icon: "bi-pen",
+                            class: "disabled feature-soon",
+                        },
                         {
                             label: "Users",
-                            path: "site-plugins",
-                            icon: "bi-plug",
+                            path: "site-users",
+                            icon: "bi-people",
+                            class: "disabled feature-soon",
                         },
                         {
                             label: "Plugins",
                             path: "site-plugins",
                             icon: "bi-plug",
+                            class: "disabled feature-soon",
                         },
-                        { divider: "Additional" },
+                        { divider: "Runner Information" },
                         {
                             label: "PageSpeed",
                             name: "site-pagespeed",
                             params: { uri: siteStore.routeSite()?.url },
                             icon: "bi-google",
                         },
+                        { divider: "Manage" },
+                        
+                        {
+                            label: "Site Settings",
+                            name: "site-settings",
+                            params: { uri: siteStore.routeSite()?.url },
+                            icon: "bi-gear",
+                        },
                     ],
                 },
                 settings: {
                     items: <Object[] | RouteLocationRaw[]>[
-                        { name: "Home", path: "/", icon: "bi-house" },
-                        { name: "About", path: "/about", icon: "bi-person" },
                         {
-                            name: "Contact",
-                            path: "/contact",
-                            icon: "bi-envelope",
+                            label: "Back",
+                            path: "/sites",
+                            icon: "bi-arrow-left",
                         },
+                        { divider: "Settings" },
+                        { label: "General", name: "account-home"},
+                        { divider: "Integrations", class: "d-none" }
                     ],
                 },
             },
             footer: {
                 items: <Object[] | RouteLocationRaw[]>[
-                    { name: "Home", path: "/", icon: "bi-house" },
-                    { name: "About", path: "/about", icon: "bi-person" },
-                    { name: "Contact", path: "/contact", icon: "bi-envelope" },
+                    { label: "Account", name: "account", icon: "bi-gear" },
+                    {
+                        label: accountStore?.account ? "Login" : "Logout",
+                        name: accountStore?.account ? "login" : "logout",
+                        icon: accountStore?.account
+                            ? "bi-box-arrow-in-right"
+                            : "bi-box-arrow-right",
+                    },
                 ],
             },
         },

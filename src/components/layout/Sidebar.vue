@@ -24,23 +24,35 @@ const sharedStore = useSharedStore();
 				<template v-if="siteStore.routeSite()?.url">
 					<SidebarContext v-for="item in sharedStore.sidebars.contextual.site.items" :item="item" />
 				</template>
+				<template v-else-if="$route.meta.account">
+					<SidebarContext v-for="item in sharedStore.sidebars.contextual.settings.items" :item="item" />
+				</template>
 				<template v-else>
 					<SidebarContext v-for="item in sharedStore.sidebars.contextual.main.items" :item="item" />
 				</template>
+				<div class="divider-heading" data-label="Debug"></div>
+				<div class="nav-item">
+					<small class="d-flex flex-column gap-1">
+						<div class="d-flex justify-content-between">
+							<div class="text-muted">Current API requests</div>
+							<div>{{ metaStore.finishedRequests }} / {{ metaStore.pendingRequests }}</div>
+						</div>
+						<div class="progress" role="progressbar" aria-label="Animated striped example" style="height:4px"
+							:class="{ 'visible': (metaStore.finishedRequests !== metaStore.pendingRequests) }">
+							<div class="progress-bar"
+								:class="{ 'bg-success': (metaStore.finishedRequests === metaStore.pendingRequests) }"
+								:style="{ width: (metaStore.finishedRequests / metaStore.pendingRequests) * 100 + '%' }">
+							</div>
+						</div>
+					</small>
+				</div>
 			</div>
-			
+
 		</div>
 		<hr>
 		<div class="sidebar-footer">
 			<div class="sidebar__nav nav nav-pills flex-column">
-				<RouterLink class="nav-link" :to="{ name: 'account' }" v-if="accountStore.account">
-					<i class="bi bi-gear me-2"></i> Account Settings
-					<small class="text-muted d-block">{{ accountStore.account?.data?.email }}</small>
-				</RouterLink>
-				<RouterLink class="nav-link" :to="{ name: 'logout' }" v-if="accountStore.account">
-					<i class="bi bi-box-arrow-right me-2"></i> Logout
-					<small class="text-muted d-block">{{ accountStore.account?.data?.email }}</small>
-				</RouterLink>
+				<SidebarContext v-for="item in sharedStore.sidebars.footer.items" :item="item" />
 				<div class="nav-item">
 					<RouterLink class="nav-link" :to="{ name: 'login' }" v-if="!accountStore.account">
 						<i class="bi bi-box-arrow-in-right me-2"></i> Login
@@ -196,4 +208,5 @@ const sharedStore = useSharedStore();
 
 	}
 
-}</style>
+}
+</style>

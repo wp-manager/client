@@ -62,7 +62,7 @@ class WPSite {
 
     // WP Manager Companion
     wpm_core_version() {
-        return this.makeRequest("wp-json/wp-manager/v1/wp-core");
+        return this.makeRequest("wp-json/wp-manager/v1/core-version");
     }
 
     // StrategiQ Dev Toolkit
