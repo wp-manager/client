@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import WPSite from '@/classes/wp.class';
+import { useSiteStore } from '@/stores/site';
 import { ref } from 'vue';
 
 const missing = ref(false)
 const loading = ref(true);
+
 
 defineProps({
     site: {

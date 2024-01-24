@@ -13,10 +13,12 @@ props.site?.discover();
 <template>
     <tr v-if="site?.discover()">
         <td>
-            <SiteIcon :site="site" />
+            <RouterLink :to="{ name: 'site', params: { uri: site?.url } }">
+                <SiteIcon :site="site" />
+            </RouterLink>
         </td>
         <td>
-            <div v-html="site.discover()?.data?.name || site.url"></div>
+            <RouterLink :to="{ name: 'site', params: { uri: site?.url } }" v-html="site.discover()?.data?.name || site.url" class="d-block text-body"></RouterLink>
             <small v-html="site.discover()?.data?.description"></small>
         </td>
         <td>

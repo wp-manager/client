@@ -13,6 +13,15 @@ app.use(router);
 
 app.mount("#app");
 
+app.config.globalProperties.siteButtons = [];
+
+// Plugins
+import wpenginePlugin from "./plugins/wpengine";
+app.use(wpenginePlugin);
+
+
+
+
 // @ts-ignore
 window.Vue = app;
 

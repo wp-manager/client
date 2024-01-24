@@ -24,6 +24,7 @@ import SitePageSpeed from "@/views/SitePageSpeed.vue";
 import SitesPlugins from "@/views/SitesPlugins.vue";
 import SitesUsers from "@/views/SitesUsers.vue";
 import SiteVue from "@/views/Site.vue";
+import SiteSettings from "@/views/Site/Settings.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -96,23 +97,7 @@ const router = createRouter({
             path: "/site/:uri?",
             name: "site",
             component: SiteVue,
-            meta: {
-                site: null,
-            },
-            beforeEnter: async (to, from) => {
-                if (to.params.uri) {
-                    const siteStore = useSiteStore();
-                    let foundSite = siteStore.sites.find(
-                        (site) => site.url === to.params.uri
-                    );
-
-                    if (!foundSite) {
-                        return router.push({ name: "sites" });
-                    }
-                }else{
-                    router.push({ name: "sites" });
-                }
-            },
+            redirect: { name: "site-dashboard" },
             children: [
                 {
                     path: "",
@@ -133,6 +118,11 @@ const router = createRouter({
                     path: "pagespeed",
                     name: "site-pagespeed",
                     component: SitePageSpeed,
+                },
+                {
+                    path: "settings",
+                    name: "site-settings",
+                    component: SiteSettings
                 },
             ],
         },

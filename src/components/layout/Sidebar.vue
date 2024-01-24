@@ -4,11 +4,14 @@ import SiteScreenshot from '../SiteScreenshot.vue';
 import SiteIcon from '../SiteIcon.vue';
 import { useMetaStore } from '@/stores/meta';
 import { useSiteStore } from '@/stores/site';
+import { useSharedStore } from '@/stores/shared';
+import SidebarContext from './SidebarContext.vue';
 
 const metaStore = useMetaStore();
 
 const accountStore = useAccountStore();
 const siteStore = useSiteStore();
+const sharedStore = useSharedStore();
 </script>
 
 <template>
@@ -17,171 +20,39 @@ const siteStore = useSiteStore();
 			<div class="d-flex justify-content-center logo">
 				<img src="/wpm-logo.svg" alt="Logo" />
 			</div>
-			<div v-if="accountStore.account">
-				<div class="sidebar__nav nav nav-pills flex-column" v-if="siteStore.routeSite()">
-					<div class="nav-screenshot">
-						<SiteScreenshot :url="siteStore.routeSite()?.screenshot" />
-						<div class="nav-screenshot__content">
-							<SiteIcon :site="siteStore.routeSite()" />
-							<span
-								v-html="siteStore.routeSite()?.discover()?.data?.name || siteStore.routeSite()?.url"></span>
+			<div class="sidebar__nav nav nav-pills flex-column">
+				<template v-if="siteStore.routeSite()?.url">
+					<SidebarContext v-for="item in sharedStore.sidebars.contextual.site.items" :item="item" />
+				</template>
+				<template v-else-if="$route.meta.account">
+					<SidebarContext v-for="item in sharedStore.sidebars.contextual.settings.items" :item="item" />
+				</template>
+				<template v-else>
+					<SidebarContext v-for="item in sharedStore.sidebars.contextual.main.items" :item="item" />
+				</template>
+				<div class="divider-heading" data-label="Debug"></div>
+				<div class="nav-item">
+					<small class="d-flex flex-column gap-1">
+						<div class="d-flex justify-content-between">
+							<div class="text-muted">Current API requests</div>
+							<div>{{ metaStore.finishedRequests }} / {{ metaStore.pendingRequests }}</div>
 						</div>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link" :to="{ name: 'sites' }">
-							<i class="bi bi-arrow-left me-2"></i> Back
-						</RouterLink>
-					</div>
-					<hr>
-					<div class="nav-item">
-						<RouterLink class="nav-link" :to="{ name: 'site', params: { uri: siteStore.routeSite()?.url } }">
-							<i class="bi bi-columns-gap me-2"></i> Dashboard
-						</RouterLink>
-					</div>
-
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/"
-							v-if="siteStore.routeSite()?.hasNamespace('wpe/cache-plugin/v1')">
-							<i class="bi bi-server me-2"></i> WP Engine
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link"
-							:to="{ name: 'site-pagespeed', params: { uri: siteStore.routeSite()?.url } }"
-							v-if="siteStore.routeSite()?.pagespeed()?.data">
-							<i class="bi bi-speedometer me-2"></i> PageSpeed
-						</RouterLink>
-					</div>
-					<hr>
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites/gravity-forms"
-							v-if="siteStore.routeSite()?.hasNamespace('gravityforms/v2')">
-							<i class="bi bi-ui-checks me-2"></i> Gravity Forms
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites/cf7-forms"
-							v-if="siteStore.routeSite()?.hasNamespace('contact-form-7/v1')">
-							<i class="bi bi-input-cursor-text me-2"></i> Contact Form 7
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites/cf7-forms"
-							v-if="siteStore.routeSite()?.hasNamespace('wp-rocket/v1')">
-							<i class="bi bi-rocket-takeoff me-2"></i> WP Rocket
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link disabled" to="/sites"
-							v-if="siteStore.routeSite()?.hasNamespace('stq/v1') && siteStore.routeSite()?.hasPlugin('sucuri-scanner/sucuri')">
-							<i class="bi bi-shield me-2"></i> Sucuri
-						</RouterLink>
-					</div>
-				</div>
-				<!-- if on /account or any sub pages -->
-				<div class="sidebar__nav nav nav-pills flex-column" v-else-if="$route.meta.account">
-					<div class="nav-item">
-						<RouterLink class="nav-link" :to="{ name: 'sites' }">
-							<i class="bi bi-arrow-left me-2"></i> Back
-						</RouterLink>
-					</div>
-					<hr>
-					<div class="nav-item">
-						<RouterLink class="nav-link" :to="{ name: 'account-home' }">
-								General
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link" :to="{ name: 'account-wp-engine' }">
-							WP Engine
-						</RouterLink>
-					</div>
-				</div>
-				<div class="sidebar__nav nav nav-pills flex-column" v-else>
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/">
-							<i class="bi bi-house me-2"></i>Home
-						</RouterLink>
-					</div>
-					<hr>
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites/add">
-							<i class="bi bi-window-plus me-2"></i> Add Site
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites">
-							<i class="bi bi-window-stack me-2"></i> Sites
-						</RouterLink>
-					</div>
-					<hr>
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites/plugins">
-							<i class="bi bi-plug me-2"></i> Plugins Overview
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites/users">
-							<i class="bi bi-people me-2"></i> Users Overview
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link" :to="{ name: 'sites-application-passwords' }">
-							<i class="bi bi-key me-2"></i> App Passwords
-						</RouterLink>
-					</div>
-					<hr>
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites/gravity-forms">
-							<i class="bi bi-ui-checks me-2"></i> Gravity Forms
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link" to="/sites/cf7-forms">
-							<i class="bi bi-input-cursor-text me-2"></i> Contact Form 7
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link disabled" to="/sites/wordfence">
-							<i class="bi bi-shield me-2"></i> Wordfence
-						</RouterLink>
-					</div>
-					<div class="nav-item">
-						<RouterLink class="nav-link disabled" to="/sites/sucuri">
-							<i class="bi bi-shield me-2"></i> Sucuri
-						</RouterLink>
-					</div>
-					<hr>
-					<div class="nav-item">
-						<small class="d-flex flex-column gap-1">
-							<div class="d-flex justify-content-between">
-								<div class="text-muted">Current API requests</div>
-								<div>{{ metaStore.finishedRequests }} / {{ metaStore.pendingRequests }}</div>
+						<div class="progress" role="progressbar" aria-label="Animated striped example" style="height:4px"
+							:class="{ 'visible': (metaStore.finishedRequests !== metaStore.pendingRequests) }">
+							<div class="progress-bar"
+								:class="{ 'bg-success': (metaStore.finishedRequests === metaStore.pendingRequests) }"
+								:style="{ width: (metaStore.finishedRequests / metaStore.pendingRequests) * 100 + '%' }">
 							</div>
-							<div class="progress" role="progressbar" aria-label="Animated striped example"
-								style="height:4px"
-								:class="{ 'visible': (metaStore.finishedRequests !== metaStore.pendingRequests) }">
-								<div class="progress-bar"
-									:class="{ 'bg-success': (metaStore.finishedRequests === metaStore.pendingRequests) }"
-									:style="{ width: (metaStore.finishedRequests / metaStore.pendingRequests) * 100 + '%' }">
-								</div>
-							</div>
-						</small>
-					</div>
+						</div>
+					</small>
 				</div>
 			</div>
+
 		</div>
 		<hr>
 		<div class="sidebar-footer">
 			<div class="sidebar__nav nav nav-pills flex-column">
-				<RouterLink class="nav-link" :to="{ name: 'account' }" v-if="accountStore.account">
-					<i class="bi bi-gear me-2"></i> Account Settings
-					<small class="text-muted d-block">{{ accountStore.account?.data?.email }}</small>
-				</RouterLink>
-				<RouterLink class="nav-link" :to="{ name: 'logout' }" v-if="accountStore.account">
-					<i class="bi bi-box-arrow-right me-2"></i> Logout
-					<small class="text-muted d-block">{{ accountStore.account?.data?.email }}</small>
-				</RouterLink>
+				<SidebarContext v-for="item in sharedStore.sidebars.footer.items" :item="item" />
 				<div class="nav-item">
 					<RouterLink class="nav-link" :to="{ name: 'login' }" v-if="!accountStore.account">
 						<i class="bi bi-box-arrow-in-right me-2"></i> Login
@@ -193,6 +64,41 @@ const siteStore = useSiteStore();
 </template>
 
 <style scoped lang="scss">
+.divider-heading {
+	color: var(--bs-secondary-color);
+	font-size: 10px;
+	font-weight: 500;
+	isolation: isolate;
+	letter-spacing: 1px;
+	line-height: 1px;
+	margin-bottom: .5rem;
+	margin-top: .5rem;
+	padding: .25rem 0;
+	position: relative;
+	text-transform: uppercase;
+	width: 100%;
+
+	&:before {
+		content: attr(data-label);
+		background-color: var(--bs-body-bg);
+		margin-left: .75rem;
+		padding: 0 8px;
+		z-index: 1;
+	}
+
+	&:after {
+		content: '';
+		background-color: var(--bs-body-color);
+		height: 1px;
+		left: 0;
+		opacity: .25;
+		position: absolute;
+		right: 0;
+		z-index: -1;
+	}
+
+}
+
 .logo {
 	margin-bottom: 18px;
 
