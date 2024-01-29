@@ -53,10 +53,13 @@ const sharedStore = useSharedStore();
 		<div class="sidebar-footer">
 			<div class="sidebar__nav nav nav-pills flex-column">
 				<SidebarContext v-for="item in sharedStore.sidebars.footer.items" :item="item" />
-				<div class="nav-item">
-					<RouterLink class="nav-link" :to="{ name: 'login' }" v-if="!accountStore.account">
-						<i class="bi bi-box-arrow-in-right me-2"></i> Login
-					</RouterLink>
+				<div class="socials">
+					<a href="https://github.com/wp-manager/client" target="_blank" rel="noopener noreferrer">
+						<i class="bi bi-github"></i>
+					</a>
+					<a href="https://discord.gg/k4GPvRfk3D" target="_blank" rel="noopener noreferrer">
+						<i class="bi bi-discord"></i>
+					</a>
 				</div>
 			</div>
 		</div>
@@ -205,8 +208,19 @@ const sharedStore = useSharedStore();
 				margin: 1rem;
 			}
 		}
-
 	}
+}
 
+.socials {
+	margin-top: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	font-size: 1.125rem;
+
+	a {
+		color: var(--bs-body-color);
+	}
 }
 </style>
