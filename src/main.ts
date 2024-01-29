@@ -2,6 +2,8 @@ import "./assets/main.scss";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import { useSharedStore } from "./stores/shared";
+import { useSiteStore } from "./stores/site";
 
 import App from "./App.vue";
 import router from "./router";
@@ -13,14 +15,12 @@ app.use(router);
 
 app.mount("#app");
 
-app.config.globalProperties.siteButtons = [];
+app.config.globalProperties.$sharedStore = useSharedStore();
+app.config.globalProperties.$siteStore = useSiteStore();
 
 // Plugins
 import wpenginePlugin from "./plugins/wpengine";
 app.use(wpenginePlugin);
-
-
-
 
 // @ts-ignore
 window.Vue = app;
