@@ -8,6 +8,7 @@ import { useAccountStore } from "@/stores/account";
 // Components
 import Account from "@/views/Account/Account.vue";
 import AccountHome from "@/views/Account/AccountHome.vue";
+import AccountPlugins from "@/views/Account/AccountPlugins.vue";
 import AccountWPEngine from "@/views/Account/AccountWPEngine.vue";
 import AddSite from "@/views/AddSite.vue";
 import FetchUtils from "@/utils/fetch";
@@ -141,6 +142,11 @@ const router = createRouter({
                     component: AccountHome,
                 },
                 {
+                    path: "plugins",
+                    name: "account-plugins",
+                    component: AccountPlugins
+                },
+                {
                     path: "wp-engine",
                     name: "account-wp-engine",
                     component: AccountWPEngine,
@@ -168,4 +174,18 @@ router.beforeEach(async (to, from, next) => {
 
     next();
 });
+
+router.isReady().then(() => {
+    const plugins = useAccountStore().account?.plugins;
+    if(!plugins) return;
+
+    plugins.forEach((plugin: any) => {
+        // create script module using plugin as src
+        const script = document.createElement("script");
+        script.type = "module";
+        script.src = plugin;
+        document.body.appendChild(script);
+    });
+});
+
 export default router;
