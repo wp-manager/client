@@ -14,44 +14,44 @@ export const useSharedStore = defineStore("shared", () => {
             contextual: {
                 main: {
                     items: <Object[] | RouteLocationRaw[]>[
-                        { label: "Home", path: "/", icon: "bi-house" },
+                        { label: "Home", path: "/", icon: "bi bi-house" },
                         { divider: true },
                         {
                             label: "Add Site",
                             path: "/sites/add",
-                            icon: "bi-window-plus",
+                            icon: "bi bi-window-plus",
                         },
                         {
                             label: "Sites",
                             path: "/sites",
-                            icon: "bi-window-stack",
+                            icon: "bi bi-window-stack",
                         },
                         { divider: "Core" },
                         {
                             label: "Plugins",
                             path: "/sites/plugins",
-                            icon: "bi-plug",
+                            icon: "bi bi-plug",
                         },
                         {
                             label: "Users",
                             path: "/sites/users",
-                            icon: "bi-people",
+                            icon: "bi bi-people",
                         },
                         {
                             label: "Application Passwords",
                             path: "/sites/application-passwords",
-                            icon: "bi-key",
+                            icon: "bi bi-key",
                         },
                         { divider: "Additional" },
                         {
                             label: "Gravity Forms",
                             path: "/sites/gravity-forms",
-                            icon: "bi-ui-checks",
+                            icon: "bi bi-ui-checks",
                         },
                         {
                             label: "Contact Form 7",
                             path: "/sites/cf7-forms",
-                            icon: "bi-ui-checks",
+                            icon: "bi bi-ui-checks",
                         },
                     ],
                 },
@@ -60,32 +60,32 @@ export const useSharedStore = defineStore("shared", () => {
                         {
                             label: "Back",
                             path: "/sites",
-                            icon: "bi-arrow-left",
+                            icon: "bi bi-arrow-left",
                         },
                         { divider: "Overview" },
                         {
                             label: "Dashboard",
                             name: "site-dashboard",
                             params: { uri: siteStore.routeSite()?.url },
-                            icon: "bi-grid",
+                            icon: "bi bi-grid",
                         },
                         { divider: "Core Information" },
                         {
                             label: "Posts",
                             path: "site-posts",
-                            icon: "bi-pen",
+                            icon: "bi bi-pen",
                             class: "disabled feature-soon",
                         },
                         {
                             label: "Users",
                             path: "site-users",
-                            icon: "bi-people",
+                            icon: "bi bi-people",
                             class: "disabled feature-soon",
                         },
                         {
                             label: "Plugins",
                             path: "site-plugins",
-                            icon: "bi-plug",
+                            icon: "bi bi-plug",
                             class: "disabled feature-soon",
                         },
                         { divider: "Runner Information" },
@@ -93,7 +93,7 @@ export const useSharedStore = defineStore("shared", () => {
                             label: "PageSpeed",
                             name: "site-pagespeed",
                             params: { uri: siteStore.routeSite()?.url },
-                            icon: "bi-google",
+                            icon: "bi bi-google",
                         },
                         { divider: "Manage" },
                         
@@ -101,7 +101,7 @@ export const useSharedStore = defineStore("shared", () => {
                             label: "Site Settings",
                             name: "site-settings",
                             params: { uri: siteStore.routeSite()?.url },
-                            icon: "bi-gear",
+                            icon: "bi bi-gear",
                         },
                     ],
                 },
@@ -110,17 +110,18 @@ export const useSharedStore = defineStore("shared", () => {
                         {
                             label: "Back",
                             path: "/sites",
-                            icon: "bi-arrow-left",
+                            icon: "bi bi-arrow-left",
                         },
                         { divider: "Settings" },
                         { label: "General", name: "account-home"},
+                        { label: "Plugins", name: "account-plugins"},
                         { divider: "Integrations", class: "d-none" }
                     ],
                 },
             },
             footer: {
                 items: <Object[] | RouteLocationRaw[]>[
-                    { label: "Account", name: "account", icon: "bi-gear" },
+                    { label: "Account", name: "account", icon: "bi bi-gear" },
                     {
                         label: accountStore?.account ? "Login" : "Logout",
                         name: accountStore?.account ? "login" : "logout",
