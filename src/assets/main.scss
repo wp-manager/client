@@ -86,3 +86,15 @@ hr[data-content] {
         background: var(--bs-secondary-bg)
     }
 }
+
+.nav-link{
+    display: flex;
+    align-items: center;
+}
+
+.icon-svg{
+    height: 16px;
+    aspect-ratio: 1;
+    display: inline-flex;
+    align-items: center;
+}
