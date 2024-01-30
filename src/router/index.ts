@@ -4,7 +4,6 @@ import { createRouter, createWebHistory } from "vue-router";
 let apiBase = import.meta.env.APP_SERVER_URL;
 
 // Stores
-import { useSiteStore } from "@/stores/site";
 import { useAccountStore } from "@/stores/account";
 
 // Components

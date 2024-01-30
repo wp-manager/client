@@ -20,10 +20,10 @@ app.config.globalProperties.$siteStore = useSiteStore();
 
 // Plugins
 import wpenginePlugin from "./plugins/wpengine";
-app.use(wpenginePlugin);
+//app.use(wpenginePlugin);
 
 // @ts-ignore
-window.Vue = app;
+window.vue = app;
 
 // Set theme to the user's preferred color scheme
 function updateTheme() {

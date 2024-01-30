@@ -34,6 +34,14 @@ class WPSite {
         return this.data["wp-json/"].data.namespaces.includes(namespace);
     }
 
+    hasRoute(route: string) {
+        if (!this.data["wp-json/"]) return false;
+        if (!this.data["wp-json/"].data) return false;
+        if (!this.data["wp-json/"].data.routes) return false;
+        // data.routes is an object where the jeys are the routes and the values are the methods
+        return Object.keys(this.data["wp-json/"].data.routes).includes(route);        
+    }
+
     hasPlugin(pluginName: string){
         if (!this.data["wp-json/wp/v2/plugins"]) return false;
         if (!this.data["wp-json/wp/v2/plugins"].data) return false;
