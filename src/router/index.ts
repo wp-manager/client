@@ -1,6 +1,8 @@
 // Vue
 import { createRouter, createWebHistory } from "vue-router";
 
+let apiBase = import.meta.env.APP_SERVER_URL;
+
 // Stores
 import { useAccountStore } from "@/stores/account";
 
@@ -182,7 +184,7 @@ router.isReady().then(() => {
         // create script module using plugin as src
         const script = document.createElement("script");
         script.type = "module";
-        script.src = plugin;
+        script.src = `${apiBase}/account/plugin/${encodeURIComponent(plugin)}`;
         document.body.appendChild(script);
     });
 });
