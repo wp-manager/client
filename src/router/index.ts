@@ -2,7 +2,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 // Stores
-import { useSiteStore } from "@/stores/site";
 import { useAccountStore } from "@/stores/account";
 
 // Components

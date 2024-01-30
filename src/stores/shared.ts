@@ -9,7 +9,8 @@ export const useSharedStore = defineStore("shared", () => {
     const siteStore = useSiteStore();
     const accountStore = useAccountStore();
 
-    const sidebars = reactive({
+    const data = reactive({
+        pluginData: {},
         sidebars: {
             contextual: {
                 main: {
@@ -96,7 +97,6 @@ export const useSharedStore = defineStore("shared", () => {
                             icon: "bi bi-google",
                         },
                         { divider: "Manage" },
-                        
                         {
                             label: "Site Settings",
                             name: "site-settings",
@@ -141,11 +141,11 @@ export const useSharedStore = defineStore("shared", () => {
             const site = siteStore.routeSite();
             if (!site) return;
 
-            sidebars.sidebars.contextual.site.items.forEach((item: any) => {
+            data.sidebars.contextual.site.items.forEach((item: any) => {
                 item.params = { uri: site.url };
             });
         }
     );
 
-    return sidebars;
+    return data;
 });
