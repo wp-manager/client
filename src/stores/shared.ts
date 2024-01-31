@@ -10,6 +10,7 @@ export const useSharedStore = defineStore("shared", () => {
     const accountStore = useAccountStore();
 
     const data = reactive({
+        apiURL: import.meta.env.APP_SERVER_URL,
         pluginData: {},
         sidebars: {
             contextual: {
