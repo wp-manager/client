@@ -1,5 +1,6 @@
 <script setup lang="ts">
-</script>
 
+</script>
 <template>
+ hiii
 </template>

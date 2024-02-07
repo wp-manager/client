@@ -20,7 +20,7 @@ app.config.globalProperties.$siteStore = useSiteStore();
 
 // Plugins
 import wpenginePlugin from "./plugins/wpengine";
-//app.use(wpenginePlugin);
+app.use(wpenginePlugin);
 
 // @ts-ignore
 window.vue = app;

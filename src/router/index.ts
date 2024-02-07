@@ -144,11 +144,6 @@ const router = createRouter({
                     path: "plugins",
                     name: "account-plugins",
                     component: AccountPlugins
-                },
-                {
-                    path: "wp-engine",
-                    name: "account-wp-engine",
-                    component: AccountWPEngine,
                 }
             ],
         },
