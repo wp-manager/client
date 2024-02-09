@@ -41,3 +41,30 @@ updateTheme();
 window
     .matchMedia("(prefers-color-scheme: dark)")
     .addEventListener("change", updateTheme);
+
+/**
+ * This is a workaround to allow dynamic routes to be navigated to on first load.
+ * This is due to routes being added after the app is mounted (e.g. in a plugin)
+ */
+app.config.globalProperties.$router.isReady().then(() => {
+    let routesNum = router.getRoutes().length;
+    let routesInterval = setInterval(() => {
+        const newRoutesNum = router.getRoutes().length;
+        if (newRoutesNum === routesNum) return;
+
+        routesNum = newRoutesNum;
+
+        let routeFailed =
+            app.config.globalProperties.$route.matched.length === 0;
+
+        if (routeFailed) {
+            app.config.globalProperties.$router.push(
+                app.config.globalProperties.$route
+            );
+        }
+    }, 50);
+
+    setTimeout(() => {
+        clearInterval(routesInterval);
+    }, 1500);
+});
