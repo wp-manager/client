@@ -106,6 +106,21 @@ export const useSharedStore = defineStore("shared", () => {
                         },
                     ],
                 },
+                siteSettings: {
+                    items: <Object[] | RouteLocationRaw[]>[
+                        {
+                            label: "Back",
+                            name: "site-dashboard",
+                            params: { uri: siteStore.routeSite()?.url },
+                            icon: "bi bi-arrow-left",
+                        },
+                        {
+                            label: "General",
+                            name: "site-settings-general",
+                            params: { uri: siteStore.routeSite()?.url },
+                        }
+                    ],
+                },
                 settings: {
                     items: <Object[] | RouteLocationRaw[]>[
                         {
@@ -143,6 +158,10 @@ export const useSharedStore = defineStore("shared", () => {
             if (!site) return;
 
             data.sidebars.contextual.site.items.forEach((item: any) => {
+                item.params = { uri: site.url };
+            });
+
+            data.sidebars.contextual.siteSettings.items.forEach((item: any) => {
                 item.params = { uri: site.url };
             });
         }

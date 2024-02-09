@@ -37,6 +37,11 @@ class WPEngine {
         return this.makeRequest(`sites/${site_id}`);
     }
 
+    getInstalls(install_id: string = '') {
+        if(!install_id) return this.makeRequest('installs');
+        return this.makeRequest(`installs/${install_id}`);
+    }
+
     
 
 }

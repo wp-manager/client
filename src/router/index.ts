@@ -124,7 +124,16 @@ const router = createRouter({
                 {
                     path: "settings",
                     name: "site-settings",
-                    component: SiteSettings
+                    component: SiteSettings,
+                    meta: {
+                        siteSettings: true
+                    },
+                    redirect: { name: "site-settings-general" },
+                    children: [{
+                        path: "",
+                        name: "site-settings-general",
+                        component: SiteSettings,
+                    }]
                 },
             ],
         },

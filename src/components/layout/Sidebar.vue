@@ -6,12 +6,14 @@ import { useMetaStore } from '@/stores/meta';
 import { useSiteStore } from '@/stores/site';
 import { useSharedStore } from '@/stores/shared';
 import SidebarContext from './SidebarContext.vue';
+import { useWPEStore } from '@/plugins/wpengine/stores/wpe';
 
 const metaStore = useMetaStore();
 
 const accountStore = useAccountStore();
 const siteStore = useSiteStore();
 const sharedStore = useSharedStore();
+const wpeStore = useWPEStore();
 </script>
 
 <template>
@@ -22,7 +24,17 @@ const sharedStore = useSharedStore();
 			</div>
 			<div class="sidebar__nav nav nav-pills flex-column">
 				<template v-if="siteStore.routeSite()?.url">
-					<SidebarContext v-for="item in sharedStore.sidebars.contextual.site.items" :item="item" />
+					<div class="nav-screenshot">
+						<SiteScreenshot :url="siteStore.routeSite()?.screenshot" />
+						<div class="nav-screenshot__content">
+							<SiteIcon :site="siteStore.routeSite()" />
+							<span
+								v-html="siteStore.routeSite()?.discover()?.data?.name || siteStore.routeSite()?.url"></span>
+						</div>
+					</div>
+					<!-- if within /site/:uri/settings-->
+					<SidebarContext v-for="item in sharedStore.sidebars.contextual.siteSettings.items" :item="item" v-if="$route.meta.siteSettings" />
+					<SidebarContext v-for="item in sharedStore.sidebars.contextual.site.items" :item="item" v-else />
 				</template>
 				<template v-else-if="$route.meta.account">
 					<SidebarContext v-for="item in sharedStore.sidebars.contextual.settings.items" :item="item" />
