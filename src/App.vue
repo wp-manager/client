@@ -3,6 +3,7 @@ import { useAccountStore } from './stores/account';
 
 import Blank from './layouts/Blank.vue';
 import Default from './layouts/Default.vue';
+import Toasts from './components/Toasts.vue';
 
 const accountStore = useAccountStore();
 
@@ -12,6 +13,7 @@ const accountStore = useAccountStore();
   <div class="app">
     <Default v-if="accountStore.account" />
     <Blank v-else/>
+    <Toasts />
   </div>
 </template>
 

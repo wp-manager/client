@@ -19,6 +19,9 @@
     }
 }
 
+.toast{
+    --bs-toast-spacing: 1rem;
+}
 
 .badge.wpe-env {
     color: var(--wpe-env-text);
