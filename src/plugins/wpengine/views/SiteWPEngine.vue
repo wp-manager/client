@@ -28,7 +28,7 @@ fetch(`${apiBase}/plugins/wp-engine-api-proxy/assigned-site/${siteStore.routeSit
 let backupStatus = ref('idle');
 
 const backupSite = async () => {
-    backupStatus.value = 'requesting';
+    backupStatus.value = 'attempting';
     fetch(`${apiBase}/plugins/wp-engine-api-proxy/api/installs/${selectedInstall.value}/backups`, {
         method: 'POST',
         credentials: 'include',
@@ -42,7 +42,7 @@ const backupSite = async () => {
     }).then(async (res) => {
         const body = await res.json();
         if (body.id) {
-            backupStatus.value = 'requested';
+            backupStatus.value = 'queued';
             pollBackupStatus(body.id);
         }
     });
@@ -134,9 +134,9 @@ const purgeCache = (type: 'object' | 'page' | 'cdn') => {
             <div class="mb-2">
                 <div>
                     <button class="btn btn-primary" @click="backupSite" :disabled="backupStatus !== 'idle'">Backup Site
-                        <span v-if="backupStatus !== 'idle'" class="me-2"> - <span style="text-transform: capitalize">{{
+                        <span v-if="backupStatus !== 'idle'"> - <span style="text-transform: capitalize">{{
                             backupStatus }}</span></span>
-                        <i class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                        <i class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"
                             v-if="backupStatus !== 'idle' && backupStatus !== 'completed'"></i>
                     </button>
                 </div>
