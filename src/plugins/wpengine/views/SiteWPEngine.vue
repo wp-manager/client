@@ -56,10 +56,12 @@ const pollBackupStatus = async (backupId: string) => {
             credentials: 'include'
         }).then(async (res) => {
             const body = await res.json();
-            console.log(body);
             backupStatus.value = body.status;
             if (body.status === 'completed') {
                 clearInterval(interval);
+                toastStore.addToast({
+                    message: 'Backup completed successfully'
+                });
                 setTimeout(() => {
                     backupStatus.value = 'idle';
                 }, 5000);
