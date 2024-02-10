@@ -98,6 +98,9 @@ class WPSite {
     stq_sucuri_audit_logs() {
         return this.makeRequest("wp-json/stq/v1/sucuri-audit/logs");
     }
+    stq_wordfence_audit() {
+        return this.makeRequest("wp-json/stq/v1/wordfence-audit");
+    }
 
     // PageSpeed
     pagespeed() {
