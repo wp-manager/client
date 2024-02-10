@@ -4,6 +4,7 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import { useSharedStore } from "./stores/shared";
 import { useSiteStore } from "./stores/site";
+import { useToastStore } from "./stores/toast";
 
 import App from "./App.vue";
 import router from "./router";
@@ -17,6 +18,7 @@ app.mount("#app");
 
 app.config.globalProperties.$sharedStore = useSharedStore();
 app.config.globalProperties.$siteStore = useSiteStore();
+app.config.globalProperties.$toastStore = useToastStore();
 
 // Plugins
 import wpenginePlugin from "./plugins/wpengine";
