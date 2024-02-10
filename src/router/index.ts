@@ -188,7 +188,12 @@ router.isReady().then(() => {
         // create script module using plugin as src
         const script = document.createElement("script");
         script.type = "module";
-        script.src = `${apiBase}/account/plugin/${encodeURIComponent(plugin)}`;
+        // if script is using localhost, don't use the apiBase
+        if(plugin.includes("localhost")) {
+            script.src = plugin;
+        } else {
+            script.src = `${apiBase}/account/plugin/${encodeURIComponent(plugin)}`;
+        }
         document.body.appendChild(script);
     });
 });
