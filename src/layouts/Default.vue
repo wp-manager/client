@@ -21,7 +21,6 @@ const metaStore = useMetaStore();
 <style scoped lang="scss">
 .view {
     position: relative;
-    overflow: hidden;
     max-width: calc(100% - var(--sidebar-width));
     transition: max-width 0.2s ease-in-out;
     margin-left: auto;    
@@ -29,6 +28,5 @@ const metaStore = useMetaStore();
 
 .view-wrapper{
     height: 100%;
-    overflow-y: auto;
 }
 </style>

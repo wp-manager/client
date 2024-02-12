@@ -20,7 +20,6 @@ const metaStore = useMetaStore();
 <style scoped lang="scss">
 .view {
     position: relative;
-    overflow: hidden;
 }
 .view-wrapper{
     height: 100%;
