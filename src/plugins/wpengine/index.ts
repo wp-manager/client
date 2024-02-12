@@ -11,15 +11,31 @@ const strategiqPlugin: Plugin = {
     install(app, options) {
         app.config.globalProperties.$sharedStore.pluginData.wpengine = {};
 
-        // Account settings
-        app.config.globalProperties.$router.addRoute("account", {
+        const router = app.config.globalProperties.$router;
+        const route = app.config.globalProperties.$route;
+        const sidebar = app.config.globalProperties.$sharedStore.sidebars.contextual;
+
+        // Setup the routes
+        router.addRoute("account", {
             path: "wp-engine",
             name: "account-wp-engine",
             component: AccountWPEngine,
         });
 
-        // Add the integration to the single site sidebar
-        app.config.globalProperties.$sharedStore.sidebars.contextual.settings.items.push(
+        router.addRoute("site-settings", {
+            path: "wp-engine",
+            name: "site-settings-wp-engine",
+            component: SiteSettings,
+        });
+
+        router.addRoute("site", {
+            path: "wp-engine",
+            name: "site-wp-engine",
+            component: SiteWPEngine,
+        });
+
+        // Add the sidebar items to the relevant sections
+        sidebar.settings.items.push(
             {
                 label: "WP Engine",
                 name: "account-wp-engine",
@@ -27,36 +43,20 @@ const strategiqPlugin: Plugin = {
             }
         );
 
-        // Site Settings
-        app.config.globalProperties.$router.addRoute("site-settings", {
-            path: "wp-engine",
-            name: "site-settings-wp-engine",
-            component: SiteSettings,
-        });
-
-        // Add the integration to the single site sidebar
-        app.config.globalProperties.$sharedStore.sidebars.contextual.siteSettings.items.push(
+        sidebar.siteSettings.items.push(
             {
                 label: "WP Engine",
                 name: "site-settings-wp-engine",
-                params: { uri: app.config.globalProperties.$route.params.uri },
+                params: { uri: route.params.uri },
                 iconSvg: icon,
             }
         );
-
-        // Site actions
-        app.config.globalProperties.$router.addRoute("site", {
-            path: "wp-engine",
-            name: "site-wp-engine",
-            component: SiteWPEngine,
-        });
-
-        // Add the integration to the single site sidebar
-        app.config.globalProperties.$sharedStore.sidebars.contextual.site.items.push(
+        
+        sidebar.site.items.push(
             {
                 label: "WP Engine",
                 name: "site-wp-engine",
-                params: { uri: app.config.globalProperties.$route.params.uri },
+                params: { uri: route.params.uri },
                 iconSvg: icon,
             }
         );
