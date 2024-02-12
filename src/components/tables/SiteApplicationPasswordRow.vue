@@ -2,6 +2,7 @@
 import WPSite from '@/classes/wp.class';
 import SiteIcon from '../SiteIcon.vue';
 import UserImage from '../UserImage.vue';
+import { computed } from 'vue';
 
 const props = defineProps({
     site: WPSite
@@ -17,10 +18,16 @@ const groupByUuid = (data: any) => {
     }, {});
 };
 
+const sortedUsers = computed(() => {
+    return props.site?.users('administrator')?.data?.sort((a: any, b: any) => {
+        return a.name.localeCompare(a.name);
+    });
+});
+
 </script>
 
 <template>
-    <tr v-if="site?.discover()?.data && site?.users('administrator')?.data?.length > 0" v-for="(user, index) in site?.users('administrator')?.data"
+    <tr v-if="site?.discover()?.data && site?.users('administrator')?.data?.length > 0" v-for="(user, index) in sortedUsers"
         :key="user?.slug">
         <td>
             <SiteIcon :site="site" />
