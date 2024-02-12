@@ -104,6 +104,7 @@ export const useSharedStore = defineStore("shared", () => {
                             params: { uri: siteStore.routeSite()?.url },
                             icon: "bi bi-gear",
                         },
+                        { divider: "Plugins" },
                     ],
                 },
                 siteSettings: {
