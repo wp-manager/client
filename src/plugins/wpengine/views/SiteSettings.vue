@@ -63,25 +63,29 @@ const assignSite = async () => {
     <div style="max-width: 600px;">
         <h1 class="h4 mb-2">WP Engine Settings</h1>
         <hr class="mb-3">
-        <div class="mb-2" v-if="wpeStore.engine.getSites().data?.results">
-            <div>
-                <select class="form-select mb-2" @change="selectedSite = $event.target.value; selectedInstall = ''">
-                    <option value="">Select a site</option>
-                    <option
-                        v-for="site in wpeStore.engine.getSites().data?.results.sort((a, b) => a.name.localeCompare(b.name))"
-                        :key="site.id" :value="site.id" :selected="site.id == selectedSite">{{ site.name }}</option>
-                </select>
+        <div v-if="wpeStore.engine.getSites().data?.results">
+            <div class="row mb-3">
+                <div class="col">
+                    <select class="form-select" @change="selectedSite = $event.target.value; selectedInstall = ''">
+                        <option value="">Select a site</option>
+                        <option
+                            v-for="site in wpeStore.engine.getSites().data?.results.sort((a, b) => a.name.localeCompare(b.name))"
+                            :key="site.id" :value="site.id" :selected="site.id == selectedSite">{{ site.name }}</option>
+                    </select>
+                </div>
+                <div v-if="selectedSite" class="col">
+                    <select class="form-select" @change="selectedInstall = $event.target.value">
+                        <option value="">Select an install</option>
+                        <option
+                            v-for="install in wpeStore.engine.getSites().data?.results.find((site) => site.id == selectedSite)?.installs"
+                            :key="install.id" :value="install.id" :selected="install.id == selectedInstall">{{ install.name
+                            }}
+                            ({{ install.environment }})</option>
+                    </select>
+                </div>
             </div>
-            <div v-if="selectedSite">
-                <select class="form-select mb-2" @change="selectedInstall = $event.target.value">
-                    <option value="">Select an install</option>
-                    <option
-                        v-for="install in wpeStore.engine.getSites().data?.results.find((site) => site.id == selectedSite)?.installs"
-                        :key="install.id" :value="install.id" :selected="install.id == selectedInstall">{{ install.name }}
-                        ({{ install.environment }})</option>
-                </select>
-            </div>
-            <button class="btn btn-primary" @click="assignSite" v-if="selectedSite && selectedInstall">Assign Install</button>
+            <button class="btn btn-primary" @click="assignSite" v-if="selectedSite && selectedInstall">Assign
+                Install</button>
         </div>
         <div class="mb-2" v-else>
             <p>Loading...</p>
