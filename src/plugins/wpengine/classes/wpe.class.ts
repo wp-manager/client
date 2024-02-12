@@ -13,7 +13,7 @@ class WPEngine {
     makeRequest(path: string, method: string = "GET", body: any = null) {
         if (this.data[path]) return this.data[path];
         return (this.data[path] = useFetch(
-            `${apiBase}/plugins/wp-engine-api-proxy/api/${path}`,
+            `${apiBase}/plugins/wp-engine-api-proxy/${path}`,
             {
                 credentials: "include",
                 signal: FetchUtils.abortController.signal,
@@ -24,22 +24,22 @@ class WPEngine {
     }
 
     getUser() {
-        return this.makeRequest("user");
+        return this.makeRequest("api/user");
     }
 
     getAccounts(account_id: string = '') {
-        if(!account_id) return this.makeRequest('accounts');
-        return this.makeRequest(`accounts/${account_id}`);
+        if(!account_id) return this.makeRequest('api/accounts');
+        return this.makeRequest(`api/accounts/${account_id}`);
     }
 
     getSites(site_id: string = '') {
-        if(!site_id) return this.makeRequest('sites');
-        return this.makeRequest(`sites/${site_id}`);
+        if(!site_id) return this.makeRequest('api/sites');
+        return this.makeRequest(`api/sites/${site_id}`);
     }
 
     getInstalls(install_id: string = '') {
-        if(!install_id) return this.makeRequest('installs');
-        return this.makeRequest(`installs/${install_id}`);
+        if(!install_id) return this.makeRequest('api/installs');
+        return this.makeRequest(`api/installs/${install_id}`);
     }
 
     
