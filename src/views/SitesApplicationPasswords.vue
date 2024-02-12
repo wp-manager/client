@@ -16,12 +16,10 @@ const siteStore = useSiteStore();
                         <th scope="col">Site</th>
                         <th scope="col">Plugin</th>
                         <th scope="col">Version</th>
-                        <th scope="col">Active</th>
-                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <SiteApplicationPasswordRow v-for="site in siteStore.sites" :key="site.url" :site="site" />
+                    <SiteApplicationPasswordRow v-for="site in siteStore.sortedSites" :key="site.url" :site="site" />
                 </tbody>
             </table>
         </div>

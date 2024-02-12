@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import { useAccountStore } from '@/stores/account';
 import { useSiteStore } from '@/stores/site';
 
 import SiteRow from '@/components/tables/SiteRow.vue';
 import SiteCard from '@/components/cards/SiteCard.vue';
 
-
-
 const siteStore = useSiteStore();
-
 </script>
 <template>
     <div class="site-cards">
-        <SiteCard v-for="site in siteStore.sites" :key="site.url" :site="site"/>
+        <SiteCard v-for="site in siteStore.sortedSites" :key="site.url" :site="site" />
     </div>
     <div class="main overflow-hidden flex-grow-1">
         <div class="card table-responsive mb-4">
@@ -43,8 +39,8 @@ const siteStore = useSiteStore();
 <style scoped lang="scss">
 .site-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: .75rem;
     margin-bottom: 1rem;
 }
 </style>

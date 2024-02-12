@@ -22,7 +22,7 @@ const siteStore = useSiteStore();
                     </tr>
                 </thead>
                 <tbody>
-                    <SiteUserRow v-for="site in siteStore.sites" :key="site.url" :site="site" />
+                    <SiteUserRow v-for="site in siteStore.sortedSites" :key="site.url" :site="site" />
                 </tbody>
             </table>
         </div>

@@ -24,7 +24,7 @@ const siteStore = useSiteStore();
                     </tr>
                 </thead>
                 <tbody>
-                    <SitePluginRow v-for="site in siteStore.sites" :key="site.url" :site="site" />
+                    <SitePluginRow v-for="site in siteStore.sortedSites" :key="site.url" :site="site" />
                 </tbody>
             </table>
         </div>
