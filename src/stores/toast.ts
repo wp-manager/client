@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { reactive } from "vue";
 
 type ToastInstance = {
     id?: string;
@@ -13,11 +14,11 @@ type ToastInstance = {
 const toastDefaults = {
     timeout: 5000,
     persist: false,
-    showClose: true
+    showClose: true,
 };
 
 export const useToastStore = defineStore("toast", {
-    state: () => ({
+    state: () => reactive({
         toasts: [] as ToastInstance[]
     }),
     actions: {
