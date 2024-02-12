@@ -23,43 +23,46 @@ const wpeStore = useWPEStore();
 				<img src="/wpm-logo.svg" alt="Logo" />
 			</div>
 			<div class="sidebar__nav nav nav-pills flex-column">
-				<template v-if="siteStore.routeSite()?.url">
-					<div class="nav-screenshot">
-						<SiteScreenshot :url="siteStore.routeSite()?.screenshot" />
-						<div class="nav-screenshot__content">
-							<SiteIcon :site="siteStore.routeSite()" />
-							<span
-								v-html="siteStore.routeSite()?.discover()?.data?.name || siteStore.routeSite()?.url"></span>
-						</div>
-					</div>
-					<!-- if within /site/:uri/settings-->
-					<SidebarContext v-for="item in sharedStore.sidebars.contextual.siteSettings.items" :item="item" v-if="$route.meta.siteSettings" />
-					<SidebarContext v-for="item in sharedStore.sidebars.contextual.site.items" :item="item" v-else />
-				</template>
-				<template v-else-if="$route.meta.account">
-					<SidebarContext v-for="item in sharedStore.sidebars.contextual.settings.items" :item="item" />
-				</template>
-				<template v-else>
-					<SidebarContext v-for="item in sharedStore.sidebars.contextual.main.items" :item="item" />
-				</template>
-				<div class="divider-heading" data-label="Debug"></div>
-				<div class="nav-item">
-					<small class="d-flex flex-column gap-1">
-						<div class="d-flex justify-content-between">
-							<div class="text-muted">Current API requests</div>
-							<div>{{ metaStore.finishedRequests }} / {{ metaStore.pendingRequests }}</div>
-						</div>
-						<div class="progress" role="progressbar" aria-label="Animated striped example" style="height:4px"
-							:class="{ 'visible': (metaStore.finishedRequests !== metaStore.pendingRequests) }">
-							<div class="progress-bar"
-								:class="{ 'bg-success': (metaStore.finishedRequests === metaStore.pendingRequests) }"
-								:style="{ width: (metaStore.finishedRequests / metaStore.pendingRequests) * 100 + '%' }">
+				<div class="sidebar__nav__inner">
+					<template v-if="siteStore.routeSite()?.url">
+						<div class="nav-screenshot">
+							<SiteScreenshot :url="siteStore.routeSite()?.screenshot" />
+							<div class="nav-screenshot__content">
+								<SiteIcon :site="siteStore.routeSite()" />
+								<span
+									v-html="siteStore.routeSite()?.discover()?.data?.name || siteStore.routeSite()?.url"></span>
 							</div>
 						</div>
-					</small>
+						<!-- if within /site/:uri/settings-->
+						<SidebarContext v-for="item in sharedStore.sidebars.contextual.siteSettings.items" :item="item"
+							v-if="$route.meta.siteSettings" />
+						<SidebarContext v-for="item in sharedStore.sidebars.contextual.site.items" :item="item" v-else />
+					</template>
+					<template v-else-if="$route.meta.account">
+						<SidebarContext v-for="item in sharedStore.sidebars.contextual.settings.items" :item="item" />
+					</template>
+					<template v-else>
+						<SidebarContext v-for="item in sharedStore.sidebars.contextual.main.items" :item="item" />
+					</template>
+					<div class="divider-heading" data-label="Debug"></div>
+					<div class="nav-item">
+						<small class="d-flex flex-column gap-1">
+							<div class="d-flex justify-content-between">
+								<div class="text-muted">Current API requests</div>
+								<div>{{ metaStore.finishedRequests }} / {{ metaStore.pendingRequests }}</div>
+							</div>
+							<div class="progress" role="progressbar" aria-label="Animated striped example"
+								style="height:4px"
+								:class="{ 'visible': (metaStore.finishedRequests !== metaStore.pendingRequests) }">
+								<div class="progress-bar"
+									:class="{ 'bg-success': (metaStore.finishedRequests === metaStore.pendingRequests) }"
+									:style="{ width: (metaStore.finishedRequests / metaStore.pendingRequests) * 100 + '%' }">
+								</div>
+							</div>
+						</small>
+					</div>
 				</div>
 			</div>
-
 		</div>
 		<hr>
 		<div class="sidebar-footer">
@@ -154,6 +157,33 @@ const wpeStore = useWPEStore();
 
 	&-main {
 		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__nav{
+		position: relative;
+		flex-grow: 1;
+		margin-right: -6px;
+		&__inner{
+			padding-right: 6px;
+			position: absolute;
+			overflow-x: hidden;
+			overflow-y: auto;
+			inset: 0;
+
+			&::-webkit-scrollbar {
+				width: 4px;
+			}
+			&::-webkit-scrollbar-track {
+			}
+
+			&::-webkit-scrollbar-thumb {
+				// slighlt darker than body color
+				background-color: rgba(255,255,255,0.25);
+			}
+
+		}
 	}
 
 	.user {
@@ -182,7 +212,7 @@ const wpeStore = useWPEStore();
 
 	.nav-screenshot {
 		position: relative;
-		margin: 0 -12px 12px -12px;
+		margin: 0 0 12px -12px;
 		display: grid;
 
 		isolation: isolate;
