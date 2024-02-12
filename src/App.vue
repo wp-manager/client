@@ -6,7 +6,6 @@ import Default from './layouts/Default.vue';
 import Toasts from './components/Toasts.vue';
 
 const accountStore = useAccountStore();
-
 </script>
 
 <template>

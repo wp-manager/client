@@ -23,7 +23,7 @@ const toastStore = useToastStore();
                     @click="toastStore.removeToast(toast)"></button>
             </div>
 
-            <div class="toast-bar" v-if="toast.timeout && !toast.persist"></div>
+            <div class="toast-bar" :class="{'active': toast.timeout && !toast.persist}"></div>
         </div>
     </TransitionGroup>
 </template>
@@ -51,12 +51,17 @@ const toastStore = useToastStore();
     }
 
     .toast-bar {
+        opacity: 0;
         position: absolute;
         bottom: 0;
         left: 0;
         width: 100%;
+        transition: opacity 1s ease;
         height: 2px;
         background-color: var(--bs-secondary);
+        &.active {
+            opacity: 1;
+        }
     }
 }
 

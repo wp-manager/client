@@ -2,7 +2,7 @@
 import router from '@/router';
 import { useAccountStore } from '@/stores/account';
 import { useToastStore } from '@/stores/toast';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const accountStore = useAccountStore();
 const toastStore = useToastStore();
@@ -14,7 +14,18 @@ const checking = ref(false);
 
 const formValidation = ref(false as string | false);
 
-
+accountStore.getSession().then((res) => {
+  if (!accountStore.account) {
+    setTimeout(() => {
+      toastStore.addToast({
+        title: 'Beta notice',
+        message: 'WP Manager is currently in beta and under active development meaning that there may be bugs and missing features.<br><br>If you\'d like to report an issue or request a feature, please do so via <a href="https://github.com/wp-manager/client/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a>.<br><br>If you would like to learn more about WP Manager or sponsor the project, please visit <a href="https://github.com/sponsors/wp-manager" target="_blank" rel="noopener noreferrer">GitHub Sponsors</a>.',
+        persist: true,
+        showClose: false
+      });
+    }, 2000);
+  }
+});
 let apiBase = import.meta.env.APP_SERVER_URL;
 
 const login = async () => {
@@ -34,6 +45,8 @@ const login = async () => {
       await accountStore.getSession(true);
       await router.push({ name: 'home' });
 
+      toastStore.removeAllToasts();
+
       toastStore.addToast({
         title: 'Login successful',
         message: 'Welcome back to WP Manager !'
@@ -42,8 +55,10 @@ const login = async () => {
       toastStore.addToast({
         title: 'Beta notice',
         message: 'WP Manager is currently in beta and under active development meaning that there may be bugs and missing features.<br><br>If you\'d like to report an issue or request a feature, please do so via <a href="https://github.com/wp-manager/client/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a>.<br><br>If you would like to learn more about WP Manager or sponsor the project, please visit <a href="https://github.com/sponsors/wp-manager" target="_blank" rel="noopener noreferrer">GitHub Sponsors</a>.',
-        timeout: 30000
+        timeout: 15000
       });
+
+
       return;
     }
 
@@ -51,8 +66,7 @@ const login = async () => {
     formValidation.value = data.message;
     checking.value = false;
   });
-}
-
+};
 </script>
 
 <template>
