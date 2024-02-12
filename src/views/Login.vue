@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import router from '@/router';
 import { useAccountStore } from '@/stores/account';
+import { useToastStore } from '@/stores/toast';
 import { ref } from 'vue';
 
 const accountStore = useAccountStore();
+const toastStore = useToastStore();
 
 const email = ref('');
 const password = ref('');
@@ -31,6 +33,17 @@ const login = async () => {
     if (res.ok) {
       await accountStore.getSession(true);
       await router.push({ name: 'home' });
+
+      toastStore.addToast({
+        title: 'Login successful',
+        message: 'Welcome back to WP Manager !'
+      });
+
+      toastStore.addToast({
+        title: 'Beta notice',
+        message: 'WP Manager is currently in beta and under active development meaning that there may be bugs and missing features.<br><br>If you\'d like to report an issue or request a feature, please do so via <a href="https://github.com/wp-manager/client/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a>.<br><br>If you would like to learn more about WP Manager or sponsor the project, please visit <a href="https://github.com/sponsors/wp-manager" target="_blank" rel="noopener noreferrer">GitHub Sponsors</a>.',
+        timeout: 30000
+      });
       return;
     }
 
