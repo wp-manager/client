@@ -39,5 +39,8 @@ export const useToastStore = defineStore("toast", {
             let index = this.toasts.findIndex((t) => t.id === toastInstance.id);
             if(index > -1) this.toasts.splice(index, 1);
         },
+        removeAllToasts(): void {
+            this.toasts = [];
+        }
     },    
 });

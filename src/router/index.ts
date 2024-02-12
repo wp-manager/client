@@ -5,6 +5,7 @@ let apiBase = import.meta.env.APP_SERVER_URL;
 
 // Stores
 import { useAccountStore } from "@/stores/account";
+import { useToastStore } from "@/stores/toast";
 
 // Components
 import Account from "@/views/Account/Account.vue";
@@ -57,6 +58,13 @@ const router = createRouter({
 
                 const accountStore = useAccountStore();
                 await accountStore.logout();
+
+                const toastStore = useToastStore();
+                toastStore.removeAllToasts();
+                toastStore.addToast({
+                    message: "You have been logged out"
+                });
+
                 router.push({ name: "login" });
             },
         },
