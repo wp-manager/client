@@ -19,9 +19,9 @@ const wpeStore = useWPEStore();
 <template>
 	<div class="sidebar border-end">
 		<div class="sidebar-main">
-			<div class="d-flex justify-content-center logo">
+			<RouterLink to="/" class="d-flex justify-content-center logo">
 				<img src="/wpm-logo.svg" alt="Logo" />
-			</div>
+			</RouterLink>
 			<div class="sidebar__nav nav nav-pills flex-column">
 				<div class="sidebar__nav__inner">
 					<template v-if="siteStore.routeSite()?.url">
