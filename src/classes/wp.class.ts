@@ -101,6 +101,15 @@ class WPSite {
     stq_wordfence_audit() {
         return this.makeRequest("wp-json/stq/v1/wordfence-audit");
     }
+    stq_legacy_users() {
+        return this.makeRequest("wp-json/stq/v1/legacy-users");
+    }
+    stq_spam_comments() {
+        return this.makeRequest("wp-json/stq/v1/spam-comments");
+    }
+    stq_php_info() {
+        return this.makeRequest("wp-json/stq/v1/php-info");
+    }
 
     // PageSpeed
     pagespeed() {
