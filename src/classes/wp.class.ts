@@ -19,8 +19,8 @@ class WPSite {
         this.mobileScreenshot = `${apiBase}/site/${this.url}/screenshot/mobile`;
     }
 
-    makeRequest(path: string) {
-        if (this.data[path]) return this.data[path];
+    makeRequest(path: string, force = false) {
+        if (this.data[path] && !force) return this.data[path];
         return (this.data[path] = useFetch(
             `${apiBase}/site/${this.url}/${path}`,
             { credentials: "include", signal: FetchUtils.abortController.signal }
@@ -114,6 +114,11 @@ class WPSite {
     // PageSpeed
     pagespeed() {
         return this.makeRequest("pagespeed");
+    }
+
+    // Crawl
+    crawl(force = false) {
+        return this.makeRequest("crawl", force);
     }
 }
 

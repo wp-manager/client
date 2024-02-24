@@ -97,6 +97,12 @@ export const useSharedStore = defineStore("shared", () => {
                             params: { uri: siteStore.routeSite()?.url },
                             icon: "bi bi-google",
                         },
+                        {
+                            label: "Site Crawl",
+                            name: "site-crawl",
+                            params: { uri: siteStore.routeSite()?.url },
+                            icon: "bi bi-diagram-3",
+                        },
                         { divider: "Manage" },
                         {
                             label: "Site Settings",

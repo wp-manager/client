@@ -28,6 +28,7 @@ import SitesPlugins from "@/views/SitesPlugins.vue";
 import SitesUsers from "@/views/SitesUsers.vue";
 import SiteVue from "@/views/Site.vue";
 import SiteSettings from "@/views/Site/Settings.vue";
+import SiteCrawl from "@/views/SiteCrawl.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -128,6 +129,11 @@ const router = createRouter({
                     path: "pagespeed",
                     name: "site-pagespeed",
                     component: SitePageSpeed,
+                },
+                {
+                    path: "crawl",
+                    name: "site-crawl",
+                    component: SiteCrawl,
                 },
                 {
                     path: "settings",
