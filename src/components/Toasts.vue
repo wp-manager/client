@@ -5,7 +5,7 @@ const toastStore = useToastStore();
 </script>
 
 <template>
-    <TransitionGroup name="toast-item" tag="div" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <TransitionGroup name="toast-item" tag="div" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 11">
         <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" v-for="toast in toastStore.toasts"
             :key="toast.id" :style="{ '--timeout': `${(toast.timeout / 1000) - 1}s` }">
             <div class="toast-header" v-if="toast.title || toast.altText">
