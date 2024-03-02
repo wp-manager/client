@@ -11,7 +11,6 @@ import { useToastStore } from "@/stores/toast";
 import Account from "@/views/Account/Account.vue";
 import AccountHome from "@/views/Account/AccountHome.vue";
 import AccountPlugins from "@/views/Account/AccountPlugins.vue";
-import AccountWPEngine from "@/views/Account/AccountWPEngine.vue";
 import AddSite from "@/views/AddSite.vue";
 import FetchUtils from "@/utils/fetch";
 import Home from "@/views/Home.vue";
@@ -168,6 +167,11 @@ const router = createRouter({
                 {
                     path: "plugins",
                     name: "account-plugins",
+                    component: AccountPlugins
+                },
+                {
+                    path: "cloudflare",
+                    name: "account-cloudflare",
                     component: AccountPlugins
                 }
             ],

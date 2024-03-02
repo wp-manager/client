@@ -138,7 +138,8 @@ export const useSharedStore = defineStore("shared", () => {
                         { divider: "Settings" },
                         { label: "General", name: "account-home"},
                         { label: "Plugins", name: "account-plugins"},
-                        { divider: "Integrations", class: "d-none" }
+                        { divider: "Integrations"},
+                        { label: "Cloudflare", name: "account-cloudflare", icon: "bi bi-cloud-fill"},
                     ],
                 },
             },
