@@ -17,6 +17,7 @@ const formValidation = ref(false as string | false);
 accountStore.getSession().then((res) => {
   if (!accountStore.account) {
     setTimeout(() => {
+      if (accountStore.account) return;
       toastStore.addToast({
         title: 'Beta notice',
         message: 'WP Manager is currently in beta and under active development meaning that there may be bugs and missing features.<br><br>If you\'d like to report an issue or request a feature, please do so via <a href="https://github.com/wp-manager/client/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a>.<br><br>If you would like to learn more about WP Manager or sponsor the project, please visit <a href="https://github.com/sponsors/wp-manager" target="_blank" rel="noopener noreferrer">GitHub Sponsors</a>.',
@@ -96,14 +97,15 @@ const login = async () => {
           @click.prevent="login">Login</button>
         <small class="d-block text-muted mt-2">
           Don't have an account? <router-link :to="{ name: 'register' }" class="text-white text-decoration-none" :class="{
-            'disabled': checking
-          }">Register</router-link>
+        'disabled': checking
+      }">Register</router-link>
         </small>
 
       </div>
     </form>
   </div>
 </template>
+
 <style scoped>
 .logo {
   max-width: 10rem;
