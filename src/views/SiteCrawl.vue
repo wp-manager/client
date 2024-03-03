@@ -43,8 +43,6 @@ queueCrawl.onError.value = () => {
     });
 };
 
-let showAll = ref(false);
-
 const sortedResults = computed(() => {
     if (!data.value?.results) return [];
     return data.value?.results.sort((a, b) => b.response - a.response || a.url.localeCompare(b.url));
@@ -65,12 +63,6 @@ const sortedResults = computed(() => {
                         - ({{ TimeUtils.formatTime((data?.endTime ? data?.endTime : Date.now()) - data?.startTime) }})
                     </span>
                 </div>
-                <div v-if="data?.results">
-                    <div class="form-check form-switch form-check-inline m-0">
-                        <input class="form-check-input" type="checkbox" id="showAll" v-model="showAll">
-                        <label class="form-check-label" for="showAll">Show All</label>
-                    </div>
-                </div>
                 <div class="btn btn-sm btn-secondary" @click="queueCrawl.execute()" :class="{
         'disabled': data?.status == 'IN_PROGRESS' || data?.status == 'QUEUED' || getCrawlInfo.loading.value || queueCrawl.loading.value
     }" v-if="getCrawlInfo.data">
@@ -86,8 +78,7 @@ const sortedResults = computed(() => {
     }" :aria-valuenow="((data?.stats?.done / data?.stats?.total) * 100)" aria-valuemin="0" :aria-valuemax="100"></div>
         </div>
         <ul class="list-group list-group-flush" v-if="data.results">
-            <li class="list-group-item"
-                v-for="result in sortedResults.filter((r, i) => showAll || !r.response.toString().startsWith(2))">
+            <li class="list-group-item" v-for="result in sortedResults">
                 <div class="badge" :class="{
         'text-bg-success': result.response.toString().startsWith(2),
         'text-bg-warning': result.response.toString().startsWith(3),
