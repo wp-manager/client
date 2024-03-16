@@ -110,6 +110,12 @@ class WPSite {
     stq_php_info() {
         return this.makeRequest("wp-json/stq/v1/php-info");
     }
+    stq_yoast_audit() {
+        return this.makeRequest("wp-json/stq/v1/yoast-audit");
+    }
+    stq_google_login_audit() {
+        return this.makeRequest("wp-json/stq/v1/google-login-audit");
+    }
 
     // PageSpeed
     pagespeed() {
