@@ -116,6 +116,9 @@ class WPSite {
     stq_google_login_audit() {
         return this.makeRequest("wp-json/stq/v1/google-login-audit");
     }
+    stq_wp_config_audit() {
+        return this.makeRequest("wp-json/stq/v1/wp-config");
+    }
 
     // PageSpeed
     pagespeed() {
