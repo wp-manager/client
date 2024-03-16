@@ -11,8 +11,8 @@ props.site?.discover();
 </script>
 
 <template>
-    <tr v-if="site?.discover()?.data && site?.hasNamespace('contact-form-7/v1') && site?.hasNamespace('stq/v1')" v-for="(form, index) in site.stq_cf7_forms()?.data"
-        :key="form?.slug">
+    <tr v-if="site?.discover()?.data && site?.hasNamespace('contact-form-7/v1') && site?.hasNamespace('stq/v1')"
+        v-for="(form, index) in site.stq_cf7_forms()?.data" :key="form?.slug">
         <td>
             <SiteIcon :site="site" />
         </td>
@@ -21,7 +21,7 @@ props.site?.discover();
         </td>
         <td>
             <div>{{ form?.title }}</div>
-            <small class="text-muted">{{ form?.subject}}</small>
+            <small class="text-muted">{{ form?.subject }}</small>
         </td>
         <td>
             {{ form?.from }}
@@ -36,11 +36,11 @@ props.site?.discover();
         </td>
         <td>
             <span class="badge bg-success" v-if="form?.honeypot_present">
-                        Honeypot Present
-                    </span>
-                    <span class="badge bg-danger" v-else>
-                        No Honeypot
-                    </span>
+                Honeypot Present
+            </span>
+            <span class="badge bg-danger" v-else>
+                No Honeypot
+            </span>
         </td>
     </tr>
 </template>
