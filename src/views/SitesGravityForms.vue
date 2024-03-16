@@ -22,6 +22,7 @@ const siteStore = useSiteStore();
                         <th scope="col">Active</th>
                         <th scope="col">Notifications</th>
                         <th scope="col">Confirmations</th>
+                        <th scope="col">Honeypot Active</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
