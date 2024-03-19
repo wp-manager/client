@@ -112,11 +112,11 @@ const checkSiteAPI = debounce(() => {
 
           <div class="input-group">
             <span class="input-group-text" id="siteUrlPrefix">https://</span>
-            <input type="text" class="form-control" placeholder="wordpress.com" aria-label="Username"
+            <input type="text" class="form-control" placeholder="wordpress.com" aria-label="Site URL"
               @input="checkSiteAPI(); siteAPIStatus = SiteAPIStatus.UNKNOWN" aria-describedby="siteUrlPrefix"
               v-model="url">
           </div>
-          <div id="emailHelp" class="form-text" v-if="url && siteAPIStatus != SiteAPIStatus.UNKNOWN">
+          <div class="form-text" v-if="url && siteAPIStatus != SiteAPIStatus.UNKNOWN">
             <div v-if="siteAPIStatus == SiteAPIStatus.CHECKING" class="d-flex align-items-center gap-2">
               <div class="spinner spinner-border spinner-border-sm text-muted"></div> Checking if the WordPress REST API
               is
