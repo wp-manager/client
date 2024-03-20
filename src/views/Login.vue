@@ -44,6 +44,7 @@ const login = async () => {
   }).then(async (res) => {
     if (res.ok) {
       await accountStore.getSession(true);
+      accountStore.loadPlugins();
       await router.push({ name: 'home' });
 
       toastStore.removeAllToasts();
@@ -58,7 +59,6 @@ const login = async () => {
         message: 'WP Manager is currently in beta and under active development meaning that there may be bugs and missing features.<br><br>If you\'d like to report an issue or request a feature, please do so via <a href="https://github.com/wp-manager/client/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a>.<br><br>If you would like to learn more about WP Manager or sponsor the project, please visit <a href="https://github.com/sponsors/wp-manager" target="_blank" rel="noopener noreferrer">GitHub Sponsors</a>.',
         timeout: 5000
       });
-
 
       return;
     }
@@ -96,7 +96,8 @@ const login = async () => {
         <button type="submit" class="btn btn-primary w-100" :disabled="!password || checking"
           @click.prevent="login">Login</button>
         <small class="d-block text-muted mt-2">
-          Don't have an account? <router-link :to="{ name: 'register' }" class="text-body-emphasis text-decoration-none" :class="{
+          Don't have an account? <router-link :to="{ name: 'register' }" class="text-body-emphasis text-decoration-none"
+            :class="{
         'disabled': checking
       }">Register</router-link>
         </small>
