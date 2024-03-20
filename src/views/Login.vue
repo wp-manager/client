@@ -96,7 +96,7 @@ const login = async () => {
         <button type="submit" class="btn btn-primary w-100" :disabled="!password || checking"
           @click.prevent="login">Login</button>
         <small class="d-block text-muted mt-2">
-          Don't have an account? <router-link :to="{ name: 'register' }" class="text-white text-decoration-none" :class="{
+          Don't have an account? <router-link :to="{ name: 'register' }" class="text-body-emphasis text-decoration-none" :class="{
         'disabled': checking
       }">Register</router-link>
         </small>
