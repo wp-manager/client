@@ -199,21 +199,8 @@ router.beforeEach(async (to, from, next) => {
 });
 
 router.isReady().then(() => {
-    const plugins = useAccountStore().account?.plugins;
-    if(!plugins) return;
-
-    plugins.forEach((plugin: any) => {
-        // create script module using plugin as src
-        const script = document.createElement("script");
-        script.type = "module";
-        // if script is using localhost, don't use the apiBase
-        if(plugin.includes("localhost")) {
-            script.src = plugin;
-        } else {
-            script.src = `${apiBase}/account/plugin/${encodeURIComponent(plugin)}`;
-        }
-        document.body.appendChild(script);
-    });
+    const accountStore = useAccountStore();
+    accountStore.loadPlugins();
 });
 
 export default router;

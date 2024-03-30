@@ -10,8 +10,6 @@ type User = {
 export const useAuthStore = defineStore("auth", () => {
     let user = ref<User | null>(null);
 
-    
-
     async function getUserFromAPI() {
         return fetch(`${import.meta.env.APP_SERVER_URL}/account`, {
             credentials: "include",
