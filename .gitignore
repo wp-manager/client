@@ -31,3 +31,4 @@ certs/
 # Other
 .env
 update.sh
+*storybook.log
